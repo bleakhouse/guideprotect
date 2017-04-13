@@ -29,7 +29,6 @@ def getDbOrCreate(dbname=DATABASE_NAME):
     except Exception, e:
         logging.error(str(e))
         logging.error(traceback.format_exc())
-        print 'error..........'
     return  op
 
 

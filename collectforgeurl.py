@@ -11,7 +11,7 @@ import urllib
 import json
 import mylogging
 import  db
-
+import platform
 
 URL_TYPE_FORGE = (1)
 
@@ -57,6 +57,8 @@ def parseforgeurl(src,urlsinfo):
 
 def CollectThread(name):
 
+    pl = platform.platform()
+
     iround = 1
     while 1:
 
@@ -79,6 +81,23 @@ def CollectThread(name):
 
         logging.info('round:{0} done!!!'.format(iround))
         iround = iround+1
+
+
+        dbobj = db.getDbOrCreate()
+        path =""
+        if pl.startswith("Window") is False:
+            path = '/usr/share/nginx/html/info.txt'
+        else:
+            path = 'g:/info.txt'
+            query ='''select count(*) from forgeurls'''
+            dbobj.execute(query)
+
+        result=dbobj.fetchall()
+        if result is not None and len(result)>0:
+            count= result[0][0]
+            fp = open(path,"w")
+            fp.write(str(count))
+            fp.close()
         time.sleep(60*60)
 
 
