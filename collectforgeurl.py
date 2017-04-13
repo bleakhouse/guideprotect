@@ -94,6 +94,7 @@ def CollectThread(name):
 
         result=dbobj.fetchall()
         if result is not None and len(result)>0:
+            logging.info('write count')
             count= result[0][0]
             fp = open(path,"w")
             fp.write(str(count))
