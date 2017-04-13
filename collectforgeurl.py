@@ -93,6 +93,7 @@ def CollectThread(name):
             dbobj.execute(query)
 
         result=dbobj.fetchall()
+        print result
         if result is not None and len(result)>0:
             logging.info('write count')
             count= result[0][0]
