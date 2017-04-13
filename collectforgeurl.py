@@ -89,9 +89,9 @@ def CollectThread(name):
             path = '/usr/share/nginx/html/info.txt'
         else:
             path = 'g:/info.txt'
-            query ='''select count(*) from forgeurls'''
-            dbobj.execute(query)
 
+        query ='''select count(*) from forgeurls'''
+        dbobj.execute(query)
         result=dbobj.fetchall()
         print result
         if result is not None and len(result)>0:
