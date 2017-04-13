@@ -1,0 +1,69 @@
+# -*- coding: UTF-8 -*-
+__author__ = 'Administrator'
+import sys
+import thread
+import time
+import logging
+import traceback
+import logging.handlers
+import urllib2
+import urllib
+import json
+import mylogging
+import MySQLdb
+
+DATABASE_NAME  = 'guideprotect'
+
+def getDbOrCreate(dbname=DATABASE_NAME):
+
+    obj=None
+    op = None
+    try:
+
+        obj = MySQLdb.connect("127.0.0.1","root","123456",  charset="utf8")
+
+        obj.autocommit(1)
+        op = obj.cursor()
+        op.execute("CREATE DATABASE if not exists {0} DEFAULT CHARACTER SET 'utf8'".format(dbname))
+        op.execute("use "+dbname)
+    except Exception, e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+        print 'error..........'
+    return  op
+
+
+forgeurls='''CREATE TABLE forgeurls (
+  Id bigint(21) NOT NULL auto_increment,
+  urlsrc varchar(128) NOT NULL default '',
+  forgewho varchar(128) NOT NULL default '',
+  url varchar(1024) NOT NULL default '',
+  urltype bigint(32),
+  AddTime timestamp default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (Id),
+  KEY UserName (urlsrc)
+) ENGINE=InnoDB, character set = utf8;;
+'''
+
+
+
+def createtable(name):
+
+    db =getDbOrCreate(DATABASE_NAME)
+
+    if db is None:
+        logging.info('getDbOrCreate fail')
+        return
+    try:
+        db.execute(name)
+
+    except MySQLdb.Error,e:
+        print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+    else:
+        print("OK")
+
+def createalltables():
+    createtable(forgeurls)
+
+if __name__ == '__main__':
+    createalltables()
