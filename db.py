@@ -20,7 +20,7 @@ def getDbOrCreate(dbname=DATABASE_NAME):
     op = None
     try:
 
-        obj = MySQLdb.connect("127.0.0.1","root","123456",  charset="utf8")
+        obj = MySQLdb.connect("127.0.0.1","test","123456",  charset="utf8")
 
         obj.autocommit(1)
         op = obj.cursor()
