@@ -44,14 +44,15 @@ class Xconfiger:
             v['reqrule'] = item[4]
             v['newurldata'] = item[5]
             v['urlMatchMethod'] = item[6]
+
             ruleitem.strRedirectData    = v['newurldata']
             ruleitem.strRedirectType    = v['RedirectType']
             ruleitem.mstrUrlHost        = v['host'].upper()
             ruleitem.strUrlReq          = v['reqrule'].upper()
             ruleitem.strMatchMethod     = v['urlMatchMethod']
             ruleitem.strRuleName         = v['name']
-            if not ruleitem.mstrUrlHost.startswith('HTTP://'):
-                ruleitem.mstrUrlHost = 'HTTP://'+ruleitem.mstrUrlHost
+            if ruleitem.mstrUrlHost.startswith('HTTP://'):
+                ruleitem.mstrUrlHost =ruleitem.mstrUrlHost[7:]
             l=[]
             l.append(ruleitem)
             if rulename in self.dictRules.keys():

@@ -32,7 +32,7 @@ class InterceptRule:
     mstrUrlHost =""
     strUrlReq=""
     strRedirectType=RULE_ATTR_NAME_redirect_type_url
-    strRedirectData="http://www.baidu.com"
+    strRedirectData="www.baidu.com"
     strMatchMethod =RULE_ATTR_NAME_req_match_method_same
     strRuleName="default"
     repattern=None
