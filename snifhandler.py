@@ -74,7 +74,7 @@ def find_req_from_httppayload(httppayload):
     except:
         return None
 
-def sniff_check_packet(pkt):
+def sniff_check_http_packet(pkt):
 
     # if not pkt.haslayer(TCP):
     #     print 'has no tcp layer'
@@ -88,15 +88,19 @@ def sniff_check_packet(pkt):
     if reqlen<10:
         return
 
-    httpreq = str(pkt[TCP])
-    pos =httpreq.find("GET /")
-    if pos==-1:
+    #httpreq = str(pkt[TCP])
+    if not pkt.haslayer(Raw):
+        return
+    httppayload = str(pkt[Raw])
+
+    if not httppayload.startswith('GET /'):
         return
 
-    req = find_req_from_httppayload(httpreq[pos:])
+    req = find_req_from_httppayload(httppayload)
     if req is None:
         return
 
+    logging.info(str(req))
     print req
     gpconf.gcServer.init()
     redirect_info = gpconf.gcServer.get_direct_info(req[0], req[1])

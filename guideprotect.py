@@ -14,13 +14,13 @@ import utils
 import gpconf
 import snifhandler
 
-def start():
+def start(sniffeth):
 
     logging.info('importing scapy....')
 
     logging.info('start sniff....')
     from scapy.all import *
-    sniff(filter="tcp and port 80 and host 192.168.64.128", prn=snifhandler.sniff_check_packet)
+    sniff(filter="tcp and dst port 80", iface=sniffeth, prn=snifhandler.sniff_check_http_packet)
 
 
 if __name__ == '__main__':
@@ -36,7 +36,7 @@ if __name__ == '__main__':
         print 'sniffer:',snife
         print 'inject:',inje
         pass
-        #start()
+        start(snife)
     else:
         logging.info('no eth selected!!')
     logging.info('guideprotect down!')
