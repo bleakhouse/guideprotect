@@ -10,7 +10,7 @@ import netifaces as netif
 import os
 import mylogging
 
-import utils
+import gputils
 import gpconf
 import snifhandler
 from scapy.all import *

@@ -12,7 +12,7 @@ import netifaces as netif
 
 import mylogging
 import os
-import  utils
+import  gputils
 import sys
 
 SELECT_CONF_FILENAME ='seleth.txt'
