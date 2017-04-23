@@ -11,7 +11,7 @@ import urllib
 import json
 import mylogging
 import MySQLdb
-
+import basedef
 DATABASE_NAME  = 'guideprotect'
 
 def getDbOrCreate(dbname=DATABASE_NAME):
@@ -45,6 +45,21 @@ forgeurls='''CREATE TABLE forgeurls (
 '''
 
 
+redirecturlrules='''CREATE TABLE redirecturlrules (
+  Id bigint(21) NOT NULL auto_increment,
+  {0} varchar(128) NOT NULL default '',
+  {1} varchar(128) NOT NULL default '',
+  {2} varchar(128) NOT NULL default '',
+  {3} varchar(128) NOT NULL default '',
+  {4} varchar(1024) NOT NULL default '',
+  {5} varchar(1024) NOT NULL default '',
+  AddTime timestamp default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (Id)
+) ENGINE=InnoDB, character set = utf8;;
+'''.format(basedef.RULE_ATTR_NAME_name, basedef.RULE_ATTR_NAME_host, basedef.RULE_ATTR_NAME_redirect_type, basedef.RULE_ATTR_NAME_req,
+           basedef.RULE_ATTR_NAME_redirect_target, basedef.RULE_ATTR_NAME_req_match_method)
+
+
 
 def createtable(name):
 
@@ -63,6 +78,8 @@ def createtable(name):
 
 def createalltables():
     createtable(forgeurls)
+    createtable(redirecturlrules)
+
 
 if __name__ == '__main__':
     createalltables()

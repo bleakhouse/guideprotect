@@ -9,7 +9,7 @@ import logging.handlers
 
 loglist=[]
 
-def setuplog(logname='_guideprotect.txt'):
+def setuplog(logname='guideprotect.txt'):
 
     if logname in loglist:
         return
@@ -19,7 +19,7 @@ def setuplog(logname='_guideprotect.txt'):
     logger.setLevel(logging.DEBUG)
 
     # create file handler
-    filename=time.strftime("%Y-%m-%d", time.localtime()) +logname,
+    filename=time.strftime("%Y-%m-%d", time.localtime()) +"_"+logname,
 
     filename= filename[0]
     fh = logging.handlers.RotatingFileHandler(filename, maxBytes=1024*1024*5, backupCount=5)

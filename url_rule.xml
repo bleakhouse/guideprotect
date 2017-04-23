@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<doc version="1.0">
+  <rule name="general demo">
+    <host>www.baidu.com</host>
+    <redirect_type>url</redirect_type>
+    <req>/?id=123456</req>
+    <redirect_target>http://www.17173.com</redirect_target>
+    <req_match_method>same</req_match_method>
+  </rule>
+</doc>

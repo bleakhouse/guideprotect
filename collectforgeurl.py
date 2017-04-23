@@ -1,17 +1,17 @@
 # -*- coding: UTF-8 -*-
 __author__ = 'Administrator'
-import sys
+import json
+import logging
+import logging.handlers
+import platform
 import thread
 import time
-import logging
-import traceback
-import logging.handlers
 import urllib2
-import urllib
-import json
+
+
+from dbase import db
+
 import mylogging
-import  db
-import platform
 
 URL_TYPE_FORGE = (1)
 
@@ -61,13 +61,13 @@ def CollectThread(name):
 
     iround = 1
     while 1:
-
         for src, url in urlsrcs.items():
 
 
             logging.info('collecting..from:{0}. url:{1}..'.format(src,url))
             try:
                 response = urllib2.urlopen(url)
+
             except urllib2.HTTPError, e:
                 logging.warning(e.code)
 
@@ -114,7 +114,7 @@ class deamon(object):
 
 if __name__ == '__main__':
 
-    mylogging.setuplog()
+    mylogging.setuplog('collectforurl')
     db.createalltables()
     CollectThread('collectforurl from tx')
 
