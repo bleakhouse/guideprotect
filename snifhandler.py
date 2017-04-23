@@ -92,6 +92,6 @@ def sniff_check_http_packet(pkt):
     redirect_info = gpconf.gcServer.get_direct_info(req[0], req[1])
     if redirect_info is None:
         return
-
+    logging.info('redirect '+str(req))
     inject_back_url(pkt, redirect_info)
 

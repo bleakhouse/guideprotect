@@ -23,7 +23,7 @@ class Xconfiger:
 
     def init(self):
         self.load_url_rules()
-
+        logging.info('load rules:'+str(len(self.dictRules)))
 
     def load_url_rules(self):
         dictRules = {}
