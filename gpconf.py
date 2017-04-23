@@ -87,8 +87,9 @@ class confserver:
         self.myconfiger.init()
 
      def get_direct_info(self, host,req):
-
-         return  self.myconfiger.check_url_match(host, req)
+         r = self.myconfiger.check_url_match(host, req)
+         print r
+         return  r
 
 
 gcServer = confserver()

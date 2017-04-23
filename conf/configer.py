@@ -26,7 +26,7 @@ class Xconfiger:
         logging.info('load rules:'+str(len(self.dictRules)))
 
     def load_url_rules(self):
-        dictRules = {}
+        self.dictRules = {}
         dbobj =db.getDbOrCreate()
         query = '''select * from redirecturlrules'''
         dbobj.execute(query)
@@ -56,7 +56,7 @@ class Xconfiger:
             l=[]
             l.append(ruleitem)
             if rulename in self.dictRules.keys():
-                self.dictRules[rulename].append(v)
+                self.dictRules[rulename].append(ruleitem)
             else:
                 self.dictRules[rulename] = l
 
