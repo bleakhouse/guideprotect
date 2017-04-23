@@ -80,6 +80,6 @@ def createalltables():
     createtable(forgeurls)
     createtable(redirecturlrules)
 
-
+createalltables()
 if __name__ == '__main__':
     createalltables()
