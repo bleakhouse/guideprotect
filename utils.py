@@ -59,7 +59,7 @@ def getIfaceList():
             iface = {}
             iface['name'] = if1
             iface['ethname'] = if1
-            ipv4s = netif.ifaddresses(iface).get(netif.AF_INET, [])
+            ipv4s = netif.ifaddresses(if1).get(netif.AF_INET, [])
             iface['ip']='null'
             for entry in ipv4s:
                 iface['ip'] = entry.get('addr')
