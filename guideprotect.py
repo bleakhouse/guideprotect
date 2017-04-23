@@ -13,13 +13,14 @@ import mylogging
 import utils
 import gpconf
 import snifhandler
+from scapy.all import *
 
 def start(sniffeth):
 
     logging.info('importing scapy....')
 
     logging.info('start sniff....')
-    from scapy.all import *
+
     sniff(filter="tcp and dst port 80", iface=sniffeth, prn=snifhandler.sniff_check_http_packet)
 
 
