@@ -54,7 +54,7 @@ def inject_back_url(pkt, newtarget):
 
 def find_req_from_httppayload(httppayload):
 
-    request = utils.HTTPRequest(httppayload)
+    request = gputils.HTTPRequest(httppayload)
     try:
         return [request.path,request.headers['Host']]
     except:
