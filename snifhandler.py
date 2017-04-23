@@ -14,7 +14,7 @@ import mylogging
 import os
 import  utils
 import sys
-#from scapy.all import *
+from scapy.all import *
 import gpconf
 import basedef
 
