@@ -56,7 +56,7 @@ def find_req_from_httppayload(httppayload):
 
     request = gputils.HTTPRequest(httppayload)
     try:
-        return [request.path,request.headers['Host']]
+        return [request.headers['Host'], request.path]
     except:
         return None
 

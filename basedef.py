@@ -40,6 +40,7 @@ class InterceptRule:
 
     def is_url_match(self, host, req):
 
+        host = host.upper()
         print 'is_url_match '
         print  host
         print req
@@ -48,7 +49,6 @@ class InterceptRule:
         print self.strUrlReq
         print self.strMatchMethod
 
-        host = host.upper()
         if host!=self.mstrUrlHost:
             return  False
 
