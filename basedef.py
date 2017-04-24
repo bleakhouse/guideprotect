@@ -77,10 +77,10 @@ class InterceptRule:
                 return
             else:
                 logging.error('file not exits '+self.strRedirectData)
-                return RULE_ATTR_NAME_redirect_type_buf,'no data error03'
+                return [RULE_ATTR_NAME_redirect_type_buf,'no data error03',self.strRuleName]
 
         if self.strRedirectDataIfFile is not None:
-            return RULE_ATTR_NAME_redirect_type_buf, self.strRedirectDataIfFile
+            return [RULE_ATTR_NAME_redirect_type_buf, self.strRedirectDataIfFile,self.strRuleName]
 
-        return self.strRedirectType, self.strRedirectData
+        return [self.strRedirectType, self.strRedirectData,self.strRuleName]
 

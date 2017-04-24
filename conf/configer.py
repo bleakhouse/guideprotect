@@ -75,8 +75,8 @@ class Xconfiger:
         for name, rules  in self.dictRules.items():
             for ruleitem in rules:
                 if ruleitem.is_url_match(host, req) == True:
-                    rtype, rdata = ruleitem.get_redirect_info()
-                    return  [rtype,rdata]
+                    return ruleitem.get_redirect_info()
+
 
 if __name__=='__main__':
     x = Xconfiger()
