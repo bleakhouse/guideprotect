@@ -84,8 +84,13 @@ class confserver:
 
 
      def init(self):
+        import os
+        if os.path.isfile('nolog'):
+            self.blogging = False
+
         if self.binit :
              return self.binit
+
 
         self.binit  =True
         self.myconfiger.init()

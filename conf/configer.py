@@ -23,9 +23,6 @@ class Xconfiger:
 
 
     def init(self):
-        import os
-        if os.path.isfile('nolog'):
-            self.blogging = False
 
         self.load_url_rules()
         if len(self.dictRules)==0:
