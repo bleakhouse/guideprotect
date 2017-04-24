@@ -47,6 +47,8 @@ class InterceptRule:
             print self.mstrUrlHost
             print self.strUrlReq
             print self.strRedirectData
+            print host
+            print req
             print 'is_url_match end'
 
         host = host.upper()
