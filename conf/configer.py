@@ -61,8 +61,8 @@ class Xconfiger:
             if ruleitem.strRedirectType==basedef.RULE_ATTR_NAME_redirect_type_buf:
                 ruleitem.strRedirectData = str(ruleitem.strRedirectData)
 
-            if  ruleitem.strRedirectType==basedef.RULE_ATTR_NAME_redirect_type_file and os.path.isfile(self.strRedirectData):
-                self.strRedirectDataIfFile =  open(self.strRedirectData,'r').read()
+            if  ruleitem.strRedirectType==basedef.RULE_ATTR_NAME_redirect_type_file and os.path.isfile(ruleitem.strRedirectData):
+                ruleitem.strRedirectDataIfFile =  open(ruleitem.strRedirectData,'r').read()
 
             full_url = v['full_url']
             if len(full_url) > 0:
