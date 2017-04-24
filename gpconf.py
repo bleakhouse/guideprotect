@@ -88,7 +88,6 @@ class confserver:
 
      def get_direct_info(self, host,req):
          r = self.myconfiger.check_url_match(host, req)
-         print r
          return  r
 
 

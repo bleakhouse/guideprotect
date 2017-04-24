@@ -41,14 +41,6 @@ class InterceptRule:
     def is_url_match(self, host, req):
 
         host = host.upper()
-        print 'is_url_match '
-        print  host
-        print req
-        print 'my pars'
-        print self.mstrUrlHost
-        print self.strUrlReq
-        print self.strMatchMethod
-
         if host!=self.mstrUrlHost:
             return  False
 

