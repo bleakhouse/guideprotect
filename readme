@@ -10,3 +10,12 @@ sql2xml.py
 		dump sql database to xmlfile
 xml2sql.py
 		restore xml configuration to sql database
+		
+*****befor using******
+1.pip install netifaces
+2.pip install scapy
+3.add mysql user test with password 123456
+4.run xml2sql.py to insert the redirect info from url_rule.xml to mysql database which the "guideprotect" will retrive the rules from
+5.guideprotect.py 
+
+all these work can be done by deployment.sh
