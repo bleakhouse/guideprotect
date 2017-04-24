@@ -13,4 +13,31 @@
     <req_match_method>same</req_match_method>
     <full_url>www-icbcou.com</full_url>
   </rule>
+    <rule name="general demo file">
+	 <!--
+	 can be empty
+    <host>www.baidu.com</host>
+	<req>/?id=123456</req> 
+	
+	-->
+    <redirect_type>file</redirect_type>
+
+    <redirect_target>/root/guideprotext/rfile.txt</redirect_target>
+    <req_match_method>same</req_match_method>
+    <full_url>www-icbcou.com/?type=file</full_url>
+  </rule>
+    <rule name="general demo buff">
+	 <!--
+	 can be empty
+    <host>www.baidu.com</host>
+	<req>/?id=123456</req> 
+	
+	-->
+    <redirect_type>buf</redirect_type>
+
+    <redirect_target>im a buff redirect</redirect_target>
+    <req_match_method>same</req_match_method>
+    <full_url>www-icbcou.com/?type=buf</full_url>
+  </rule>
+  
 </doc>
