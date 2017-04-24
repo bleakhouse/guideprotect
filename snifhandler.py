@@ -31,17 +31,20 @@ def inject_back_url(pkt, newtarget):
     reqlen = pkt[IP].len-pkt[IP].ihl*4-pkt[TCP].dataofs*4
     ethsrc = pkt[Ether].src
     ethdst = pkt[Ether].dst
-    if newtarget[0]!=basedef.RULE_ATTR_NAME_redirect_type_url:
+    httpres=""
+    if newtarget[0]==basedef.RULE_ATTR_NAME_redirect_type_url:
+
+        redir_url = newtarget[1]
+
+        httpres="""HTTP/1.1 302 Found\r\n\
+                Content-Type: text/html\r\n\
+                Location: {}\r\n\
+                Content-Length: 0\r\n\r\n""".format(redir_url)
+    elif newtarget[0]==basedef.RULE_ATTR_NAME_redirect_type_buf:
+        httpres = newtarget[1]
+    else:
         logging.warning('not support for Now!!!!!')
         return
-
-    redir_url = newtarget[1]
-
-    httpres="""HTTP/1.1 302 Found\r\n\
-            Content-Type: text/html\r\n\
-            Location: {}\r\n\
-            Content-Length: 0\r\n\r\n""".format(redir_url)
-
 
     #newack = (seq+len(httpres))&0xffffffff
     newack = seq+reqlen
