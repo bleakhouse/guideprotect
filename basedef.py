@@ -8,7 +8,7 @@ import thread
 import time
 import re
 import os
-
+import gpconf
 
 RULE_ATTR_NAME_rule = 'rule'
 RULE_ATTR_NAME_name = 'name'
@@ -41,6 +41,13 @@ class InterceptRule:
     strfullUrl=""
 
     def is_url_match(self, host, req):
+
+        if gpconf.gcServer.output_log():
+            print 'is_url_match'
+            print self.mstrUrlHost
+            print self.strUrlReq
+            print self.strRedirectData
+            print 'is_url_match end'
 
         host = host.upper()
         if host!=self.mstrUrlHost and len(self.mstrUrlHost)>0:

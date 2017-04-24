@@ -77,7 +77,7 @@ def get_sniff_eth():
 class confserver:
      binit=False
      myconfiger = configer.Xconfiger()
-     blogging = False
+     blogging = True
 
      def output_log(self):
          return self.blogging
