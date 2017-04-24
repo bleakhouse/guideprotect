@@ -81,7 +81,7 @@ class Xconfiger:
                 logging.error('wrong rule!!!!!!:'+rulename)
 
             l=[]
-            logging.info(vars(ruleitem))
+
             l.append(ruleitem)
             if rulename in self.dictRules.keys():
                 self.dictRules[rulename].append(ruleitem)
