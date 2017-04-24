@@ -55,7 +55,7 @@ class Xconfiger:
 
             full_url = v['full_url'].upper()
             if full_url.startswith('HTTP://'):
-                full_url.mstrUrlHost = full_url.mstrUrlHost[7:]
+                ruleitem.mstrUrlHost = ruleitem.mstrUrlHost[7:]
             if len(full_url)>0:
                 pos1 = full_url.find('/')
                 if pos1!=-1:
