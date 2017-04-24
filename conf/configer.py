@@ -23,7 +23,10 @@ class Xconfiger:
 
     def init(self):
         self.load_url_rules()
-        logging.info('load rules:'+str(len(self.dictRules)))
+        if len(self.dictRules)==0:
+            logging.error('there is no ruls!!!!!!')
+        else:
+            logging.info('load rules:'+str(len(self.dictRules)))
 
     def load_url_rules(self):
         self.dictRules = {}
