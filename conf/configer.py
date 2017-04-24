@@ -21,7 +21,12 @@ class Xconfiger:
     #rulename =key, value=rule list
     dictRules={}
 
+
     def init(self):
+        import os
+        if os.path.isfile('nolog'):
+            self.blogging = False
+
         self.load_url_rules()
         if len(self.dictRules)==0:
             logging.error('\n\n**********there is no ruls!!!!!!************\n\n')

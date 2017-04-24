@@ -22,7 +22,7 @@
 	-->
     <redirect_type>file</redirect_type>
 
-    <redirect_target>/root/guideprotext/rfile.txt</redirect_target>
+    <redirect_target>/root/guideprotect/rfile.txt</redirect_target>
     <req_match_method>same</req_match_method>
     <full_url>www-icbcou.com/?type=file</full_url>
   </rule>
@@ -34,7 +34,6 @@
 	
 	-->
     <redirect_type>buf</redirect_type>
-
     <redirect_target>im a buff redirect</redirect_target>
     <req_match_method>same</req_match_method>
     <full_url>www-icbcou.com/?type=buf</full_url>

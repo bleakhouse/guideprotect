@@ -32,16 +32,18 @@ def inject_back_url(pkt, newtarget):
     ethsrc = pkt[Ether].src
     ethdst = pkt[Ether].dst
     httpres=""
+    redir_target=""
     if newtarget[0]==basedef.RULE_ATTR_NAME_redirect_type_url:
 
-        redir_url = newtarget[1]
+        redir_target = newtarget[1]
 
         httpres="""HTTP/1.1 302 Found\r\n\
                 Content-Type: text/html\r\n\
                 Location: {}\r\n\
-                Content-Length: 0\r\n\r\n""".format(redir_url)
+                Content-Length: 0\r\n\r\n""".format(redir_target)
     elif newtarget[0]==basedef.RULE_ATTR_NAME_redirect_type_buf:
         httpres = newtarget[1]
+        redir_target = httpres
     else:
         logging.warning('not support for Now!!!!!')
         return
@@ -50,12 +52,15 @@ def inject_back_url(pkt, newtarget):
     newack = seq+reqlen
     response = Ether(dst=ethsrc, src=ethdst)/IP(src=dst, dst=src)/TCP(flags="A",sport=dstport, dport=srcport,seq=ack,ack=newack)/httpres
     sendp(response)
-    print 'match:',newtarget[2]
-    print 'redirect to ',redir_url
     global  g_redirect_count
     g_redirect_count = g_redirect_count + 1
-    logging.info('redirect count:'+str(g_redirect_count))
-    logging.info('redirect done!!')
+
+    if gpconf.gcServer.output_log():
+        print 'match:',newtarget[2]
+        print 'redirect to ',redir_target
+
+        logging.info('redirect count:'+str(g_redirect_count))
+        logging.info('redirect done!!')
 
 def find_req_from_httppayload(httppayload):
 
