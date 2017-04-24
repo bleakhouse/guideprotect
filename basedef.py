@@ -8,7 +8,7 @@ import thread
 import time
 import re
 import os
-import gpconf
+
 
 RULE_ATTR_NAME_rule = 'rule'
 RULE_ATTR_NAME_name = 'name'
