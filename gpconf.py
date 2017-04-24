@@ -83,7 +83,7 @@ class confserver:
         if self.binit :
              return self.binit
 
-        binit  =True
+        self.binit  =True
         self.myconfiger.init()
 
      def get_direct_info(self, host,req):
