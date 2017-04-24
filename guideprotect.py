@@ -23,14 +23,14 @@ def start(sniffeth):
 
     sniff(filter="tcp and dst port 80", iface=sniffeth, prn=snifhandler.sniff_check_http_packet)
 
-
+import  gpconf
 if __name__ == '__main__':
 
     mylogging.setuplog('guideprotect')
     reload(sys).setdefaultencoding("utf8")
 
     logging.info('guideprotect up.....')
-
+    gpconf.gcServer.init()
     snife, inje= gpconf.get_sniff_eth()
     if len(snife)>0 and  len(inje)>0:
         print 'select eth:'

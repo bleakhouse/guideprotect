@@ -1,8 +1,7 @@
 # -*- coding: UTF-8 -*-
 __author__ = 'Administrator'
 import json
-import logging
-import logging.handlers
+
 import platform
 import thread
 import time
@@ -87,13 +86,13 @@ def sniff_check_http_packet(pkt):
     if req is None:
         return
 
-    logging.info(str(req))
-    print req
-    gpconf.gcServer.init()
+    #logging.info(str(req))
+    #print req
+
     redirect_info = gpconf.gcServer.get_direct_info(req[0], req[1])
-    print 'get_direct_info:', redirect_info
+    #print 'get_direct_info:', redirect_info
     if redirect_info is None:
         return
-    logging.info('redirect '+str(req))
+    #logging.info('redirect '+str(req))
     inject_back_url(pkt, redirect_info)
 
