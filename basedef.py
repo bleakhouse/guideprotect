@@ -71,6 +71,10 @@ class InterceptRule:
 
 
     def get_redirect_info(self):
+
+        if self.strRedirectDataIfFile is not None:
+            return [RULE_ATTR_NAME_redirect_type_buf, self.strRedirectDataIfFile,self.strRuleName]
+
         if self.strRedirectType==RULE_ATTR_NAME_redirect_type_file:
             self.strRedirectType = RULE_ATTR_NAME_redirect_type_buf
             if os.path.isfile(self.strRedirectData):
@@ -79,9 +83,6 @@ class InterceptRule:
             else:
                 logging.error('file not exits '+self.strRedirectData)
                 return [RULE_ATTR_NAME_redirect_type_buf,'no data error03',self.strRuleName]
-
-        if self.strRedirectDataIfFile is not None:
-            return [RULE_ATTR_NAME_redirect_type_buf, self.strRedirectDataIfFile,self.strRuleName]
 
         return [self.strRedirectType, self.strRedirectData,self.strRuleName]
 

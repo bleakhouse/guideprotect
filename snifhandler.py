@@ -44,8 +44,7 @@ def inject_back_url(pkt, newtarget):
     elif newtarget[0]==basedef.RULE_ATTR_NAME_redirect_type_buf:
         httpres="""HTTP/1.1 200 OK\r\n\
                 Content-Type: text/html\r\n\
-                Location: {0}\r\n\
-                Content-Length: {1}\r\n\r\n""".format(newtarget[1], len(newtarget[1]))
+                Content-Length: {0}\r\n\r\n{1}""".format(len(newtarget[1]),newtarget[1])
         redir_target = httpres
     else:
         logging.warning('not support for Now!!!!!')

@@ -14,7 +14,7 @@ except ImportError:
 from dbase import db
 import basedef
 import gpconf
-
+import os
 
 class Xconfiger:
 
@@ -60,6 +60,9 @@ class Xconfiger:
             ruleitem.strfullUrl         =   v['full_url'].upper()
             if ruleitem.strRedirectType==basedef.RULE_ATTR_NAME_redirect_type_buf:
                 ruleitem.strRedirectData = str(ruleitem.strRedirectData)
+
+            if  ruleitem.strRedirectType==basedef.RULE_ATTR_NAME_redirect_type_file and os.path.isfile(self.strRedirectData):
+                self.strRedirectDataIfFile =  open(self.strRedirectData,'r').read()
 
             full_url = v['full_url']
             if len(full_url) > 0:
