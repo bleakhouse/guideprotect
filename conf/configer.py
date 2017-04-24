@@ -61,6 +61,8 @@ class Xconfiger:
             ruleitem.strMatchMethod     = v['urlMatchMethod']
             ruleitem.strRuleName         = v['name']
             ruleitem.strfullUrl         =   v['full_url'].upper()
+            if ruleitem.strRedirectType==basedef.RULE_ATTR_NAME_redirect_type_buf:
+                ruleitem.strRedirectData = str(ruleitem.strRedirectData)
 
             full_url = v['full_url']
             if len(full_url) > 0:
