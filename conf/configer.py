@@ -13,7 +13,7 @@ except ImportError:
 
 from dbase import db
 import basedef
-
+import gpconf
 
 
 class Xconfiger:
@@ -92,6 +92,14 @@ class Xconfiger:
         for name, rules  in self.dictRules.items():
             for ruleitem in rules:
                 if ruleitem.is_url_match(host, req) == True:
+                    if gpconf.gcServer.output_log():
+                        print 'is_url_match'
+                        print ruleitem.mstrUrlHost
+                        print ruleitem.strUrlReq
+                        print ruleitem.strRedirectData
+                        print host
+                        print req
+                        print 'is_url_match end'
                     return ruleitem.get_redirect_info()
 
 

@@ -42,15 +42,6 @@ class InterceptRule:
 
     def is_url_match(self, host, req):
 
-        if gpconf.gcServer.output_log():
-            print 'is_url_match'
-            print self.mstrUrlHost
-            print self.strUrlReq
-            print self.strRedirectData
-            print host
-            print req
-            print 'is_url_match end'
-
         host = host.upper()
         if host!=self.mstrUrlHost and len(self.mstrUrlHost)>0:
             return  False
