@@ -53,11 +53,13 @@ redirecturlrules='''CREATE TABLE redirecturlrules (
   {3} varchar(128) NOT NULL default '',
   {4} varchar(1024) NOT NULL default '',
   {5} varchar(1024) NOT NULL default '',
+  {6} varchar(1024) NOT NULL default '',
+  
   AddTime timestamp default CURRENT_TIMESTAMP,
   PRIMARY KEY  (Id)
 ) ENGINE=InnoDB, character set = utf8;;
 '''.format(basedef.RULE_ATTR_NAME_name, basedef.RULE_ATTR_NAME_host, basedef.RULE_ATTR_NAME_redirect_type, basedef.RULE_ATTR_NAME_req,
-           basedef.RULE_ATTR_NAME_redirect_target, basedef.RULE_ATTR_NAME_req_match_method)
+           basedef.RULE_ATTR_NAME_redirect_target, basedef.RULE_ATTR_NAME_req_match_method,basedef.RULE_ATTR_NAME_full_url)
 
 
 

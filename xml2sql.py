@@ -41,6 +41,18 @@ def restore2sql(fname=FILE_URL_RULES_NAME):
         v.update(rule.attrib)
         for rule_sub in rule:
             v[rule_sub.tag] = rule_sub.text
+
+        if not RULE_ATTR_NAME_host in v.keys() and not RULE_ATTR_NAME_req in v.keys():
+            if not RULE_ATTR_NAME_full_url in v.keys():
+                logging.error('error rule :'+v[RULE_ATTR_NAME_name])
+                continue
+        #these two node can be empty
+        if not RULE_ATTR_NAME_host in v.keys():
+            v[RULE_ATTR_NAME_host]=""
+
+        if not RULE_ATTR_NAME_req in v.keys():
+            v[RULE_ATTR_NAME_req] = ""
+
         rules.append(v)
 
     dbobj = db.getDbOrCreate()
@@ -56,13 +68,13 @@ def restore2sql(fname=FILE_URL_RULES_NAME):
     dbobj.execute('delete  from redirecturlrules')
     insult=0
     for rule in rules:
-        ins = "insert into redirecturlrules (%s,%s,%s,%s,%s,%s)"%(RULE_ATTR_NAME_name, RULE_ATTR_NAME_req_match_method, RULE_ATTR_NAME_req,
-             RULE_ATTR_NAME_redirect_target,RULE_ATTR_NAME_redirect_type, RULE_ATTR_NAME_host
+        ins = "insert into redirecturlrules (%s,%s,%s,%s,%s,%s,%s)"%(RULE_ATTR_NAME_name, RULE_ATTR_NAME_req_match_method, RULE_ATTR_NAME_req,
+             RULE_ATTR_NAME_redirect_target,RULE_ATTR_NAME_redirect_type, RULE_ATTR_NAME_host, RULE_ATTR_NAME_full_url
              )
 
-        insult = insult+dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s)",(
+        insult = insult+dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s,%s)",(
              rule[RULE_ATTR_NAME_name], rule[RULE_ATTR_NAME_req_match_method], rule[RULE_ATTR_NAME_req],
-             rule[RULE_ATTR_NAME_redirect_target], rule[RULE_ATTR_NAME_redirect_type], rule[RULE_ATTR_NAME_host]))
+             rule[RULE_ATTR_NAME_redirect_target], rule[RULE_ATTR_NAME_redirect_type], rule[RULE_ATTR_NAME_host], rule[RULE_ATTR_NAME_full_url]))
 
     print 'insert succ:', insult
     print '\n\n'

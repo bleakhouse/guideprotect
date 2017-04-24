@@ -44,6 +44,7 @@ class Xconfiger:
             v['reqrule'] = item[4]
             v['newurldata'] = item[5]
             v['urlMatchMethod'] = item[6]
+            v['full_url'] = item[7]
 
             ruleitem.strRedirectData    = v['newurldata']
             ruleitem.strRedirectType    = v['RedirectType']
@@ -51,6 +52,16 @@ class Xconfiger:
             ruleitem.strUrlReq          = v['reqrule'].upper()
             ruleitem.strMatchMethod     = v['urlMatchMethod']
             ruleitem.strRuleName         = v['name']
+
+            full_url = v['full_url'].upper()
+            if full_url.startswith('HTTP://'):
+                full_url.mstrUrlHost = full_url.mstrUrlHost[7:]
+            if len(full_url)>0:
+                pos1 = full_url.find('/')
+                if pos1!=-1:
+                    ruleitem.mstrUrlHost=full_url[:pos1]
+                    ruleitem.strUrlReq = full_url[pos1:]
+
             if ruleitem.mstrUrlHost.startswith('HTTP://'):
                 ruleitem.mstrUrlHost =ruleitem.mstrUrlHost[7:]
             l=[]
@@ -69,5 +80,5 @@ class Xconfiger:
 
 if __name__=='__main__':
     x = Xconfiger()
-    x.load_url_rules()
+    x.init()
     x.check_url_match('11','bb')

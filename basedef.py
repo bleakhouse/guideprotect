@@ -17,6 +17,7 @@ RULE_ATTR_NAME_req = 'req'
 RULE_ATTR_NAME_redirect_target = 'redirect_target'
 RULE_ATTR_NAME_redirect_type = 'redirect_type'
 RULE_ATTR_NAME_req_match_method = 'req_match_method'
+RULE_ATTR_NAME_full_url = 'full_url'
 
 RULE_ATTR_NAME_req_match_method_same   = "same"
 RULE_ATTR_NAME_req_match_method_starts   = "startswith"
@@ -32,7 +33,7 @@ class InterceptRule:
     mstrUrlHost =""
     strUrlReq=""
     strRedirectType=RULE_ATTR_NAME_redirect_type_url
-    strRedirectData="www.baidu.com"
+    strRedirectData=""
     strMatchMethod =RULE_ATTR_NAME_req_match_method_same
     strRuleName="default"
     repattern=None
@@ -41,10 +42,13 @@ class InterceptRule:
     def is_url_match(self, host, req):
 
         host = host.upper()
-        if host!=self.mstrUrlHost:
+        if host!=self.mstrUrlHost and len(self.mstrUrlHost)>0:
             return  False
 
         req = req.upper()
+        if len(self.strUrlReq)==0:
+            return  True
+
         if self.strMatchMethod == RULE_ATTR_NAME_req_match_method_same:
             if self.strUrlReq==req:
                 return True

@@ -87,6 +87,7 @@ def dumpsql2xml(fname=FILE_URL_RULES_NAME):
         rule[RULE_ATTR_NAME_req] = row[4]
         rule[RULE_ATTR_NAME_redirect_target] = row[5]
         rule[RULE_ATTR_NAME_req_match_method] = row[6]
+        rule[RULE_ATTR_NAME_full_url] = row[7]
 
 
         rulenode = ET.SubElement(doc,RULE_ATTR_NAME_rule)
@@ -97,12 +98,14 @@ def dumpsql2xml(fname=FILE_URL_RULES_NAME):
         req             = ET.SubElement(rulenode, RULE_ATTR_NAME_req)
         redirect_target = ET.SubElement(rulenode, RULE_ATTR_NAME_redirect_target)
         req_match_method = ET.SubElement(rulenode, RULE_ATTR_NAME_req_match_method)
+        full_url = ET.SubElement(rulenode, RULE_ATTR_NAME_full_url)
 
         host.text           = rule[RULE_ATTR_NAME_host]
         redirect_type.text  = rule[RULE_ATTR_NAME_redirect_type]
         req.text            = rule[RULE_ATTR_NAME_req]
         redirect_target.text = rule[RULE_ATTR_NAME_redirect_target]
         req_match_method.text = rule[RULE_ATTR_NAME_req_match_method]
+        full_url.text = rule[RULE_ATTR_NAME_full_url]
 
     tree = ET.ElementTree(doc)
     tree.write(fname, encoding="UTF-8")
