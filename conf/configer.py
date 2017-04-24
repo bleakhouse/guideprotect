@@ -55,6 +55,7 @@ class Xconfiger:
             ruleitem.strUrlReq          = v['reqrule'].upper()
             ruleitem.strMatchMethod     = v['urlMatchMethod']
             ruleitem.strRuleName         = v['name']
+            ruleitem.strfullUrl         =   v['full_url'].upper()
 
             full_url = v['full_url']
             if len(full_url) > 0:
@@ -65,11 +66,17 @@ class Xconfiger:
                 if pos1 != -1:
                     ruleitem.mstrUrlHost = full_url[:pos1]
                     ruleitem.strUrlReq = full_url[pos1:]
-
+                else:
+                    ruleitem.mstrUrlHost = full_url
             else:
                 if ruleitem.mstrUrlHost.startswith('HTTP://'):
                     ruleitem.mstrUrlHost = ruleitem.mstrUrlHost[7:]
+
+            if len(ruleitem.mstrUrlHost)==0 and len(ruleitem.strUrlReq)==0:
+                logging.error('wrong rule!!!!!!:'+rulename)
+
             l=[]
+            logging.info(vars(ruleitem))
             l.append(ruleitem)
             if rulename in self.dictRules.keys():
                 self.dictRules[rulename].append(ruleitem)
@@ -84,6 +91,8 @@ class Xconfiger:
 
 
 if __name__=='__main__':
+    import mylogging
+    mylogging.setuplog()
     x = Xconfiger()
     x.init()
     x.check_url_match('11','bb')

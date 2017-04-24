@@ -38,6 +38,7 @@ class InterceptRule:
     strRuleName="default"
     repattern=None
     strRedirectDataIfFile=None
+    strfullUrl=""
 
     def is_url_match(self, host, req):
 
