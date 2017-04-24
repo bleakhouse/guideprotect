@@ -73,6 +73,7 @@ class Xconfiger:
                     ruleitem.strUrlReq = full_url[pos1:]
                 else:
                     ruleitem.mstrUrlHost = full_url
+                    ruleitem.strUrlReq = "/"
             else:
                 if ruleitem.mstrUrlHost.startswith('HTTP://'):
                     ruleitem.mstrUrlHost = ruleitem.mstrUrlHost[7:]
@@ -92,15 +93,11 @@ class Xconfiger:
         for name, rules  in self.dictRules.items():
             for ruleitem in rules:
                 if ruleitem.is_url_match(host, req) == True:
+                    r= ruleitem.get_redirect_info()
                     if gpconf.gcServer.output_log():
                         print 'is_url_match'
-                        print ruleitem.mstrUrlHost
-                        print ruleitem.strUrlReq
-                        print ruleitem.strRedirectData
-                        print host
-                        print req
-                        print 'is_url_match end'
-                    return ruleitem.get_redirect_info()
+                        print r
+                    return  r
 
 
 if __name__=='__main__':
