@@ -75,7 +75,7 @@ class InterceptRule:
             self.strRedirectType = RULE_ATTR_NAME_redirect_type_buf
             if os.path.isfile(self.strRedirectData):
                 self.strRedirectDataIfFile =  open(self.strRedirectData,'r').read()
-                return
+                return [RULE_ATTR_NAME_redirect_type_buf, self.strRedirectDataIfFile, self.strRuleName]
             else:
                 logging.error('file not exits '+self.strRedirectData)
                 return [RULE_ATTR_NAME_redirect_type_buf,'no data error03',self.strRuleName]
