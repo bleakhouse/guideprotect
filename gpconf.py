@@ -87,6 +87,7 @@ class confserver:
         import os
         if os.path.isfile('nolog'):
             self.blogging = False
+            logging.info('no logging'.center(50,'*'))
 
         if self.binit :
              return self.binit
