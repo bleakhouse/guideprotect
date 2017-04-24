@@ -18,7 +18,7 @@ import gpconf
 import basedef
 
 g_redirect_count = 0
-
+g_redirect_eth=""
 def inject_back_url(pkt, newtarget):
 
     src=pkt[IP].src
@@ -53,7 +53,7 @@ def inject_back_url(pkt, newtarget):
     #newack = (seq+len(httpres))&0xffffffff
     newack = seq+reqlen
     response = Ether(dst=ethsrc, src=ethdst)/IP(src=dst, dst=src)/TCP(flags="A",sport=dstport, dport=srcport,seq=ack,ack=newack)/httpres
-    sendp(response)
+    sendp(response, iface=g_redirect_eth)
     global  g_redirect_count
     g_redirect_count = g_redirect_count + 1
 

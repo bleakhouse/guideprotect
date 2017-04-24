@@ -36,6 +36,7 @@ if __name__ == '__main__':
         print 'select eth:'
         print 'sniffer:',snife
         print 'inject:',inje
+        snifhandler.g_redirect_eth=inje
         pass
         start(snife)
     else:
