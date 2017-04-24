@@ -53,17 +53,19 @@ class Xconfiger:
             ruleitem.strMatchMethod     = v['urlMatchMethod']
             ruleitem.strRuleName         = v['name']
 
-            full_url = v['full_url'].upper()
-            if full_url.startswith('HTTP://'):
-                ruleitem.mstrUrlHost = ruleitem.mstrUrlHost[7:]
-            if len(full_url)>0:
+            full_url = v['full_url']
+            if len(full_url) > 0:
+                full_url = v['full_url'].upper()
+                if full_url.startswith('HTTP://'):
+                    full_url = full_url[7:]
                 pos1 = full_url.find('/')
-                if pos1!=-1:
-                    ruleitem.mstrUrlHost=full_url[:pos1]
+                if pos1 != -1:
+                    ruleitem.mstrUrlHost = full_url[:pos1]
                     ruleitem.strUrlReq = full_url[pos1:]
 
-            if ruleitem.mstrUrlHost.startswith('HTTP://'):
-                ruleitem.mstrUrlHost =ruleitem.mstrUrlHost[7:]
+            else:
+                if ruleitem.mstrUrlHost.startswith('HTTP://'):
+                    ruleitem.mstrUrlHost = ruleitem.mstrUrlHost[7:]
             l=[]
             l.append(ruleitem)
             if rulename in self.dictRules.keys():
