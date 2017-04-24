@@ -22,7 +22,7 @@ SELECT_CONF_FILENAME ='seleth.txt'
 
 
 def promote_select_eth():
-    iflist = utils.getIfaceList()
+    iflist = gputils.getIfaceList()
     if len(iflist) < 2:
         logging.info('there is no enough ethers')
         sys.exit(0)
