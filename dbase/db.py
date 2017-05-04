@@ -51,9 +51,9 @@ forgeurls='''CREATE TABLE forgeurls (
 redirecturlrules='''CREATE TABLE redirecturlrules (
   Id bigint(21) NOT NULL auto_increment,
   {0} varchar(128) NOT NULL default '',
-  {1} varchar(128) NOT NULL default '',
+  {1} varchar(128) default '',
   {2} varchar(128) NOT NULL default '',
-  {3} varchar(128) NOT NULL default '',
+  {3} varchar(128) default '',
   {4} varchar(1024) NOT NULL default '',
   {5} varchar(1024) NOT NULL default '',
   {6} varchar(1024) NOT NULL default '',
