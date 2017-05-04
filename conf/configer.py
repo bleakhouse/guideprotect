@@ -99,22 +99,39 @@ class Xconfiger:
             l=[]
 
             l.append(ruleitem)
-            if rulename in self.dictRules.keys():
-                self.dictRules[rulename].append(ruleitem)
+            dickey = ruleitem.strfullUrl
+            if len(dickey)==0:
+                dickey = ruleitem.mstrUrlHost
+
+            if dickey in self.dictRules.keys():
+                self.dictRules[dickey].append(ruleitem)
             else:
-                self.dictRules[rulename] = l
+                self.dictRules[dickey] = l
 
     def check_url_match(self, host, req):
-        for name, rules  in self.dictRules.items():
-            for ruleitem in rules:
-                if ruleitem.is_url_match(host, req) == True:
-                    r= ruleitem.get_redirect_info()
-                    ruleitem.imatch_count = ruleitem.imatch_count+1
+        fullurl = host+req
 
-                    if gpconf.gcServer.output_log():
-                        print 'is_url_match'
-                        print r
-                    return  r
+        dickey = fullurl.upper()
+
+        ruleitemlist = None
+        if dickey in self.dictRules.keys():
+            ruleitemlist = self.dictRules[dickey]
+        else:
+            dickey = host.upper()
+            if dickey in self.dictRules.keys():
+                ruleitemlist = self.dictRules[dickey]
+        if ruleitemlist is None:
+            return
+
+        for ruleitem in ruleitemlist:
+            if ruleitem.is_url_match(host, req) == True:
+                r= ruleitem.get_redirect_info()
+                ruleitem.imatch_count = ruleitem.imatch_count+1
+
+                if gpconf.gcServer.output_log():
+                    print 'is_url_match'
+                    print r
+                return  r
 
 
 if __name__=='__main__':
