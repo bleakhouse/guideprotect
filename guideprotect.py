@@ -23,6 +23,25 @@ def start(sniffeth):
 
     sniff(filter="tcp and dst port 80", iface=sniffeth, prn=snifhandler.sniff_check_http_packet)
 
+import basedef
+def RuntimEnginThread(name):
+    x = __import__('hotpatch')
+    x.check(basedef.gvar)
+    while 1:
+
+        x = reload(sys.modules['hotpatch'])
+        x.check(basedef.gvar)
+        time.sleep(30)
+
+class RuntimEngin(object):
+    def Start(self):
+        try:
+            thread.start_new_thread(RuntimEnginThread, ("RuntimEnginThread-1",))
+        except:
+            print "Error: unable to start RuntimEnginThread"
+
+
+
 import  gpconf
 if __name__ == '__main__':
 
@@ -37,7 +56,7 @@ if __name__ == '__main__':
         print 'sniffer:',snife
         print 'inject:',inje
         snifhandler.g_redirect_eth=inje
-        pass
+        RuntimEngin.Start()
         start(snife)
     else:
         logging.info('no eth selected!!')

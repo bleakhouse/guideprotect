@@ -28,6 +28,8 @@ RULE_ATTR_NAME_redirect_type_url  ='url'
 RULE_ATTR_NAME_redirect_type_buf  ='buf'
 RULE_ATTR_NAME_redirect_type_file  ='file'
 
+gvar={}
+
 #type for strRedirectType 'url', 'buf','buffile'
 class InterceptRule:
     mstrUrlHost =""
@@ -39,7 +41,7 @@ class InterceptRule:
     repattern=None
     strRedirectDataIfFile=None
     strfullUrl=""
-
+    imatch_count=0
     def is_url_match(self, host, req):
 
         host = host.upper()

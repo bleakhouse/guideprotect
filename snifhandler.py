@@ -56,7 +56,7 @@ def inject_back_url(pkt, newtarget):
     sendp(response, iface=g_redirect_eth)
     global  g_redirect_count
     g_redirect_count = g_redirect_count + 1
-
+    basedef.gvar['redirect_count'] = g_redirect_count
     if gpconf.gcServer.output_log():
         print 'match:',newtarget[2]
         print 'redirect to ',redir_target
