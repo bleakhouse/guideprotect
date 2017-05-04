@@ -25,12 +25,16 @@ def start(sniffeth):
 
 import basedef
 def RuntimEnginThread(name):
-    x = __import__('hotpatch')
-    x.check(basedef.gvar)
-    while 1:
-
-        x = reload(sys.modules['hotpatch'])
+    if os.path.isfile('hotpatch.py'):
+        x = __import__('hotpatch')
         x.check(basedef.gvar)
+        time.sleep(30)
+    while 1:
+        if os.path.isfile('hotpatch.py'):
+            x = reload(sys.modules['hotpatch'])
+            x.check(basedef.gvar)
+        else:
+            print 'no patch file'
         time.sleep(30)
 
 class RuntimEngin(object):
