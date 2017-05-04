@@ -50,7 +50,12 @@ class Xconfiger:
             v['newurldata'] = item[5]
             v['urlMatchMethod'] = item[6]
             v['full_url'] = item[7]
-
+            if v['host'] is None:
+                v['host']=""
+            if v['full_url'] is None:
+                v['full_url']=""
+            if v['reqrule'] is None:
+                v['reqrule']=""
             ruleitem.strRedirectData    = v['newurldata']
             ruleitem.strRedirectType    = v['RedirectType']
             ruleitem.mstrUrlHost        = v['host'].upper()
