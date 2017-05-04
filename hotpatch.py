@@ -9,5 +9,6 @@ import logging
 import os
 
 def check(ginfo):
+
     if 'redirect_count' in ginfo.keys():
         print 'redirect_count:',ginfo['redirect_count']
