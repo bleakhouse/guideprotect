@@ -60,7 +60,7 @@ if __name__ == '__main__':
         print 'sniffer:',snife
         print 'inject:',inje
         snifhandler.g_redirect_eth=inje
-        RuntimEngin.Start()
+        RuntimEngin().Start()
         start(snife)
     else:
         logging.info('no eth selected!!')
