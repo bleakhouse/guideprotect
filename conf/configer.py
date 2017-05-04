@@ -28,7 +28,12 @@ class Xconfiger:
         if len(self.dictRules)==0:
             logging.error('\n\n**********there is no ruls!!!!!!************\n\n')
         else:
-            logging.info('load rules:'+str(len(self.dictRules)))
+
+            logging.info('load rules type:'+str(len(self.dictRules)))
+            num =0
+            for k,v in self.dictRules.items():
+                num = num+1*len(v)
+            logging.info('number of rules:'+str(num))
 
     def load_url_rules(self):
         self.dictRules = {}
