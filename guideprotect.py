@@ -36,13 +36,16 @@ def RuntimEnginThread(name):
     while 1:
         try:
             if os.path.isfile('hotpatch.py'):
+                x = __import__('hotpatch')
                 x = reload(sys.modules['hotpatch'])
                 x.check(basedef.gvar)
             else:
                 print 'no patch file'
             time.sleep(30)
-        except:
-            print "Error: RuntimEnginThread 22"
+        except Exception, e:
+            logging.error(str(e))
+            logging.error(traceback.format_exc())
+
             time.sleep(30)
             continue
 
