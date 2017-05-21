@@ -15,7 +15,7 @@ from dbase import db
 import basedef
 import gpconf
 import os
-
+gtestx=1
 class Xconfiger:
 
     #rulename =key, value=rule list
@@ -107,12 +107,14 @@ class Xconfiger:
                     newkey =full_url[4:]
                 else:
                     newkey = "WWW."+full_url
-
+            dickey = str(dickey)
             if dickey in self.dictRules.keys():
                 self.dictRules[dickey].append(ruleitem)
             else:
                 self.dictRules[dickey] = l
             if newkey is not None:
+
+                newkey = str(newkey)
                 if newkey in self.dictRules.keys():
                     self.dictRules[newkey].append(ruleitem)
                 else:
@@ -122,6 +124,20 @@ class Xconfiger:
         fullurl = host+req
 
         dickey = fullurl.upper()
+
+        global  gtestx
+        if gtestx==1:
+            gtestx=0
+            if type(host)!=self.dictRules.keys()[0]:
+                print '*****************not same type********************\n'
+
+                print '*****************not same type********************\n'
+
+                print '*****************not same type********************\n'
+
+                print '*****************not same type********************\n'
+
+                print '*****************not same type********************\n'
 
         ruleitemlist = None
         if dickey in self.dictRules.keys():
