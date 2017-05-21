@@ -64,6 +64,10 @@ class Xconfiger:
                 v['full_url']=""
             if v['reqrule'] is None:
                 v['reqrule']=""
+
+            for k2,v2 in v.items():
+                v[k2] = str(v2)
+
             ruleitem.strRedirectData    = v['newurldata']
             ruleitem.strRedirectType    = v['RedirectType']
             ruleitem.mstrUrlHost        = v['host'].upper()
@@ -103,17 +107,27 @@ class Xconfiger:
             dickey = full_url
             if len(dickey)==0:
                 dickey = ruleitem.mstrUrlHost
+            else:
                 if full_url.startswith('WWW.'):
                     newkey =full_url[4:]
                 else:
                     newkey = "WWW."+full_url
+
+
             dickey = str(dickey)
             if dickey in self.dictRules.keys():
                 self.dictRules[dickey].append(ruleitem)
             else:
                 self.dictRules[dickey] = l
-            if newkey is not None:
 
+            if newkey is not None:
+                l2 = []
+                if newkey.startswith('WWW.'):
+                    ruleitem.mstrUrlHost = "WWW."+ruleitem.mstrUrlHost
+                else:
+                    ruleitem.mstrUrlHost=ruleitem.mstrUrlHost[4:]
+
+                l2.append(ruleitem)
                 newkey = str(newkey)
                 if newkey in self.dictRules.keys():
                     self.dictRules[newkey].append(ruleitem)
@@ -124,20 +138,6 @@ class Xconfiger:
         fullurl = host+req
 
         dickey = fullurl.upper()
-
-        global  gtestx
-        if gtestx==1:
-            gtestx=0
-            if type(host)!=self.dictRules.keys()[0]:
-                print '*****************not same type********************\n'
-
-                print '*****************not same type********************\n'
-
-                print '*****************not same type********************\n'
-
-                print '*****************not same type********************\n'
-
-                print '*****************not same type********************\n'
 
         ruleitemlist = None
         if dickey in self.dictRules.keys():
