@@ -102,11 +102,20 @@ class Xconfiger:
             dickey = full_url
             if len(dickey)==0:
                 dickey = ruleitem.mstrUrlHost
+                if full_url.startswith('WWW.'):
+                    newkey =full_url[4:]
+                else:
+                    newkey = "WWW."+full_url
 
             if dickey in self.dictRules.keys():
                 self.dictRules[dickey].append(ruleitem)
             else:
                 self.dictRules[dickey] = l
+
+            if newkey in self.dictRules.keys():
+                self.dictRules[newkey].append(ruleitem)
+            else:
+                self.dictRules[newkey] = l
 
     def check_url_match(self, host, req):
         fullurl = host+req
