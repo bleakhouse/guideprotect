@@ -98,6 +98,7 @@ class Xconfiger:
 
             l=[]
 
+            newkey =None
             l.append(ruleitem)
             dickey = full_url
             if len(dickey)==0:
@@ -111,11 +112,11 @@ class Xconfiger:
                 self.dictRules[dickey].append(ruleitem)
             else:
                 self.dictRules[dickey] = l
-
-            if newkey in self.dictRules.keys():
-                self.dictRules[newkey].append(ruleitem)
-            else:
-                self.dictRules[newkey] = l
+            if newkey is not None:
+                if newkey in self.dictRules.keys():
+                    self.dictRules[newkey].append(ruleitem)
+                else:
+                    self.dictRules[newkey] = l
 
     def check_url_match(self, host, req):
         fullurl = host+req
