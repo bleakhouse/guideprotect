@@ -99,7 +99,7 @@ class Xconfiger:
             l=[]
 
             l.append(ruleitem)
-            dickey = ruleitem.strfullUrl
+            dickey = full_url
             if len(dickey)==0:
                 dickey = ruleitem.mstrUrlHost
 
