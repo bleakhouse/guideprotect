@@ -63,6 +63,25 @@ redirecturlrules='''CREATE TABLE redirecturlrules (
 '''.format(basedef.RULE_ATTR_NAME_name, basedef.RULE_ATTR_NAME_host, basedef.RULE_ATTR_NAME_redirect_type, basedef.RULE_ATTR_NAME_req,
            basedef.RULE_ATTR_NAME_redirect_target, basedef.RULE_ATTR_NAME_req_match_method,basedef.RULE_ATTR_NAME_full_url)
 
+url_check_stat='''CREATE TABLE url_check_stat (
+  Id bigint(21) NOT NULL auto_increment,
+  url_visit_count bigint(32),
+  url_block_count bigint(32),
+  check_date DATETIME,
+  PRIMARY KEY  (Id)
+) ENGINE=InnoDB, character set = utf8;;
+'''
+
+url_check_detail='''CREATE TABLE url_check_detail (
+  Id bigint(21) NOT NULL auto_increment,
+  host_name bigint(32),
+  host_visit_count bigint(32),
+  check_date DATETIME,
+  PRIMARY KEY  (Id)
+) ENGINE=InnoDB, character set = utf8;;
+'''
+
+
 def createtable(name):
 
     db =getDbOrCreate(DATABASE_NAME)
@@ -81,6 +100,8 @@ def createtable(name):
 def createalltables():
     createtable(forgeurls)
     createtable(redirecturlrules)
+    createtable(url_check_stat)
+    createtable(url_check_detail)
 
 createalltables()
 if __name__ == '__main__':
