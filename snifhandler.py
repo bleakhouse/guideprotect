@@ -56,7 +56,7 @@ def inject_back_url(pkt, newtarget):
     sendp(response, iface=g_redirect_eth)
     global  g_redirect_count
     g_redirect_count = g_redirect_count + 1
-    basedef.gvar['redirect_count'] = g_redirect_count
+    basedef.gvar['url_block_count'] = g_redirect_count
     if gpconf.gcServer.output_log():
         print 'match:',newtarget[2]
         print 'redirect to ',redir_target
@@ -71,6 +71,14 @@ def find_req_from_httppayload(httppayload):
         return [request.headers['Host'], request.path]
     except:
         return None
+
+
+def log_visit_info(host,req):
+
+    basedef.gvar['url_visit_count'] =basedef.gvar['url_visit_count']+1
+    host = host.upper()
+    basedef.gvar['host_visited'].add(host)
+
 
 def sniff_check_http_packet(pkt):
 
@@ -101,10 +109,17 @@ def sniff_check_http_packet(pkt):
     #logging.info(str(req))
     #print req
 
-    redirect_info = gpconf.gcServer.get_direct_info(req[0], req[1])
+    host1 = req[0].upper()
+    log_visit_info(host1, req[1])
+
+    if host1 in basedef.gvar['ignorehost']:
+        return
+
+
+    redirect_info = gpconf.gcServer.get_direct_info(host1, req[1])
     #print 'get_direct_info:', redirect_info
     if redirect_info is None:
         return
     #logging.info('redirect '+str(req))
     inject_back_url(pkt, redirect_info)
-
+    basedef.gvar['blocked_host_visited'].add(host1)

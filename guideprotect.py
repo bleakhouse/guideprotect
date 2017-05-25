@@ -58,6 +58,26 @@ class RuntimEngin(object):
             print "Error: unable to start RuntimEnginThread"
 
 
+def init_ignore_host_list():
+
+    basedef.gvar['ignorehost'] = set()
+
+    if not os.path.isfile('ignorehost.txt'):
+        return
+    fp = open('ignorehost.txt', 'r')
+    for r in fp:
+        r = r.strip()
+        if len(r)==0:
+            continue
+        basedef.gvar['ignorehost'].add(r)
+    logging.info("init ignor host list:"+str(len(basedef.gvar['ignorehost'])))
+
+def init_sth():
+    basedef.gvar['url_visit_count'] = 0
+    basedef.gvar['url_block_count'] = 0
+    basedef.gvar['host_visited'] = set()
+    basedef.gvar['blocked_host_visited'] = set()
+
 
 import  gpconf
 if __name__ == '__main__':
