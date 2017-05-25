@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
     mylogging.setuplog('guideprotect')
     reload(sys).setdefaultencoding("utf8")
-
+    init_ignore_host_list()
     logging.info('guideprotect up.....')
     gpconf.gcServer.init()
     snife, inje= gpconf.get_sniff_eth()
