@@ -115,12 +115,16 @@ class Xconfiger:
 
 
             dickey = str(dickey)
+            if dickey.find("/")==-1:
+                dickey = dickey+"/"
             if dickey in self.dictRules.keys():
                 self.dictRules[dickey].append(ruleitem)
             else:
                 self.dictRules[dickey] = l
 
             if newkey is not None:
+                if newkey.find("/")==-1:
+                    newkey = newkey+"/"
                 l2 = []
                 if newkey.startswith('WWW.'):
                     ruleitem.mstrUrlHost = "WWW."+ruleitem.mstrUrlHost
