@@ -15,6 +15,13 @@ import gpconf
 import snifhandler
 from scapy.all import *
 
+import basedef
+basedef.gvar['url_visit_count'] = 0
+basedef.gvar['url_block_count'] = 0
+basedef.gvar['host_visited'] = set()
+basedef.gvar['blocked_host_visited'] = set()
+
+
 def start(sniffeth):
 
     logging.info('importing scapy....')
@@ -71,12 +78,6 @@ def init_ignore_host_list():
             continue
         basedef.gvar['ignorehost'].add(r)
     logging.info("init ignor host list:"+str(len(basedef.gvar['ignorehost'])))
-
-def init_sth():
-    basedef.gvar['url_visit_count'] = 0
-    basedef.gvar['url_block_count'] = 0
-    basedef.gvar['host_visited'] = set()
-    basedef.gvar['blocked_host_visited'] = set()
 
 
 import  gpconf
