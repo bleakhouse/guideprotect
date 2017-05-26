@@ -15,7 +15,7 @@ from dbase import db
 import basedef
 import gpconf
 import os
-gtestx=1
+import copy
 class Xconfiger:
 
     #rulename =key, value=rule list
@@ -122,21 +122,23 @@ class Xconfiger:
             else:
                 self.dictRules[dickey] = l
 
+            ruleitem2 = basedef.InterceptRule()
+            ruleitem2 = copy.deepcopy(ruleitem)
             if newkey is not None:
                 if newkey.find("/")==-1:
                     newkey = newkey+"/"
                 l2 = []
                 if newkey.startswith('WWW.'):
-                    ruleitem.mstrUrlHost = "WWW."+ruleitem.mstrUrlHost
+                    ruleitem2.mstrUrlHost = "WWW."+ruleitem2.mstrUrlHost
                 else:
-                    ruleitem.mstrUrlHost=ruleitem.mstrUrlHost[4:]
+                    ruleitem2.mstrUrlHost=ruleitem2.mstrUrlHost[4:]
 
-                l2.append(ruleitem)
+                l2.append(ruleitem2)
                 newkey = str(newkey)
                 if newkey in self.dictRules.keys():
-                    self.dictRules[newkey].append(ruleitem)
+                    self.dictRules[newkey].append(ruleitem2)
                 else:
-                    self.dictRules[newkey] = l
+                    self.dictRules[newkey] = l2
 
     def check_url_match(self, host, req):
         fullurl = host+req
