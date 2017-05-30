@@ -12,7 +12,7 @@ import platform
 from basedef import *
 import os
 import traceback
-
+import MySQLdb
 
 
 try:
@@ -25,6 +25,21 @@ from dbase import db
 
 FILE_URL_RULES_NAME   = ('url_rule.xml')
 
+
+def getDbOrCreate2(dbname='guideprotect'):
+    conn=None
+    op = None
+    try:
+
+        conn = MySQLdb.connect(db.MYSQL_HOST,db.MYSQL_USR,db.MYSQL_PWD,  charset="utf8")
+
+        op = conn.cursor()
+        op.execute("CREATE DATABASE if not exists {0} DEFAULT CHARACTER SET 'utf8'".format(dbname))
+        op.execute("use "+dbname)
+    except Exception, e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+    return  op, conn
 
 def restore2sql(fname=FILE_URL_RULES_NAME):
 
@@ -55,7 +70,7 @@ def restore2sql(fname=FILE_URL_RULES_NAME):
 
         rules.append(v)
 
-    dbobj = db.getDbOrCreate()
+    dbobj, conn = getDbOrCreate2()
     number = dbobj.execute('select * from redirecturlrules')
 
     inp = raw_input('there are {0} records in database,\nare you sure want it be replaced by xml({1} records)?\npress 1 confirm!\n'.format(number, len(rules)))
@@ -75,7 +90,7 @@ def restore2sql(fname=FILE_URL_RULES_NAME):
         insult = insult+dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s,%s)",(
              rule[RULE_ATTR_NAME_name], rule[RULE_ATTR_NAME_req_match_method], rule[RULE_ATTR_NAME_req],
              rule[RULE_ATTR_NAME_redirect_target], rule[RULE_ATTR_NAME_redirect_type], rule[RULE_ATTR_NAME_host], rule[RULE_ATTR_NAME_full_url]))
-
+    conn.commit()
     print 'insert succ:', insult
     print '\n\n'
 

@@ -15,7 +15,9 @@ import basedef
 
 
 DATABASE_NAME  = 'guideprotect'
-
+MYSQL_HOST="127.0.0.1"
+MYSQL_USR = 'test'
+MYSQL_PWD = '123456'
 
 def getDbOrCreate(dbname=DATABASE_NAME):
 
@@ -23,7 +25,7 @@ def getDbOrCreate(dbname=DATABASE_NAME):
     op = None
     try:
 
-        obj = MySQLdb.connect("127.0.0.1","test","123456",  charset="utf8")
+        obj = MySQLdb.connect(MYSQL_HOST,MYSQL_USR,MYSQL_PWD,  charset="utf8")
 
         obj.autocommit(1)
         op = obj.cursor()
