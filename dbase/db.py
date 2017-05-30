@@ -121,7 +121,8 @@ def createtable_in_host_rate(table_create_sql):
         db.execute(table_create_sql)
 
     except MySQLdb.Error,e:
-        print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+        if e.args[0]!=1050:
+            print "Mysql Error %d: %s" % (e.args[0], e.args[1])
     else:
         print("OK")
 
@@ -146,7 +147,6 @@ def create_url_check_detail_furture():
           PRIMARY KEY  (Id)
         ) ENGINE=InnoDB, character set = utf8;;
         '''.format(tbl_name)
-        print tmp
         createtable_in_host_rate(tmp)
 
 def get_today_host_visit_tblname():
