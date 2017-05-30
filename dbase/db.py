@@ -12,7 +12,7 @@ import json
 import mylogging
 import MySQLdb
 import basedef
-
+import datetime
 
 DATABASE_NAME  = 'guideprotect'
 MYSQL_HOST="127.0.0.1"
@@ -20,6 +20,24 @@ MYSQL_USR = 'test'
 MYSQL_PWD = '123456'
 
 def getDbOrCreate(dbname=DATABASE_NAME):
+
+    obj=None
+    op = None
+    try:
+
+        obj = MySQLdb.connect(MYSQL_HOST,MYSQL_USR,MYSQL_PWD,  charset="utf8")
+
+        obj.autocommit(1)
+        op = obj.cursor()
+        op.execute("CREATE DATABASE if not exists {0} DEFAULT CHARACTER SET 'utf8'".format(dbname))
+        op.execute("use "+dbname)
+    except Exception, e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+    return  op
+
+
+def get_create_host_visitdb(dbname='host_visit_rate'):
 
     obj=None
     op = None
@@ -74,17 +92,9 @@ url_check_stat='''CREATE TABLE url_check_stat (
 ) ENGINE=InnoDB, character set = utf8;;
 '''
 
-url_check_detail='''CREATE TABLE url_check_detail (
-  Id bigint(21) NOT NULL auto_increment,
-  host_name bigint(32),
-  host_visit_count bigint(32),
-  check_date DATETIME,
-  PRIMARY KEY  (Id)
-) ENGINE=InnoDB, character set = utf8;;
-'''
 
 
-def createtable(name):
+def createtable(table_create_sql):
 
     db =getDbOrCreate(DATABASE_NAME)
 
@@ -92,19 +102,68 @@ def createtable(name):
         logging.info('getDbOrCreate fail')
         return
     try:
-        db.execute(name)
+        db.execute(table_create_sql)
 
     except MySQLdb.Error,e:
         print "Mysql Error %d: %s" % (e.args[0], e.args[1])
     else:
         print("OK")
 
+
+def createtable_in_host_rate(table_create_sql):
+
+    db =get_create_host_visitdb()
+
+    if db is None:
+        logging.info('createtable_in_host_rate fail')
+        return
+    try:
+        db.execute(table_create_sql)
+
+    except MySQLdb.Error,e:
+        print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+    else:
+        print("OK")
+
+def create_url_check_detail_furture():
+
+    next_15day_table_names=[]
+
+
+    timeNow = datetime.datetime.now()
+    for d in range(0,15):
+        anotherTime = timeNow + datetime.timedelta(days=d)
+        next_15day_table_names.append(anotherTime)
+
+
+    for day in next_15day_table_names:
+        tbl_name = 'z_'+day.strftime('%Y_%m_%d')
+        tmp = '''CREATE TABLE {0} (
+          Id bigint(21) NOT NULL auto_increment,
+          host_name bigint(32),
+          host_visit_count bigint(32),
+          check_date DATETIME,
+          PRIMARY KEY  (Id)
+        ) ENGINE=InnoDB, character set = utf8;;
+        '''.format(tbl_name)
+        print tmp
+        createtable_in_host_rate(tmp)
+
+def get_today_host_visit_tblname():
+    timeNow = datetime.datetime.now()
+    tbl_name = 'z_' + timeNow.strftime('%Y_%m_%d')
+    return  tbl_name
+
+
 def createalltables():
     createtable(forgeurls)
     createtable(redirecturlrules)
     createtable(url_check_stat)
-    createtable(url_check_detail)
+    create_url_check_detail_furture()
 
 createalltables()
+
 if __name__ == '__main__':
+
     createalltables()
+    print get_today_host_visit_tblname()
