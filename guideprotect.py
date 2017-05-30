@@ -20,7 +20,7 @@ basedef.gvar['url_visit_count'] = 0
 basedef.gvar['url_block_count'] = 0
 basedef.gvar['host_visited'] = set()
 basedef.gvar['blocked_host_visited'] = set()
-
+basedef.gvar['calling_hotpath'] = False
 
 def start(sniffeth):
 
@@ -43,9 +43,14 @@ def RuntimEnginThread(name):
     while 1:
         try:
             if os.path.isfile('hotpatch.py'):
+                logging.info('calling hotpath')
+
+                basedef.gvar['calling_hotpath'] = True
                 x = __import__('hotpatch')
                 x = reload(sys.modules['hotpatch'])
                 x.check(basedef.gvar)
+                logging.info('end call hotpath')
+                basedef.gvar['calling_hotpath'] = False
             else:
                 print 'no patch file'
             time.sleep(30)

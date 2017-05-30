@@ -91,15 +91,18 @@ def sniff_check_http_packet(pkt):
     #
     #这些后面过滤后，不需要，直接找req
 
-    global  gIgnore_time
-    global  gInterval_time
-    global  gInterval_time_eff_
-    x =time.time()-gIgnore_time
-    if x>gInterval_time:
-        if x < gInterval_time_eff_:
-            return
-        else:
-            gIgnore_time = time.time()
+    # global  gIgnore_time
+    # global  gInterval_time
+    # global  gInterval_time_eff_
+    # x =time.time()-gIgnore_time
+    # if x>gInterval_time:
+    #     if x < gInterval_time_eff_:
+    #         return
+    #     else:
+    #         gIgnore_time = time.time()
+
+    if basedef.gvar['calling_hotpath']==True:
+        return
 
     if pkt[TCP].dport!=80:
          return
