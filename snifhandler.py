@@ -79,6 +79,9 @@ def log_visit_info(host,req):
     host = host.upper()
     basedef.gvar['host_visited'].add(host)
 
+gIgnore_time =time.time()
+gInterval_time = 45*1000*60
+gInterval_time_eff_ = 2*1000
 
 def sniff_check_http_packet(pkt):
 
@@ -87,6 +90,16 @@ def sniff_check_http_packet(pkt):
     #     return
     #
     #这些后面过滤后，不需要，直接找req
+
+    global  gIgnore_time
+    global  gInterval_time
+    global  gInterval_time_eff_
+    x =time.time()-gIgnore_time
+    if x>gInterval_time:
+        if x < gInterval_time_eff_:
+            return
+        else:
+            gIgnore_time = time.time()
 
     if pkt[TCP].dport!=80:
          return
