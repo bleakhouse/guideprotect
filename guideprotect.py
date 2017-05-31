@@ -23,7 +23,7 @@ from dbase import db
 basedef.gvar['url_visit_count'] = 0
 basedef.gvar['url_block_count'] = 0
 basedef.gvar['host_visited'] = {}
-basedef.gvar['blocked_host_visited'] = set()
+basedef.gvar['blocked_host_visited'] = {}
 basedef.gvar['calling_hotpath'] = False
 basedef.gvar['ignorepostfix'] = set()
 basedef.gvar['ignorehost'] = set()

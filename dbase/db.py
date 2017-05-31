@@ -143,6 +143,7 @@ def create_url_check_detail_furture():
           Id bigint(21) NOT NULL auto_increment,
           host_name varchar(128) NOT NULL default '',
           host_visit_count bigint(32),
+          record_type bigint(32) default 0, 
           PRIMARY KEY  (Id)
         ) ENGINE=InnoDB, character set = utf8;;
         '''.format(tbl_name)

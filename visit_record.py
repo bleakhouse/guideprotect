@@ -15,7 +15,7 @@ import MySQLdb
 
 def update_url_check_stat(ginfo):
     url_visit_count = ginfo['url_visit_count']
-    blocked_host_visited = ginfo['blocked_host_visited']
+    blocked_host_visited = ginfo['url_block_count']
     ginfo['blocked_host_visited'] = 0
     ginfo['url_visit_count'] =0
 
@@ -26,7 +26,7 @@ def update_url_check_stat(ginfo):
     result = obj.execute(update, (url_visit_count, blocked_host_visited, db.get_today_visit_count_date()))
 
     ginfo['url_visit_count']=0
-    ginfo['blocked_host_visited']=0
+    ginfo['url_block_count']=0
 
 def get_visit_db(dbname='host_visit_rate'):
     conn=None
@@ -61,14 +61,34 @@ def update_visit_host_rate(ginfo):
             sql = "insert into {} (host_name,host_visit_count) values(%s,%s)".format(today)
             result = obj.execute(sql,( host,count))
 
+    for host, count in ginfo['blocked_host_visited'].items():
+
+        host = host.lower()
+        query = '''select * from {0} where host_name=%s and record_type=1'''.format(today)
+        obj.execute(query, (host,))
+        result = obj.fetchall()
+        if len(result)>0:
+            update = '''update {} set host_visit_count=host_visit_count +%s where host_name=%s and record_type=1'''.format(today)
+            result = obj.execute(update, (count, host))
+
+        else:
+            sql = "insert into {} (host_name,host_visit_count, record_type) values(%s,%s,%s)".format(today)
+            result = obj.execute(sql,( host,count, 1))
+
     conn.commit()
 
     ginfo['host_visited']={}
+    ginfo['blocked_host_visited']={}
 
 if __name__=='__main__':
     ginfo={}
     haha={}
     haha['baidu.com']=1
-    ginfo['host_visited']=haha
+    ginfo['host_visited'] = haha
+    haha={}
+    haha['baidu---block.com']=1
+
+    ginfo['blocked_host_visited'] = haha
+
     update_visit_host_rate(ginfo)
     pass
