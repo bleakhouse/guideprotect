@@ -16,7 +16,6 @@ import MySQLdb
 def update_url_check_stat(ginfo):
     url_visit_count = ginfo['url_visit_count']
     blocked_host_visited = ginfo['url_block_count']
-    ginfo['blocked_host_visited'] = 0
     ginfo['url_visit_count'] =0
 
     today = db.get_today_visit_count_date()
