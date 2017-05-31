@@ -77,7 +77,13 @@ def log_visit_info(host,req):
 
     basedef.gvar['url_visit_count'] =basedef.gvar['url_visit_count']+1
     host = host.upper()
-    basedef.gvar['host_visited'].add(host)
+    newhost = host
+    if host.startswith("WWW."):
+        newhost = host[4:]
+    if newhost in basedef.gvar['host_visited'].keys():
+        basedef.gvar['host_visited'][newhost] = basedef.gvar['host_visited'][newhost]+1
+    else:
+        basedef.gvar['host_visited'][newhost]=1
 
 gIgnore_time =time.time()
 gInterval_time = 45*1000*60
@@ -101,7 +107,7 @@ def sniff_check_http_packet(pkt):
     #     else:
     #         gIgnore_time = time.time()
 
-    if basedef.gvar['calling_hotpath']==True:
+    if basedef.gcalling_hotpath==True:
         return
 
     if pkt[TCP].dport!=80:
@@ -122,8 +128,16 @@ def sniff_check_http_packet(pkt):
     if req is None:
         return
 
+    req_postfix = req[1][-5:]
+    pos = req_postfix.find('.')
+    if pos!=-1:
+        if req_postfix[pos:].upper() in  basedef.gvar['ignorepostfix']:
+            return
+
     #logging.info(str(req))
     #print req
+
+
 
     host1 = req[0].upper()
     log_visit_info(host1, req[1])

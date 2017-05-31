@@ -29,6 +29,7 @@ RULE_ATTR_NAME_redirect_type_buf  ='buf'
 RULE_ATTR_NAME_redirect_type_file  ='file'
 
 gvar={}
+gcalling_hotpath = False
 
 #type for strRedirectType 'url', 'buf','buffile'
 class InterceptRule:

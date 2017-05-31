@@ -1,0 +1,9 @@
+
+.JS
+.CSS
+#picture
+.PNG
+.JPG
+.ICO
+.GIF
+

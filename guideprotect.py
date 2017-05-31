@@ -14,13 +14,19 @@ import gputils
 import gpconf
 import snifhandler
 from scapy.all import *
-
+import visit_record
 import basedef
+import  gpconf
+import  ignoremgr
+
+
 basedef.gvar['url_visit_count'] = 0
 basedef.gvar['url_block_count'] = 0
-basedef.gvar['host_visited'] = set()
+basedef.gvar['host_visited'] = {}
 basedef.gvar['blocked_host_visited'] = set()
 basedef.gvar['calling_hotpath'] = False
+basedef.gvar['ignorepostfix'] = set()
+basedef.gvar['ignorehost'] = set()
 
 def start(sniffeth):
 
@@ -31,6 +37,9 @@ def start(sniffeth):
     sniff(filter="tcp and dst port 80", iface=sniffeth, prn=snifhandler.sniff_check_http_packet)
 
 import basedef
+
+import datetime
+
 def RuntimEnginThread(name):
 
     try:
@@ -42,22 +51,30 @@ def RuntimEnginThread(name):
         print "Error: RuntimEnginThread 1"
     while 1:
         try:
+            basedef.gcalling_hotpath = True
+
             if os.path.isfile('hotpatch.py'):
                 logging.info('calling hotpath')
 
-                basedef.gvar['calling_hotpath'] = True
                 x = __import__('hotpatch')
                 x = reload(sys.modules['hotpatch'])
                 x.check(basedef.gvar)
                 logging.info('end call hotpath')
-                basedef.gvar['calling_hotpath'] = False
+
             else:
                 print 'no patch file'
+
+            visit_record.update_url_check_stat(basedef.gvar)
+
+            visit_record.update_visit_host_rate(basedef.gvar)
+
+            basedef.gcalling_hotpath = False
+            db.create_visit_furture_record()
             time.sleep(30)
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
-
+            basedef.gcalling_hotpath = False
             time.sleep(30)
             continue
 
@@ -70,27 +87,14 @@ class RuntimEngin(object):
             print "Error: unable to start RuntimEnginThread"
 
 
-def init_ignore_host_list():
 
-    basedef.gvar['ignorehost'] = set()
-
-    if not os.path.isfile('ignorehost.txt'):
-        return
-    fp = open('ignorehost.txt', 'r')
-    for r in fp:
-        r = r.strip()
-        if len(r)==0:
-            continue
-        basedef.gvar['ignorehost'].add(r)
-    logging.info("init ignor host list:"+str(len(basedef.gvar['ignorehost'])))
-
-
-import  gpconf
 if __name__ == '__main__':
 
     mylogging.setuplog('guideprotect')
     reload(sys).setdefaultencoding("utf8")
-    init_ignore_host_list()
+
+    ignoremgr.init()
+
     logging.info('guideprotect up.....')
     gpconf.gcServer.init()
     snife, inje= gpconf.get_sniff_eth()

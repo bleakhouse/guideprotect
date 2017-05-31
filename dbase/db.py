@@ -87,7 +87,7 @@ url_check_stat='''CREATE TABLE url_check_stat (
   Id bigint(21) NOT NULL auto_increment,
   url_visit_count bigint(32),
   url_block_count bigint(32),
-  check_date DATETIME,
+  date varchar(64) NOT NULL default '',
   PRIMARY KEY  (Id)
 ) ENGINE=InnoDB, character set = utf8;;
 '''
@@ -143,7 +143,6 @@ def create_url_check_detail_furture():
           Id bigint(21) NOT NULL auto_increment,
           host_name bigint(32),
           host_visit_count bigint(32),
-          check_date DATETIME,
           PRIMARY KEY  (Id)
         ) ENGINE=InnoDB, character set = utf8;;
         '''.format(tbl_name)
@@ -154,16 +153,52 @@ def get_today_host_visit_tblname():
     tbl_name = 'z_' + timeNow.strftime('%Y_%m_%d')
     return  tbl_name
 
+def get_today_visit_count_date():
+    timeNow = datetime.datetime.now()
+    record_name = timeNow.strftime('%Y-%m-%d')
+    return  record_name
+
+
+def create_visit_furture_record():
+    next_5day_record_names=[]
+
+
+    try:
+        timeNow = datetime.datetime.now()
+        for d in range(0,5):
+            anotherTime = timeNow + datetime.timedelta(days=d)
+            next_5day_record_names.append(anotherTime)
+
+        db = getDbOrCreate(DATABASE_NAME)
+        for day in next_5day_record_names:
+            record_name = day.strftime('%Y-%m-%d')
+            query ='''select * from url_check_stat where date=%s'''
+            db.execute(query,(record_name,))
+            result = db.fetchall()
+            if len(result)>0:
+                continue
+            result = db.execute("insert into url_check_stat (url_visit_count, url_block_count, date) values(%s,%s,%s)",(0, 0, record_name))
+
+    except Exception, e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
 
 def createalltables():
     createtable(forgeurls)
     createtable(redirecturlrules)
     createtable(url_check_stat)
     create_url_check_detail_furture()
+    create_visit_furture_record()
 
 createalltables()
 
 if __name__ == '__main__':
+
+    db = getDbOrCreate(DATABASE_NAME)
+    test1 = 1
+    test2 = 2
+    update = '''update url_check_stat set url_visit_count=url_visit_count+%s, url_block_count=url_block_count +%s where date=%s'''
+    result = db.execute(update, (test1, test2, get_today_visit_count_date()))
 
     createalltables()
     print get_today_host_visit_tblname()
