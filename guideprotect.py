@@ -18,7 +18,7 @@ import visit_record
 import basedef
 import  gpconf
 import  ignoremgr
-
+from dbase import db
 
 basedef.gvar['url_visit_count'] = 0
 basedef.gvar['url_block_count'] = 0

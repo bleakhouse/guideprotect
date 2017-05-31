@@ -45,7 +45,7 @@ def get_visit_db(dbname='host_visit_rate'):
 
 def update_visit_host_rate(ginfo):
 
-    obj, conn= db.get_visit_db()
+    obj, conn= get_visit_db()
     today = db.get_today_host_visit_tblname()
     for host, count in ginfo['host_visited'].items():
 
