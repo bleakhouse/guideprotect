@@ -40,13 +40,14 @@ import basedef
 
 import datetime
 
-def RuntimEnginThread(name):
 
+def RuntimEnginThread(name):
+    MAX_SLEEP = 30 * 60
     try:
         if os.path.isfile('hotpatch.py'):
             x = __import__('hotpatch')
             x.check(basedef.gvar)
-            time.sleep(30)
+            time.sleep(10)
     except:
         print "Error: RuntimEnginThread 1"
     while 1:
@@ -70,7 +71,9 @@ def RuntimEnginThread(name):
 
             basedef.gcalling_hotpath = False
             db.create_visit_furture_record()
-            time.sleep(30)
+
+            time.sleep(MAX_SLEEP)
+
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
