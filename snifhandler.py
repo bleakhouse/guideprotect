@@ -80,8 +80,13 @@ def log_visit_info(host,req):
     basedef.gvar['url_visit_count'] =basedef.gvar['url_visit_count']+1
     host = host.upper()
     newhost = host
+
     if host.startswith("WWW."):
         newhost = host[4:]
+
+    if newhost[-1:]=='/':
+        newhost = newhost[:-1]
+
     if newhost in basedef.gvar['host_visited'].keys():
         basedef.gvar['host_visited'][newhost] = basedef.gvar['host_visited'][newhost]+1
     else:
