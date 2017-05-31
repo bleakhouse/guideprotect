@@ -141,7 +141,7 @@ def create_url_check_detail_furture():
         tbl_name = 'z_'+day.strftime('%Y_%m_%d')
         tmp = '''CREATE TABLE {0} (
           Id bigint(21) NOT NULL auto_increment,
-          host_name bigint(32),
+          host_name varchar(128) NOT NULL default '',
           host_visit_count bigint(32),
           PRIMARY KEY  (Id)
         ) ENGINE=InnoDB, character set = utf8;;

@@ -49,21 +49,26 @@ def update_visit_host_rate(ginfo):
     today = db.get_today_host_visit_tblname()
     for host, count in ginfo['host_visited'].items():
 
-        query = '''select * from %s where host_name=%s'''
-        obj.execute(query, (today,host))
+        host = host.lower()
+        query = '''select * from {0} where host_name=%s'''.format(today)
+        obj.execute(query, (host,))
         result = obj.fetchall()
         if len(result)>0:
-            update = '''update %s set host_visit_count=host_visit_count +%s where host_name=%s'''
-            result = obj.execute(update, (today, count, host))
+            update = '''update {} set host_visit_count=host_visit_count +%s where host_name=%s'''.format(today)
+            result = obj.execute(update, (count, host))
 
         else:
-            result = obj.execute(
-                "insert into %s (host_name,host_visit_count) values(%s,%s)",
-                (today, host,count))
+            sql = "insert into {} (host_name,host_visit_count) values(%s,%s)".format(today)
+            result = obj.execute(sql,( host,count))
 
     conn.commit()
 
     ginfo['host_visited']={}
 
 if __name__=='__main__':
+    ginfo={}
+    haha={}
+    haha['baidu.com']=1
+    ginfo['host_visited']=haha
+    update_visit_host_rate(ginfo)
     pass
