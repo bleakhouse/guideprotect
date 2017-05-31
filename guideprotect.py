@@ -54,12 +54,12 @@ def RuntimEnginThread(name):
             basedef.gcalling_hotpath = True
 
             if os.path.isfile('hotpatch.py'):
-                logging.info('calling hotpath')
+                #logging.info('calling hotpath')
 
                 x = __import__('hotpatch')
                 x = reload(sys.modules['hotpatch'])
                 x.check(basedef.gvar)
-                logging.info('end call hotpath')
+                #logging.info('end call hotpath')
 
             else:
                 print 'no patch file'

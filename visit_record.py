@@ -15,14 +15,14 @@ import MySQLdb
 
 def update_url_check_stat(ginfo):
     url_visit_count = ginfo['url_visit_count']
-    blocked_host_visited = ginfo['url_block_count']
+    url_block_count = ginfo['url_block_count']
     ginfo['url_visit_count'] =0
 
     today = db.get_today_visit_count_date()
 
     obj = db.getDbOrCreate()
     update = '''update url_check_stat set url_visit_count=url_visit_count+%s, url_block_count=url_block_count +%s where date=%s'''
-    result = obj.execute(update, (url_visit_count, blocked_host_visited, db.get_today_visit_count_date()))
+    result = obj.execute(update, (url_visit_count, url_block_count, db.get_today_visit_count_date()))
 
     ginfo['url_visit_count']=0
     ginfo['url_block_count']=0

@@ -95,7 +95,7 @@ def log_visit_info(host,req):
 
 def log_redirect_url(host,req):
     full = host+req
-
+    full = full.lower()
     if full in basedef.gvar['blocked_host_visited'].keys():
         basedef.gvar['blocked_host_visited'][full] = basedef.gvar['blocked_host_visited'][full]+1
     else:
