@@ -23,7 +23,7 @@ def update_url_check_stat(ginfo):
 
     obj = db.getDbOrCreate()
     update = '''update url_check_stat set url_visit_count=url_visit_count+%s, url_block_count=url_block_count +%s where date=%s'''
-    result = db.execute(update, (url_visit_count, blocked_host_visited, db.get_today_visit_count_date()))
+    result = obj.execute(update, (url_visit_count, blocked_host_visited, db.get_today_visit_count_date()))
 
     ginfo['url_visit_count']=0
     ginfo['blocked_host_visited']=0
@@ -50,14 +50,14 @@ def update_visit_host_rate(ginfo):
     for host, count in ginfo['host_visited'].items():
 
         query = '''select * from %s where host_name=%s'''
-        db.execute(query, (today,host))
-        result = db.fetchall()
+        obj.execute(query, (today,host))
+        result = obj.fetchall()
         if len(result)>0:
             update = '''update %s set host_visit_count=host_visit_count +%s where host_name=%s'''
-            result = db.execute(update, (today, count, host))
+            result = obj.execute(update, (today, count, host))
 
         else:
-            result = db.execute(
+            result = obj.execute(
                 "insert into %s (host_name,host_visit_count) values(%s,%s)",
                 (today, host,count))
 
