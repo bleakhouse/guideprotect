@@ -166,8 +166,8 @@ def sniff_check_http_packet(pkt):
         return
 
 
-    redirect_info = gpconf.gcServer.get_direct_info(host1, req[1])
-    #redirect_info = url_redis_matcher.get_direct_info(host1, req[1])
+    #redirect_info = gpconf.gcServer.get_direct_info(host1, req[1])
+    redirect_info = url_redis_matcher.get_direct_info(host1, req[1])
     #print 'get_direct_info:', redirect_info
     if redirect_info is None:
         return
