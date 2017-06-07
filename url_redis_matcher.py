@@ -32,13 +32,13 @@ def get_direct_info( host,req):
     fullurl =host+req
     val = gRedisObj.hmget(fullurl, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time'])
 
-    if val is None:
+    if val is None or val[0] is None:
         new_unknow_url(fullurl)
         return
 
     if basedef.GP_URL_TYPE_VALID_TIMES!=-1:
         update_time = val[4]
-        if time.time()-int(update_time)>basedef.GP_URL_TYPE_VALID_TIMES:
+        if update_time is not None and time.time()-int(update_time)>basedef.GP_URL_TYPE_VALID_TIMES:
             new_unknow_url(fullurl) # over time,need to check timer again
             return
 
