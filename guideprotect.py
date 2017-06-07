@@ -116,6 +116,7 @@ if __name__ == '__main__':
 
     ignoremgr.init()
     url_redis_matcher.init_redis()
+    paser_cfg()
 
     logging.info('guideprotect up.....')
     gpconf.gcServer.init()

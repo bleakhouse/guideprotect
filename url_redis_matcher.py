@@ -78,10 +78,10 @@ def init_redis(host='127.0.0.1', port=6379):
     try:
         global gRedisObj
         gRedisObj = redis.Redis(host=host, port=port)
-        print gRedisObj.dbsize()
+        print 'url size:',gRedisObj.dbsize()
         global gRedisObj_unknow
         gRedisObj_unknow = new_url_updator.get_redis()
-        print gRedisObj_unknow.dbsize()
+        print 'unknow url size:', gRedisObj_unknow.dbsize()
 
     except Exception, e:
         logging.error(str(e))
