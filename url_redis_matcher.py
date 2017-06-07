@@ -30,7 +30,7 @@ def get_direct_info( host,req):
 
 
     urltype = val[0]
-    if not urltype.isdigit():
+    if urltype is None or not urltype.isdigit():
         return
 
     if int(urltype) != 2: # 2 means risky url
@@ -38,6 +38,8 @@ def get_direct_info( host,req):
 
     redirect_type = val[2]
     redirect_target=val[3]
+    if redirect_type is None or redirect_target is None:
+        return
 
     if redirect_type == RULE_ATTR_NAME_redirect_type_url or redirect_type == RULE_ATTR_NAME_redirect_type_buf :
         return [redirect_type, redirect_target]
