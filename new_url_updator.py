@@ -49,7 +49,7 @@ def do_update(name):
             unknow_urls = pip.smembers(gUNKNOW_URL_KEY_NAME)
             pip.flushdb()
             pip.execute()
-
+            print 'unknow_urls:',len(unknow_urls)
             updating_url_infos={}
             for url in unknow_urls:
                 url_info = http_check_url_type(url)
