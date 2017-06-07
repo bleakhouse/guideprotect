@@ -20,6 +20,7 @@ import  gpconf
 import  ignoremgr
 from dbase import db
 import url_redis_matcher
+import ConfigParser
 
 basedef.gvar['url_visit_count'] = 0
 basedef.gvar['url_block_count'] = 0
@@ -91,6 +92,22 @@ class RuntimEngin(object):
             print "Error: unable to start RuntimEnginThread"
 
 
+def paser_cfg(cfg='guideprotect.conf'):
+    try:
+        if os.path.isfile(cfg):
+            basedef.GP_Configer.read(cfg)
+            url_type_valid_time = basedef.GP_Configer.getint('boot','url_type_valid_time')
+            basedef.GP_URL_TYPE_VALID_TIMES = url_type_valid_time*24*3600
+            print 'url_type_valid_time(days):', url_type_valid_time
+            print 'GP_URL_TYPE_VALID_TIMES(sec):', basedef.GP_URL_TYPE_VALID_TIMES
+        else:
+            print 'url_type_valid_time(days):', basedef.GP_URL_TYPE_VALID_TIMES/3600/24
+
+            print 'not found:', cfg
+    except Exception, e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+
 
 if __name__ == '__main__':
 
@@ -112,7 +129,14 @@ if __name__ == '__main__':
         start(snife)
     else:
         logging.info('no eth selected!!')
+
     logging.info('guideprotect down!')
+    logging.info('star saving redis......')
+
+    r = url_redis_matcher.save_data()
+
+    logging.info('end saving redis..!')
+    print r
 
 #p = sub.Popen(('sudo', 'tcpdump', '-w'),stdout=sub.PIPE)
 

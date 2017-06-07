@@ -8,7 +8,7 @@ import thread
 import time
 import re
 import os
-
+import ConfigParser
 
 RULE_ATTR_NAME_rule = 'rule'
 RULE_ATTR_NAME_name = 'name'
@@ -30,6 +30,8 @@ RULE_ATTR_NAME_redirect_type_file  ='file'
 
 gvar={}
 gcalling_hotpath = False
+GP_Configer=ConfigParser.ConfigParser()
+GP_URL_TYPE_VALID_TIMES =   3600*24*30 #30 days
 
 #type for strRedirectType 'url', 'buf','buffile'
 class InterceptRule:
