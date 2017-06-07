@@ -8,11 +8,13 @@ import logging
 import basedef
 import redis
 import traceback
+from basedef import *
+import os
 
 gRedisObj=None
 gTargetFile={}
 
-def get_direct_info(self, host,req):
+def get_direct_info( host,req):
     global gRedisObj
     if gRedisObj is None:
         return
