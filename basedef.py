@@ -45,11 +45,11 @@ class InterceptRule:
     imatch_count=0
     def is_url_match(self, host, req):
 
-        host = host.upper()
+        host = host.lower()
         if host!=self.mstrUrlHost and len(self.mstrUrlHost)>0:
             return  False
 
-        req = req.upper()
+        req = req.lower()
         if len(self.strUrlReq)==0:
             return  True
 

@@ -45,11 +45,11 @@ def parseforgeurl(src,urlsinfo):
             bn = urlitem['bn']
             url = urlitem['n']
 
-        url = url.upper()
+        url = url.lower()
         url = url.encode('utf-8')
         bn = bn.encode('utf-8')
-        url = url.replace("%2F","/")
-        url = url.replace("%3A",":")
+        url = url.replace("%2f","/")
+        url = url.replace("%3a",":")
 
         if not isurlin(dbobj, url):
             result= dbobj.execute("insert into forgeurls (urlsrc,forgewho,url,urltype) values(%s,%s,%s,%s)", (src, bn, url, urltype))

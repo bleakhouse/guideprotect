@@ -55,7 +55,7 @@ def restore2sql(fname=FILE_URL_RULES_NAME):
         v = {}
         v.update(rule.attrib)
         for rule_sub in rule:
-            v[rule_sub.tag] = rule_sub.text
+            v[rule_sub.tag] = rule_sub.text.lower()
 
         if not RULE_ATTR_NAME_host in v.keys() and not RULE_ATTR_NAME_req in v.keys():
             if not RULE_ATTR_NAME_full_url in v.keys():

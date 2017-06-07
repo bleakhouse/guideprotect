@@ -16,9 +16,12 @@ import sys
 from scapy.all import *
 import gpconf
 import basedef
+import url_redis_matcher
 
 g_redirect_count = 0
 g_redirect_eth=""
+
+
 def inject_back_url(pkt, newtarget):
 
     src=pkt[IP].src
@@ -78,10 +81,10 @@ def find_req_from_httppayload(httppayload):
 def log_visit_info(host,req):
 
     basedef.gvar['url_visit_count'] =basedef.gvar['url_visit_count']+1
-    host = host.upper()
+    host = host.lower()
     newhost = host
 
-    if host.startswith("WWW."):
+    if host.startswith("www."):
         newhost = host[4:]
 
     if newhost[-1:]=='/':
@@ -148,7 +151,7 @@ def sniff_check_http_packet(pkt):
     req_postfix = req[1][-5:]
     pos = req_postfix.find('.')
     if pos!=-1:
-        if req_postfix[pos:].upper() in  basedef.gvar['ignorepostfix']:
+        if req_postfix[pos:].lower() in  basedef.gvar['ignorepostfix']:
             return
 
     #logging.info(str(req))
@@ -156,7 +159,7 @@ def sniff_check_http_packet(pkt):
 
 
 
-    host1 = req[0].upper()
+    host1 = req[0].lower()
     log_visit_info(host1, req[1])
 
     if host1 in basedef.gvar['ignorehost']:
@@ -164,6 +167,7 @@ def sniff_check_http_packet(pkt):
 
 
     redirect_info = gpconf.gcServer.get_direct_info(host1, req[1])
+    redirect_info = url_redis_matcher.get_direct_info(host1, req[1])
     #print 'get_direct_info:', redirect_info
     if redirect_info is None:
         return

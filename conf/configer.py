@@ -70,11 +70,11 @@ class Xconfiger:
 
             ruleitem.strRedirectData    = v['newurldata']
             ruleitem.strRedirectType    = v['RedirectType']
-            ruleitem.mstrUrlHost        = v['host'].upper()
-            ruleitem.strUrlReq          = v['reqrule'].upper()
+            ruleitem.mstrUrlHost        = v['host'].lower()
+            ruleitem.strUrlReq          = v['reqrule'].lower()
             ruleitem.strMatchMethod     = v['urlMatchMethod']
             ruleitem.strRuleName         = v['name']
-            ruleitem.strfullUrl         =   v['full_url'].upper()
+            ruleitem.strfullUrl         =   v['full_url'].lower()
             if ruleitem.strRedirectType==basedef.RULE_ATTR_NAME_redirect_type_buf:
                 ruleitem.strRedirectData = str(ruleitem.strRedirectData)
 
@@ -83,8 +83,8 @@ class Xconfiger:
 
             full_url = v['full_url']
             if len(full_url) > 0:
-                full_url = v['full_url'].upper()
-                if full_url.startswith('HTTP://'):
+                full_url = v['full_url'].lower()
+                if full_url.startswith('http://'):
                     full_url = full_url[7:]
                 pos1 = full_url.find('/')
                 if pos1 != -1:
@@ -94,7 +94,7 @@ class Xconfiger:
                     ruleitem.mstrUrlHost = full_url
                     ruleitem.strUrlReq = "/"
             else:
-                if ruleitem.mstrUrlHost.startswith('HTTP://'):
+                if ruleitem.mstrUrlHost.startswith('http://'):
                     ruleitem.mstrUrlHost = ruleitem.mstrUrlHost[7:]
 
             if len(ruleitem.mstrUrlHost)==0 and len(ruleitem.strUrlReq)==0:
@@ -108,10 +108,10 @@ class Xconfiger:
             if len(dickey)==0:
                 dickey = ruleitem.mstrUrlHost
             else:
-                if full_url.startswith('WWW.'):
+                if full_url.startswith('www.'):
                     newkey =full_url[4:]
                 else:
-                    newkey = "WWW."+full_url
+                    newkey = "www."+full_url
 
 
             dickey = str(dickey)
@@ -128,8 +128,8 @@ class Xconfiger:
                 if newkey.find("/")==-1:
                     newkey = newkey+"/"
                 l2 = []
-                if newkey.startswith('WWW.'):
-                    ruleitem2.mstrUrlHost = "WWW."+ruleitem2.mstrUrlHost
+                if newkey.startswith('www.'):
+                    ruleitem2.mstrUrlHost = "www."+ruleitem2.mstrUrlHost
                 else:
                     ruleitem2.mstrUrlHost=ruleitem2.mstrUrlHost[4:]
 
@@ -143,13 +143,13 @@ class Xconfiger:
     def check_url_match(self, host, req):
         fullurl = host+req
 
-        dickey = fullurl.upper()
+        dickey = fullurl.lower()
 
         ruleitemlist = None
         if dickey in self.dictRules.keys():
             ruleitemlist = self.dictRules[dickey]
         else:
-            dickey = host.upper()
+            dickey = host.lower()
             if dickey in self.dictRules.keys():
                 ruleitemlist = self.dictRules[dickey]
         if ruleitemlist is None:
