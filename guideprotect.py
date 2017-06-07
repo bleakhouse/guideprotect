@@ -19,6 +19,7 @@ import basedef
 import  gpconf
 import  ignoremgr
 from dbase import db
+import url_redis_matcher
 
 basedef.gvar['url_visit_count'] = 0
 basedef.gvar['url_block_count'] = 0
@@ -97,6 +98,7 @@ if __name__ == '__main__':
     reload(sys).setdefaultencoding("utf8")
 
     ignoremgr.init()
+    url_redis_matcher.init_redis()
 
     logging.info('guideprotect up.....')
     gpconf.gcServer.init()
