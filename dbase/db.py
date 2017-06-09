@@ -105,9 +105,9 @@ def createtable(table_create_sql):
         db.execute(table_create_sql)
 
     except MySQLdb.Error,e:
-        print "Mysql Error %d: %s" % (e.args[0], e.args[1])
-    else:
-        print("OK")
+
+        if e.args[0] !=1050:
+            print "Mysql Error %d: %s" % (e.args[0], e.args[1])
 
 
 def createtable_in_host_rate(table_create_sql):
