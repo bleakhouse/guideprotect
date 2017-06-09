@@ -13,19 +13,15 @@ import mylogging
 import MySQLdb
 import basedef
 import datetime
+import gpconf
 
-DATABASE_NAME  = 'guideprotect'
-MYSQL_HOST="127.0.0.1"
-MYSQL_USR = 'test'
-MYSQL_PWD = '123456'
-
-def getDbOrCreate(dbname=DATABASE_NAME):
+def getDbOrCreate(dbname=gpconf.gcServer.DATABASE_NAME):
 
     obj=None
     op = None
     try:
 
-        obj = MySQLdb.connect(MYSQL_HOST,MYSQL_USR,MYSQL_PWD,  charset="utf8")
+        obj = MySQLdb.connect(gpconf.gcServer.MYSQL_HOST,gpconf.gcServer.MYSQL_USR,gpconf.gcServer.MYSQL_PWD,  charset="utf8")
 
         obj.autocommit(1)
         op = obj.cursor()
@@ -43,7 +39,7 @@ def get_create_host_visitdb(dbname='host_visit_rate'):
     op = None
     try:
 
-        obj = MySQLdb.connect(MYSQL_HOST,MYSQL_USR,MYSQL_PWD,  charset="utf8")
+        obj = MySQLdb.connect(gpconf.gcServer.MYSQL_HOST,gpconf.gcServer.MYSQL_USR,gpconf.gcServer.MYSQL_PWD,  charset="utf8")
 
         obj.autocommit(1)
         op = obj.cursor()
@@ -96,7 +92,7 @@ url_check_stat='''CREATE TABLE url_check_stat (
 
 def createtable(table_create_sql):
 
-    db =getDbOrCreate(DATABASE_NAME)
+    db =getDbOrCreate(gpconf.gcServer.DATABASE_NAME)
 
     if db is None:
         logging.info('getDbOrCreate fail')
@@ -170,7 +166,7 @@ def create_visit_furture_record():
             anotherTime = timeNow + datetime.timedelta(days=d)
             next_5day_record_names.append(anotherTime)
 
-        db = getDbOrCreate(DATABASE_NAME)
+        db = getDbOrCreate(gpconf.gcServer.DATABASE_NAME)
         for day in next_5day_record_names:
             record_name = day.strftime('%Y-%m-%d')
             query ='''select * from url_check_stat where date=%s'''
@@ -195,11 +191,13 @@ createalltables()
 
 if __name__ == '__main__':
 
-    db = getDbOrCreate(DATABASE_NAME)
+
+    print gpconf.gcServer
+    db = getDbOrCreate(gpconf.gcServer.DATABASE_NAME)
     test1 = 1
     test2 = 2
     update = '''update url_check_stat set url_visit_count=url_visit_count+%s, url_block_count=url_block_count +%s where date=%s'''
-    result = db.execute(update, (test1, test2, get_today_visit_count_date()))
+    #result = db.execute(update, (test1, test2, get_today_visit_count_date()))
 
     createalltables()
     print get_today_host_visit_tblname()

@@ -13,8 +13,10 @@ import traceback
 import web
 import sys
 import url_redis_matcher
+import datetime
 
 redis_obj =None
+gstart_update = 0
 
 gUNKNOW_URL_KEY_NAME = 'guide:protect:unknow_urls'
 
@@ -33,6 +35,10 @@ def http_check_url_type(url):
 
 def do_update(name):
 
+    global  gstart_update
+    timeNow = datetime.datetime.now()
+    gstart_update = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    gstart_update = name + " " + gstart_update
     global  redis_obj
     redis_obj = get_redis()
 
@@ -64,6 +70,8 @@ def do_update(name):
                 urlinfo['evilclass'] = url_info[1]
                 urlinfo['redirect_type'] = 'file'
                 urlinfo['redirect_target'] = 'safe_navigate.html'
+                urlinfo['urlclass'] = url_info[2]
+                urlinfo['urlsubclass'] = url_info[3]
                 urlinfo['update_time'] = int(time.time())
 
                 updating_url_infos[url]=url_info
@@ -89,8 +97,19 @@ def do_update(name):
 urls = (
     '/', 'Index',
     '/test', 'gptest',
+    '/update_url', 'update_url',
 
 )
+
+
+class update_url:
+    def GET(self):
+        global  gstart_update
+        if gstart_update :
+            return "start already ",gstart_update
+        run_url_updator().Start('start from web')
+
+        return 'do_update OK!'
 
 class Index:
     def GET(self):
@@ -117,9 +136,9 @@ def notfound():
     return web.notfound("Sorry, the page you were looking for was not found^_^")
 
 class run_url_updator(object):
-    def Start(self):
+    def Start(self, name='do_update-1'):
         try:
-            thread.start_new_thread(do_update, ("do_update-1",))
+            thread.start_new_thread(do_update, (name,))
         except:
             print "Error: unable to start RuntimEnginThread"
 
@@ -130,7 +149,7 @@ if __name__=='__main__':
     reload(sys).setdefaultencoding("utf8")
     print 'system encoding: ',sys.getdefaultencoding()
 
-    run_url_updator().Start()
+    #run_url_updator().Start()
     app = web.application(urls, globals())
     app.notfound = notfound
     app.run()

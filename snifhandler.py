@@ -165,9 +165,11 @@ def sniff_check_http_packet(pkt):
     if host1 in basedef.gvar['ignorehost']:
         return
 
+    if gpconf.gcServer.is_rule_from_redis():
+        redirect_info = url_redis_matcher.get_direct_info(host1, req[1])
+    else:
+        redirect_info = gpconf.gcServer.get_direct_info(host1, req[1])
 
-    #redirect_info = gpconf.gcServer.get_direct_info(host1, req[1])
-    redirect_info = url_redis_matcher.get_direct_info(host1, req[1])
     #print 'get_direct_info:', redirect_info
     if redirect_info is None:
         return

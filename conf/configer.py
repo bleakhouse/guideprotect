@@ -13,7 +13,6 @@ except ImportError:
 
 from dbase import db
 import basedef
-import gpconf
 import os
 import copy
 class Xconfiger:

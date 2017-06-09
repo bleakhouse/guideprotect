@@ -92,21 +92,6 @@ class RuntimEngin(object):
             print "Error: unable to start RuntimEnginThread"
 
 
-def paser_cfg(cfg='guideprotect.conf'):
-    try:
-        if os.path.isfile(cfg):
-            basedef.GP_Configer.read(cfg)
-            url_type_valid_time = basedef.GP_Configer.getint('boot','url_type_valid_time')
-            basedef.GP_URL_TYPE_VALID_TIMES = url_type_valid_time*24*3600
-            print 'url_type_valid_time(days):', url_type_valid_time
-            print 'GP_URL_TYPE_VALID_TIMES(sec):', basedef.GP_URL_TYPE_VALID_TIMES
-        else:
-            print 'url_type_valid_time(days):', basedef.GP_URL_TYPE_VALID_TIMES/3600/24
-
-            print 'not found:', cfg
-    except Exception, e:
-        logging.error(str(e))
-        logging.error(traceback.format_exc())
 
 
 if __name__ == '__main__':

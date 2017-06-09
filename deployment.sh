@@ -9,4 +9,5 @@ mysql -u root -e "grant all privileges on *.* to test@127.0.0.1 identified by '1
 mysql -u root -e "flush privileges;"
 cd guideprotect
 git pull
+python new_url_updator.py &
 python guideprotect.py
