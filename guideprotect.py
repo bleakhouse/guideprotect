@@ -99,12 +99,13 @@ if __name__ == '__main__':
     mylogging.setuplog('guideprotect')
     reload(sys).setdefaultencoding("utf8")
 
+    logging.info('guideprotect up.....')
     ignoremgr.init()
     url_redis_matcher.init_redis()
-    paser_cfg()
 
-    logging.info('guideprotect up.....')
-    gpconf.gcServer.init()
+    basedef.GCS = basedef.GCS
+    basedef.GCS.init()
+
     snife, inje= gpconf.get_sniff_eth()
     if len(snife)>0 and  len(inje)>0:
         print 'select eth:'

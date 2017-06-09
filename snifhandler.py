@@ -60,7 +60,7 @@ def inject_back_url(pkt, newtarget):
     global  g_redirect_count
     g_redirect_count = g_redirect_count + 1
     basedef.gvar['url_block_count'] = basedef.gvar['url_block_count']+1
-    if gpconf.gcServer.output_log():
+    if basedef.GCS.output_log():
         print 'match:',newtarget[2]
         print 'redirect to ',redir_target
 
@@ -166,7 +166,7 @@ def sniff_check_http_packet(pkt):
         return
 
 
-    redirect_info = gpconf.gcServer.get_direct_info(host1, req[1])
+    redirect_info = basedef.GCS.get_direct_info(host1, req[1])
 
     #print 'get_direct_info:', redirect_info
     if redirect_info is None:

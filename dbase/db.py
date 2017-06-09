@@ -13,7 +13,7 @@ import mylogging
 import MySQLdb
 import basedef
 import datetime
-import gpconf
+
 
 def getDbOrCreate(dbname='guideprotect'):
 
@@ -21,7 +21,7 @@ def getDbOrCreate(dbname='guideprotect'):
     op = None
     try:
 
-        obj = MySQLdb.connect(gpconf.gcServer.MYSQL_HOST,gpconf.gcServer.MYSQL_USR,gpconf.gcServer.MYSQL_PWD,  charset="utf8")
+        obj = MySQLdb.connect(basedef.GCS.MYSQL_HOST,basedef.GCS.MYSQL_USR,basedef.GCS.MYSQL_PWD,  charset="utf8")
 
         obj.autocommit(1)
         op = obj.cursor()
@@ -39,7 +39,7 @@ def get_create_host_visitdb(dbname='host_visit_rate'):
     op = None
     try:
 
-        obj = MySQLdb.connect(gpconf.gcServer.MYSQL_HOST,gpconf.gcServer.MYSQL_USR,gpconf.gcServer.MYSQL_PWD,  charset="utf8")
+        obj = MySQLdb.connect(basedef.GCS.MYSQL_HOST,basedef.GCS.MYSQL_USR,basedef.GCS.MYSQL_PWD,  charset="utf8")
 
         obj.autocommit(1)
         op = obj.cursor()
@@ -166,7 +166,7 @@ def create_visit_furture_record():
             anotherTime = timeNow + datetime.timedelta(days=d)
             next_5day_record_names.append(anotherTime)
 
-        db = getDbOrCreate(gpconf.gcServer.DATABASE_NAME)
+        db = getDbOrCreate(basedef.GCS.DATABASE_NAME)
         for day in next_5day_record_names:
             record_name = day.strftime('%Y-%m-%d')
             query ='''select * from url_check_stat where date=%s'''
