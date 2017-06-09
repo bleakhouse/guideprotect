@@ -15,7 +15,7 @@ import basedef
 import datetime
 import gpconf
 
-def getDbOrCreate(dbname=gpconf.gcServer.DATABASE_NAME):
+def getDbOrCreate(dbname='guideprotect'):
 
     obj=None
     op = None
@@ -92,7 +92,7 @@ url_check_stat='''CREATE TABLE url_check_stat (
 
 def createtable(table_create_sql):
 
-    db =getDbOrCreate(gpconf.gcServer.DATABASE_NAME)
+    db =getDbOrCreate()
 
     if db is None:
         logging.info('getDbOrCreate fail')
@@ -192,8 +192,7 @@ createalltables()
 if __name__ == '__main__':
 
 
-    print gpconf.gcServer
-    db = getDbOrCreate(gpconf.gcServer.DATABASE_NAME)
+    db = getDbOrCreate()
     test1 = 1
     test2 = 2
     update = '''update url_check_stat set url_visit_count=url_visit_count+%s, url_block_count=url_block_count +%s where date=%s'''

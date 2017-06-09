@@ -7,7 +7,7 @@ import platform
 import thread
 import time
 import urllib2
-from conf import configer
+
 import netifaces as netif
 import basedef
 import mylogging
@@ -16,6 +16,8 @@ import  gputils
 import sys
 import traceback
 import ConfigParser
+import url_redis_matcher
+import  url_mysql_matcher
 
 SELECT_CONF_FILENAME ='seleth.txt'
 
@@ -77,8 +79,9 @@ def get_sniff_eth():
 
 
 class confserver:
+
      binit=False
-     myconfiger = configer.Xconfiger()
+
      blogging = True
 
 
@@ -88,6 +91,7 @@ class confserver:
      # 0 = redis
      # 1 = mysql
      rules_src = 0
+     url_mysql_obj = url_mysql_matcher.url_mysql()
 
      def output_log(self):
          return self.blogging
@@ -111,7 +115,7 @@ class confserver:
 
         if self.is_rule_from_redis():
             return
-        self.myconfiger.init()
+        self.url_mysql_obj.init()
 
      def paser_cfg(self, cfg='guideprotect.conf'):
 
@@ -155,8 +159,11 @@ class confserver:
 
      def get_direct_info(self, host,req):
 
-         r = self.myconfiger.check_url_match(host, req)
-         return  r
+        if self.is_rule_from_redis():
+            r= url_redis_matcher.get_direct_info(host, req)
+        else:
+            r = url_mysql_matcher.get_direct_info(host, req)
+        return  r
 
 
 gcServer = confserver()

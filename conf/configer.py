@@ -15,6 +15,8 @@ from dbase import db
 import basedef
 import os
 import copy
+
+
 class Xconfiger:
 
     #rulename =key, value=rule list
@@ -22,9 +24,6 @@ class Xconfiger:
 
 
     def init(self):
-
-
-
         self.load_url_rules()
         if len(self.dictRules)==0:
             logging.error('\n\n**********there is no ruls!!!!!!************\n\n')
@@ -158,10 +157,6 @@ class Xconfiger:
             if ruleitem.is_url_match(host, req) == True:
                 r= ruleitem.get_redirect_info()
                 ruleitem.imatch_count = ruleitem.imatch_count+1
-
-                if gpconf.gcServer.output_log():
-                    print 'is_url_match'
-                    print r
                 return  r
 
 
