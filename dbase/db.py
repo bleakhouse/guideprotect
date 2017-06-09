@@ -187,7 +187,7 @@ def createalltables():
     create_url_check_detail_furture()
     create_visit_furture_record()
 
-createalltables()
+
 
 if __name__ == '__main__':
 

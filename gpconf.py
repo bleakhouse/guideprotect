@@ -82,9 +82,9 @@ class confserver:
 
      binit=False
 
-     blogging = True
+     blogging = False
 
-
+     DATABASE_NAME = 'guideprotect'
      MYSQL_HOST = "127.0.0.1"
      MYSQL_USR = 'test'
      MYSQL_PWD = '123456'
