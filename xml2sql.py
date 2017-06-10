@@ -31,7 +31,10 @@ def getDbOrCreate2(dbname='guideprotect'):
     op = None
     try:
 
-        conn = MySQLdb.connect(db.MYSQL_HOST,db.MYSQL_USR,db.MYSQL_PWD,  charset="utf8")
+        MYSQL_HOST = "127.0.0.1"
+        MYSQL_USR = 'test'
+        MYSQL_PWD = '123456'
+        conn = MySQLdb.connect(MYSQL_HOST,MYSQL_USR,MYSQL_PWD,  charset="utf8")
 
         op = conn.cursor()
         op.execute("CREATE DATABASE if not exists {0} DEFAULT CHARACTER SET 'utf8'".format(dbname))

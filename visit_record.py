@@ -11,7 +11,7 @@ import os
 import datetime
 from dbase import db
 import MySQLdb
-
+import basedef
 
 def update_url_check_stat(ginfo):
     url_visit_count = ginfo['url_visit_count']
@@ -32,7 +32,7 @@ def get_visit_db(dbname='host_visit_rate'):
     op = None
     try:
 
-        conn = MySQLdb.connect(db.MYSQL_HOST,db.MYSQL_USR,db.MYSQL_PWD,  charset="utf8")
+        conn = MySQLdb.connect(basedef.GCS.MYSQL_HOST,basedef.GCS.MYSQL_USR,basedef.GCS.MYSQL_PWD,  charset="utf8")
 
         op = conn.cursor()
         op.execute("CREATE DATABASE if not exists {0} DEFAULT CHARACTER SET 'utf8'".format(dbname))
@@ -45,6 +45,11 @@ def get_visit_db(dbname='host_visit_rate'):
 def update_visit_host_rate(ginfo):
 
     obj, conn= get_visit_db()
+
+    if obj is None or conn is None:
+        print 'get_visit_db error'
+        return
+
     today = db.get_today_host_visit_tblname()
     for host, count in ginfo['host_visited'].items():
 
