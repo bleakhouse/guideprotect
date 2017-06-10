@@ -164,6 +164,8 @@ def sniff_check_http_packet(pkt):
 
     if host1.endswith('.gov'):
         return
+    if host1.endswith('.gov.cn'):
+        return
 
     short_host = None
     if host1 in basedef.gvar['ignorehost']:
