@@ -57,7 +57,7 @@ def do_update(name):
             if url_redis_matcher.gRedisObj is None:
                 raise NameError('redis not init')
 
-            unknow_urls= pop_all_unknow_urls(redis_obj.gRedisObj)
+            unknow_urls= pop_all_unknow_urls(redis_obj)
             print 'unknow_urls:',len(unknow_urls)
             updating_url_infos={}
             for url in unknow_urls:
