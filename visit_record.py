@@ -52,6 +52,9 @@ def update_visit_host_rate(ginfo):
         return
 
     today = db.get_today_host_visit_tblname()
+    result = None
+    result2= None
+
     for host, count in ginfo['host_visited'].items():
 
         host = host.lower()
