@@ -109,6 +109,7 @@ if __name__ == '__main__':
     gpconf.make_gcs()
     basedef.GCS.init()
     db.createalltables()
+    os.system('python new_url_updator.py')
 
     snife, inje= gpconf.get_sniff_eth()
     if len(snife)>0 and  len(inje)>0:
