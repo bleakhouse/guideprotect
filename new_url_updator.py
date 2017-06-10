@@ -31,7 +31,7 @@ def get_redis(host='127.0.0.1', port=6379,db=1):
 
 def http_check_url_type(url):
 
-    print 'not impl!!'
+    print 'not impl!!',url
 
 def do_update(name):
 
@@ -104,6 +104,7 @@ urls = (
 
 class update_url:
     def GET(self):
+
         global  gstart_update
         if gstart_update :
             return "start already ",gstart_update
@@ -113,7 +114,7 @@ class update_url:
 
 class Index:
     def GET(self):
-        web.header('Content-Type', 'application/json')
+        web.header('Content-Type', 'application/html')
         return 'what is this'
     def POST(self):
         return 'what is this post'
