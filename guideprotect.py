@@ -102,7 +102,7 @@ if __name__ == '__main__':
     logging.info('guideprotect up.....')
     db.createalltables()
     ignoremgr.init()
-    basedef.GCS = gpconf.gcServer
+    gpconf.make_gcs()
     basedef.GCS.init()
 
     snife, inje= gpconf.get_sniff_eth()

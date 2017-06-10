@@ -165,8 +165,9 @@ class confserver:
             r = url_mysql_matcher.get_direct_info(host, req)
         return  r
 
+def make_gcs():
+    basedef.GCS = confserver()
 
-gcServer = confserver()
 
 if __name__ == "__main__":
     mylogging.setuplog('gpconfig')
