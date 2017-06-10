@@ -112,6 +112,7 @@ class confserver:
         self.binit  =True
 
         if self.is_rule_from_redis():
+            url_redis_matcher.init_redis()
             return
         self.url_mysql_obj.init()
 
