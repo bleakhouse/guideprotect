@@ -51,6 +51,8 @@ def do_update(name):
     if redis_obj is None:
         return
 
+    url_redis_matcher.init_redis()
+
     while True:
 
         try:
@@ -91,9 +93,6 @@ def do_update(name):
             pass
 
         time.sleep(10)
-        if url_redis_matcher.gRedisObj is None:
-            url_redis_matcher.init_redis()
-
 
 
 # URL映射
@@ -109,11 +108,8 @@ class update_url:
     def GET(self):
 
         global  gstart_update
-        if gstart_update :
-            return "start already ",gstart_update
-        run_url_updator().Start('start from web')
+        return "start already ",gstart_update
 
-        return 'do_update OK!'
 
 class Index:
     def GET(self):
@@ -155,7 +151,7 @@ if __name__=='__main__':
     reload(sys).setdefaultencoding("utf8")
     print 'system encoding: ',sys.getdefaultencoding()
 
-    #run_url_updator().Start()
+    run_url_updator().Start()
     app = web.application(urls, globals())
     app.notfound = notfound
     app.run()
