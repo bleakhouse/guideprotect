@@ -35,11 +35,8 @@ def http_check_url_type(url):
 
 def pop_all_unknow_urls(redis_obj):
 
-    pip = redis_obj.pipeline()
-    unknow_urls = pip.smembers(gUNKNOW_URL_KEY_NAME)
-    pip.execute()
+    unknow_urls = redis_obj.smembers(gUNKNOW_URL_KEY_NAME)
     redis_obj.flushdb()
-
     return unknow_urls
 
 def do_update(name):
@@ -60,7 +57,7 @@ def do_update(name):
             if url_redis_matcher.gRedisObj is None:
                 raise NameError('redis not init')
 
-            unknow_urls= pop_all_unknow_urls(url_redis_matcher.gRedisObj)
+            unknow_urls= pop_all_unknow_urls(redis_obj.gRedisObj)
             print 'unknow_urls:',len(unknow_urls)
             updating_url_infos={}
             for url in unknow_urls:
@@ -151,8 +148,10 @@ class run_url_updator(object):
 
 
 import ConfigParser
+import mylogging
 if __name__=='__main__':
 
+    mylogging.setuplog('url_updator.txt')
     reload(sys).setdefaultencoding("utf8")
     print 'system encoding: ',sys.getdefaultencoding()
 
