@@ -165,6 +165,14 @@ def sniff_check_http_packet(pkt):
     if host1 in basedef.gvar['ignorehost']:
         return
 
+    else:
+        dot1 = host1.find(".")
+        dot2 = host1.rfind(".")
+        if dot1 !=-1 and dot2 !=-1 and dot1!=dot2:
+            if host1[dot1:] in basedef.gvar['ignorehost']:
+                return
+
+
 
     redirect_info = basedef.GCS.get_direct_info(host1, req[1])
 
