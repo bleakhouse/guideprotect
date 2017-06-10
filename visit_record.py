@@ -26,6 +26,7 @@ def update_url_check_stat(ginfo):
 
     ginfo['url_visit_count']=0
     ginfo['url_block_count']=0
+    return  result
 
 def get_visit_db(dbname='host_visit_rate'):
     conn=None
@@ -70,19 +71,20 @@ def update_visit_host_rate(ginfo):
         host = host.lower()
         query = '''select * from {0} where host_name=%s and record_type=1'''.format(today)
         obj.execute(query, (host,))
-        result = obj.fetchall()
-        if len(result)>0:
+        result2 = obj.fetchall()
+        if len(result2)>0:
             update = '''update {} set host_visit_count=host_visit_count +%s where host_name=%s and record_type=1'''.format(today)
-            result = obj.execute(update, (count, host))
+            result2 = obj.execute(update, (count, host))
 
         else:
             sql = "insert into {} (host_name,host_visit_count, record_type) values(%s,%s,%s)".format(today)
-            result = obj.execute(sql,( host,count, 1))
+            result2 = obj.execute(sql,( host,count, 1))
 
     conn.commit()
 
     ginfo['host_visited']={}
     ginfo['blocked_host_visited']={}
+    return [result, result2]
 
 if __name__=='__main__':
     ginfo={}

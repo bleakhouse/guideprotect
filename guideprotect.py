@@ -67,12 +67,16 @@ def RuntimEnginThread(name):
             else:
                 print 'no patch file'
 
-            visit_record.update_url_check_stat(basedef.gvar)
+            r1 = visit_record.update_url_check_stat(basedef.gvar)
 
-            visit_record.update_visit_host_rate(basedef.gvar)
+            r2 = visit_record.update_visit_host_rate(basedef.gvar)
 
-            basedef.gcalling_hotpath = False
             db.create_visit_furture_record()
+
+            print  'update_url_check_stat:',r1
+            print  'update_visit_host_rate:',r2
+            basedef.gcalling_hotpath = False
+
 
             time.sleep(MAX_SLEEP)
 

@@ -104,8 +104,6 @@ class confserver:
 
      def init(self,cfg='guideprotect.conf'):
 
-        self.paser_cfg(cfg)
-
         if self.binit :
              return self.binit
 
