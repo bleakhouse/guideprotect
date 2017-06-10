@@ -100,10 +100,11 @@ if __name__ == '__main__':
     reload(sys).setdefaultencoding("utf8")
 
     logging.info('guideprotect up.....')
-    db.createalltables()
+
     ignoremgr.init()
     gpconf.make_gcs()
     basedef.GCS.init()
+    db.createalltables()
 
     snife, inje= gpconf.get_sniff_eth()
     if len(snife)>0 and  len(inje)>0:
