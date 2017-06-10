@@ -20,10 +20,10 @@ gstart_update = 0
 
 gUNKNOW_URL_KEY_NAME = 'guide:protect:unknow_urls'
 
-def get_redis(host='127.0.0.1', port=6379,db=1):
+def get_unknow_redis_db(host='127.0.0.1', port=6379,db=1):
 
     try:
-        redis_obj = redis.Redis(host=host, port=port)
+        redis_obj = redis.Redis(host=host, port=port, db=db)
         return redis_obj
     except Exception, e:
         logging.error(str(e))
@@ -40,7 +40,7 @@ def do_update(name):
     gstart_update = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     gstart_update = name + " " + gstart_update
     global  redis_obj
-    redis_obj = get_redis()
+    redis_obj = get_unknow_redis_db()
 
     if redis_obj is None:
         return
