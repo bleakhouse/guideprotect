@@ -31,7 +31,7 @@ def get_redis(host='127.0.0.1', port=6379,db=1):
 
 def http_check_url_type(url):
 
-    print 'not impl!!',url
+    logging.info('not impl!! '+url)
 
 def do_update(name):
 
