@@ -156,7 +156,7 @@ class confserver:
             logging.error(str(e))
             logging.error(traceback.format_exc())
 
-     def get_direct_info(self, host,req):
+     def get_direct_info(self, host,req, short_host=None):
 
         if self.is_rule_from_redis():
             r= url_redis_matcher.get_direct_info(host, req)

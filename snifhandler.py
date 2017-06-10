@@ -162,14 +162,19 @@ def sniff_check_http_packet(pkt):
     host1 = req[0].lower()
     log_visit_info(host1, req[1])
 
+    if host1.endswith('.gov'):
+        return
+
+    short_host = None
     if host1 in basedef.gvar['ignorehost']:
         return
 
     else:
-        dot1 = host1.find(".")
-        dot2 = host1.rfind(".")
+        dot1 = host1.rfind(".")
+        dot2 = host1[:dot1-1].rfind(".")
         if dot1 !=-1 and dot2 !=-1 and dot1!=dot2:
-            if host1[dot1+1:] in basedef.gvar['ignorehost']:
+            short_host = host1[dot1+1:]
+            if short_host in basedef.gvar['ignorehost']:
                 return
 
 

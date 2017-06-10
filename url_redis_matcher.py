@@ -23,13 +23,31 @@ def new_unknow_url(url):
         return
     gRedisObj_unknow.sadd(new_url_updator.gUNKNOW_URL_KEY_NAME, url)
 
+def should_pass_by_shothost(short_host):
+    if short_host is not None:
+        val2 = gRedisObj.hmget(short_host, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time'])
+        if val2 is None or val2[0] is None:
+            new_unknow_url(short_host)
+        else:
+            urltype = val2[0]
+            if urltype is None or not urltype.isdigit():
+                return
+            if int(urltype) == 3 or int(urltype) == 4:  # 2 means risky url
+                return True
 
-def get_direct_info( host,req):
+def get_direct_info( host,req, short_host=None):
     global gRedisObj
     if gRedisObj is None:
         return
 
     fullurl =host+req
+
+    if should_pass_by_shothost(short_host)==True:
+        return
+
+    if should_pass_by_shothost(host)==True:
+        return
+
     val = gRedisObj.hmget(fullurl, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time'])
 
     if val is None or val[0] is None:
