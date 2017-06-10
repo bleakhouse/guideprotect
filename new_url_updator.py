@@ -33,6 +33,15 @@ def http_check_url_type(url):
 
     logging.info('not impl!! '+url)
 
+def pop_all_unknow_urls(redis_obj):
+
+    pip = redis_obj.pipeline()
+    unknow_urls = pip.smembers(gUNKNOW_URL_KEY_NAME)
+    pip.execute()
+    redis_obj.flushdb()
+
+    return unknow_urls
+
 def do_update(name):
 
     global  gstart_update
@@ -51,10 +60,7 @@ def do_update(name):
             if url_redis_matcher.gRedisObj is None:
                 raise NameError('redis not init')
 
-            pip = redis_obj.pipeline()
-            unknow_urls = pip.smembers(gUNKNOW_URL_KEY_NAME)
-            pip.flushdb()
-            pip.execute()
+            unknow_urls= pop_all_unknow_urls(url_redis_matcher.gRedisObj)
             print 'unknow_urls:',len(unknow_urls)
             updating_url_infos={}
             for url in unknow_urls:
