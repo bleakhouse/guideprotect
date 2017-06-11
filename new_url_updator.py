@@ -113,11 +113,25 @@ urls = (
     '/', 'Index',
     '/test', 'gptest',
     '/update_url', 'update_url',
+    '/get_url', 'get_url',
 
 )
+class get_url:
+    def GET(self):
+        obj = get_redis_obj()
+        if obj is None:
+            return 'conn fail'
+        url =web.input().get('url')
+        if url is None or len(url)==0:
+            return 'error pars'
+        url = url.lower()
+        info = obj.hgetall(url)
+        return info
+
+
 class update_url:
     def GET(self):
-        return "start already ",get_redis_obj.hget('update_info')
+        return "start already ",get_redis_obj().get('update_info')
 
 
 class Index:
