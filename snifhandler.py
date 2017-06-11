@@ -148,6 +148,9 @@ def sniff_check_http_packet(pkt):
     if req is None:
         return
 
+    if len(req[1])>300:
+        return
+
     req_postfix = req[1][-5:]
     pos = req_postfix.find('.')
     if pos!=-1:
