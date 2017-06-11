@@ -90,6 +90,7 @@ def do_update(name):
                 urlinfo['urlclass'] = url_info[2]
                 urlinfo['urlsubclass'] = url_info[3]
                 urlinfo['update_time'] = int(time.time())
+                urlinfo['info_src'] = 'tx_online_query'
 
                 if urlinfo['redirect_type']=='url':
                     if len(urlinfo['redirect_target'])>0 and not urlinfo['redirect_target'].startswith('http://'):
