@@ -97,7 +97,7 @@ class RuntimEngin(object):
 
 
 
-def startwebthread:
+def startwebthread(name):
     os.system('python new_url_updator.py')
 
 
