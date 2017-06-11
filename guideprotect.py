@@ -97,6 +97,16 @@ class RuntimEngin(object):
 
 
 
+def startwebthread:
+    os.system('python new_url_updator.py')
+
+
+def startweb():
+        try:
+            thread.start_new_thread(startwebthread, ("startwebthread-1",))
+        except:
+            print "Error: unable to start startwebthread"
+
 
 if __name__ == '__main__':
 
@@ -109,7 +119,8 @@ if __name__ == '__main__':
     gpconf.make_gcs()
     basedef.GCS.init()
     db.createalltables()
-    os.system('python new_url_updator.py')
+
+    startweb()
 
     snife, inje= gpconf.get_sniff_eth()
     if len(snife)>0 and  len(inje)>0:
