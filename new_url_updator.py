@@ -91,6 +91,10 @@ def do_update(name):
                 urlinfo['urlsubclass'] = url_info[3]
                 urlinfo['update_time'] = int(time.time())
 
+                if urlinfo['redirect_type']=='url':
+                    if len(urlinfo['redirect_target'])>0 and not urlinfo['redirect_target'].startswith('http://'):
+                        urlinfo['redirect_target'] ='http://'+urlinfo['redirect_target']
+
                 updating_url_infos[url]=url_info
 
             if len(updating_url_infos)>0:
