@@ -28,6 +28,9 @@ csm.baidu.com
 hao123.com
 hao123img.com
 baidustatic.com
+bdstatic.com
+iqiyi.com
+
 
 hao.360.cn
 se.360.cn
@@ -58,6 +61,8 @@ login.taobao.com
 
 
 163.com
+news.163.com
+
 
 sogou.com
 www.sogou.com
