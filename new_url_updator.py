@@ -63,7 +63,7 @@ def do_update(name):
         return
 
     redis_match_obj = get_redis_obj()
-    redis_match_obj.hset('update_info', gstart_update)
+    redis_match_obj.set('update_info', gstart_update)
 
     while True:
 
@@ -106,7 +106,7 @@ def do_update(name):
 
         time.sleep(10)
 
-        redis_match_obj.hdel('update_info', gstart_update)
+    redis_match_obj.delete('update_info', gstart_update)
 
 # URL映射
 urls = (
