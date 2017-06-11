@@ -73,7 +73,7 @@ def find_req_from_httppayload(httppayload):
 
     request = gputils.HTTPRequest(httppayload)
     try:
-        return [request.headers['Host'], request.path]
+        return [request.headers['Host'].lower(), request.path.lower()]
     except:
         return None
 
@@ -81,7 +81,7 @@ def find_req_from_httppayload(httppayload):
 def log_visit_info(host,req):
 
     basedef.gvar['url_visit_count'] =basedef.gvar['url_visit_count']+1
-    host = host.lower()
+
     newhost = host
 
     if host.startswith("www."):
@@ -98,7 +98,7 @@ def log_visit_info(host,req):
 
 def log_redirect_url(host,req):
     full = host+req
-    full = full.lower()
+
     if full in basedef.gvar['blocked_host_visited'].keys():
         basedef.gvar['blocked_host_visited'][full] = basedef.gvar['blocked_host_visited'][full]+1
     else:
@@ -151,7 +151,7 @@ def sniff_check_http_packet(pkt):
     req_postfix = req[1][-5:]
     pos = req_postfix.find('.')
     if pos!=-1:
-        if req_postfix[pos:].lower() in  basedef.gvar['ignorepostfix']:
+        if req_postfix[pos:] in  basedef.gvar['ignorepostfix']:
             return
 
     #logging.info(str(req))
@@ -159,7 +159,7 @@ def sniff_check_http_packet(pkt):
 
 
 
-    host1 = req[0].lower()
+    host1 = req[0]
     log_visit_info(host1, req[1])
 
     if host1.endswith('.gov'):
@@ -181,7 +181,7 @@ def sniff_check_http_packet(pkt):
 
 
 
-    redirect_info = basedef.GCS.get_direct_info(host1, req[1])
+    redirect_info = basedef.GCS.get_direct_info(host1, req[1],short_host)
 
     #print 'get_direct_info:', redirect_info
     if redirect_info is None:

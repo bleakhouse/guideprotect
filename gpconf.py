@@ -159,7 +159,7 @@ class confserver:
      def get_direct_info(self, host,req, short_host=None):
 
         if self.is_rule_from_redis():
-            r= url_redis_matcher.get_direct_info(host, req)
+            r= url_redis_matcher.get_direct_info(host, req,short_host)
         else:
             r = url_mysql_matcher.get_direct_info(host, req)
         return  r
