@@ -175,7 +175,7 @@ def sniff_check_http_packet(pkt):
         dot1 = host1.rfind(".")
         dot2 = host1[:dot1-1].rfind(".")
         if dot1 !=-1 and dot2 !=-1 and dot1!=dot2:
-            short_host = host1[dot1+1:]
+            short_host = host1[dot2+1:]
             if short_host in basedef.gvar['ignorehost']:
                 return
 

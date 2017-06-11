@@ -26,6 +26,8 @@ ting.baidu.com
 csm.baidu.com
 
 hao123.com
+hao123img.com
+baidustatic.com
 
 hao.360.cn
 se.360.cn
