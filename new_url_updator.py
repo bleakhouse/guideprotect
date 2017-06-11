@@ -12,7 +12,7 @@ import redis
 import traceback
 import web
 import sys
-import url_redis_matcher
+
 import datetime
 
 redis_obj =None
@@ -24,6 +24,17 @@ def get_unknow_redis_db(host='127.0.0.1', port=6379,db=1):
 
     try:
         redis_obj = redis.Redis(host=host, port=port, db=db)
+        return redis_obj
+    except Exception, e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+
+
+
+def get_redis_obj():
+
+    try:
+        redis_obj = redis.Redis()
         return redis_obj
     except Exception, e:
         logging.error(str(e))
@@ -51,12 +62,13 @@ def do_update(name):
     if redis_obj is None:
         return
 
-    url_redis_matcher.init_redis()
+    redis_match_obj = get_redis_obj()
+    redis_match_obj.hset('update_info', gstart_update)
 
     while True:
 
         try:
-            if url_redis_matcher.gRedisObj is None:
+            if redis_match_obj is None:
                 raise NameError('redis not init')
 
             unknow_urls= pop_all_unknow_urls(redis_obj)
@@ -82,7 +94,7 @@ def do_update(name):
                 updating_url_infos[url]=url_info
 
             if len(updating_url_infos)>0:
-                pip = url_redis_matcher.gRedisObj.pipeline()
+                pip = redis_match_obj.pipeline()
 
                 for url,update_info in updating_url_infos:
                     pip.hmset(url.lower(), update_info)
@@ -94,6 +106,7 @@ def do_update(name):
 
         time.sleep(10)
 
+        redis_match_obj.hdel('update_info', gstart_update)
 
 # URL映射
 urls = (
@@ -102,13 +115,9 @@ urls = (
     '/update_url', 'update_url',
 
 )
-
-
 class update_url:
     def GET(self):
-
-        global  gstart_update
-        return "start already ",gstart_update
+        return "start already ",get_redis_obj.hget('update_info')
 
 
 class Index:
@@ -122,9 +131,9 @@ class gptest:
 
     def GET(self):
         try:
-            global  redis_obj
+            redis_obj = get_redis_obj()
             if redis_obj is not None:
-                return redis_obj.dbsize(), redis_obj.smembers(gUNKNOW_URL_KEY_NAME)
+                return redis_obj.dbsize()
 
         except Exception, e:
             logging.error(str(e))
@@ -140,7 +149,8 @@ class run_url_updator(object):
         try:
             thread.start_new_thread(do_update, (name,))
         except:
-            print "Error: unable to start RuntimEnginThread"
+            print "Error: unable to start run_url_updator"
+
 
 
 import ConfigParser
