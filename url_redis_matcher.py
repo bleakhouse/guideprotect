@@ -67,7 +67,7 @@ def is_blocked_url(url_or_host):
     if urltype in ["0", "1"]:
         return [4]
 
-    if urltype in [2]:
+    if urltype in ["2"]:
         return [1]+val
 
     if urltype in ["3", "4"]:
