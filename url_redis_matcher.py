@@ -65,7 +65,10 @@ def is_blocked_url(url_or_host):
         return [3]
 
     if urltype in ["0", "1"]:
-        return [4]
+        update_time = val[4]
+        if update_time is not None and time.time()-int(update_time)>3600*24*2: #
+            new_unknow_url(url_or_host) #over 2days .we should check it again!!
+        return [4] #check,but unknow
 
     if urltype in ["2"]:
         return [1]+val
