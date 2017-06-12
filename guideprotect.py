@@ -73,8 +73,8 @@ def RuntimEnginThread(name):
 
             db.create_visit_furture_record()
 
-            print  'update_url_check_stat:',r1
-            print  'update_visit_host_rate:',r2
+            logging.info('update_url_check_stat:%s',r1)
+            logging.info('update_visit_host_rate:%s',r2)
             basedef.gcalling_hotpath = False
 
 

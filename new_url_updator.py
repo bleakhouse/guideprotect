@@ -72,7 +72,9 @@ def do_update(name):
                 raise NameError('redis not init')
 
             unknow_urls= pop_all_unknow_urls(redis_obj)
-            print 'unknow_urls:',len(unknow_urls)
+            count = len(unknow_urls)
+            if count>0:
+                logging.info('unknow urls:%s', len(unknow_urls))
             updating_url_infos={}
             for url in unknow_urls:
                 url_info = http_check_url_type(url)
@@ -104,7 +106,7 @@ def do_update(name):
                 for url,update_info in updating_url_infos:
                     pip.hmset(url.lower(), update_info)
 
-                print 'pip.execute():',pip.execute()
+                logging.info('pip.execute():%s',pip.execute())
 
         except:
             pass
@@ -141,7 +143,7 @@ class update_url:
 
 class Index:
     def GET(self):
-        web.header('Content-Type', 'application/html')
+        web.header('Content-Type', 'application/json')
         return 'what is this'
     def POST(self):
         return 'what is this post'
