@@ -162,6 +162,10 @@ class get_url:
             return 'error pars'
         url = url.lower()
         info = obj.hgetall(url)
+        if len(info)==0:
+            obj =redis.Redis(db=1)
+            if obj.sismember(gUNKNOW_URL_KEY_NAME,url):
+                print 'url in unknow record:',url
         return info
 
 
