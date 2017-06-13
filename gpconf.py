@@ -102,13 +102,13 @@ class confserver:
      def is_rule_from_mysql(self):
          return self.rules_src==1
 
-     def init(self,cfg='guideprotect.conf'):
+     def init(self):
 
         if self.binit :
              return self.binit
 
 
-        self.paser_cfg(cfg)
+        self.paser_cfg(basedef.GCFG)
         self.binit  =True
 
         if self.is_rule_from_redis():
@@ -116,7 +116,7 @@ class confserver:
             return
         self.url_mysql_obj.init()
 
-     def paser_cfg(self, cfg='guideprotect.conf'):
+     def paser_cfg(self, cfg):
 
         try:
             if os.path.isfile(cfg):
@@ -125,8 +125,8 @@ class confserver:
                 if GP_Configer.has_option('boot', 'url_type_valid_time'):
                     url_type_valid_time = GP_Configer.getint('boot', 'url_type_valid_time')
                     basedef.GP_URL_TYPE_VALID_TIMES = url_type_valid_time * 24 * 3600
-                    print 'url_type_valid_time(days):', url_type_valid_time
-                    print 'GP_URL_TYPE_VALID_TIMES(sec):', basedef.GP_URL_TYPE_VALID_TIMES
+                    logging.info('url_type_valid_time(days):%s', url_type_valid_time)
+                    logging.info('GP_URL_TYPE_VALID_TIMES(sec):%s', basedef.GP_URL_TYPE_VALID_TIMES)
 
                 if GP_Configer.has_option('boot', 'logging'):
                     self.blogging = GP_Configer.getint('boot', 'logging')==1
@@ -139,18 +139,18 @@ class confserver:
                 if GP_Configer.has_option('boot', 'mysql_host') and \
                     GP_Configer.has_option('boot', 'mysql_user') and \
                     GP_Configer.has_option('boot', 'mysql_password'):
-                    self.MYSQL_HOST = GP_Configer.getint('boot', 'mysql_host')
-                    self.MYSQL_USR = GP_Configer.getint('boot', 'mysql_user')
-                    self.MYSQL_PWD = GP_Configer.getint('boot', 'mysql_password')
+                    self.MYSQL_HOST = GP_Configer.get('boot', 'mysql_host')
+                    self.MYSQL_USR = GP_Configer.get('boot', 'mysql_user')
+                    self.MYSQL_PWD = GP_Configer.get('boot', 'mysql_password')
                 print 'mysql info:'
                 print 'mysql MYSQL_HOST:',self.MYSQL_HOST
                 print 'mysql MYSQL_USR:',self.MYSQL_USR
                 print 'mysql MYSQL_PWD:',self.MYSQL_PWD
 
             else:
-                 print 'url_type_valid_time(days):', basedef.GP_URL_TYPE_VALID_TIMES / 3600 / 24
+                 logging.info('url_type_valid_time(days):%s', basedef.GP_URL_TYPE_VALID_TIMES / 3600 / 24)
 
-                 print 'not found:', cfg
+                 logging.warning('not found:%s', cfg)
 
         except Exception, e:
             logging.error(str(e))

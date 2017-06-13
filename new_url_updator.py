@@ -12,6 +12,7 @@ import redis
 import traceback
 import web
 import sys
+import http_query
 
 import datetime
 
@@ -40,10 +41,6 @@ def get_redis_obj():
         logging.error(str(e))
         logging.error(traceback.format_exc())
 
-def http_check_url_type(url):
-
-    logging.info('not impl!! '+url)
-
 def pop_all_unknow_urls(redis_obj):
 
     unknow_urls = redis_obj.smembers(gUNKNOW_URL_KEY_NAME)
@@ -65,6 +62,9 @@ def do_update(name):
     redis_match_obj = get_redis_obj()
     redis_match_obj.set('update_info', gstart_update)
 
+    queryobj = http_query.HttpQuery()
+    queryobj.init()
+
     while True:
 
         try:
@@ -77,7 +77,7 @@ def do_update(name):
                 logging.info('unknow urls:%s', len(unknow_urls))
             updating_url_infos={}
             for url in unknow_urls:
-                url_info = http_check_url_type(url)
+                url_info = queryobj.http_check_url_type(url)
                 if url_info is None:
                     continue
                 url_type = url_info[0]
@@ -86,11 +86,12 @@ def do_update(name):
 
                 urlinfo = {}
                 urlinfo['urltype'] = url_type
-                urlinfo['evilclass'] = url_info[1]
+                urlinfo['eviltype'] = url_info[1]
+                urlinfo['evilclass'] = url_info[2]
                 urlinfo['redirect_type'] = 'file'
                 urlinfo['redirect_target'] = 'safe_navigate.html'
-                urlinfo['urlclass'] = url_info[2]
-                urlinfo['urlsubclass'] = url_info[3]
+                urlinfo['urlclass'] = url_info[3]
+                urlinfo['urlsubclass'] = url_info[4]
                 urlinfo['update_time'] = int(time.time())
                 urlinfo['info_src'] = 'tx_online_query'
 
