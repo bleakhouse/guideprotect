@@ -99,7 +99,7 @@ class RuntimEngin(object):
 
 
 def startwebthread(name):
-    os.system('python new_url_updator.py')
+    os.system('python new_url_updator.py 8787')
 
 
 def startweb():
