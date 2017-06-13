@@ -27,7 +27,7 @@ class HttpQuery(object):
             return
 
         try:
-            cfgobj.read()
+            cfgobj.read(cfg)
             if not cfgobj.has_option('boot', 'url_req_host'):
                 return
             self.url_req_port = cfgobj.getint('boot', 'url_req_port')
