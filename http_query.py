@@ -65,7 +65,16 @@ class HttpQuery(object):
 
             # response是HTTPResponse对象
             response = self.httpClient.getresponse()
-            data = json.loads( response.read())
+            httpres =response.read()
+            data = None
+            try:
+                data = json.loads(httpres)
+            except Exception, e:
+                logging.error(str(e))
+                logging.error(traceback.format_exc())
+                print httpres[:100]
+                return
+
             hasfalse = False
             r=[]
             keys = ["urltype","eviltype","evilclass","urlclass","urlsubclass",]
