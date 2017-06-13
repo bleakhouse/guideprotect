@@ -34,6 +34,7 @@ gcalling_hotpath = False
 GP_URL_TYPE_VALID_TIMES =   3600*24*30 #30 days
 GCS=None
 GCFG = 'guideprotect.conf'
+GWARNING=None
 
 #type for strRedirectType 'url', 'buf','buffile'
 class InterceptRule:

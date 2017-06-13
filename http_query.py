@@ -19,7 +19,7 @@ class HttpQuery(object):
     httpClient = None
     req_host = '127.0.0.1'
     req_port = 8080
-
+    warning_email=[]
 
     def init_from_cfg(self, cfg):
         cfgobj = ConfigParser.ConfigParser()
@@ -28,12 +28,11 @@ class HttpQuery(object):
 
         try:
             cfgobj.read(cfg)
-            if not cfgobj.has_option('boot', 'url_req_host'):
-                return
-            self.url_req_port = cfgobj.getint('boot', 'url_req_port')
+            if cfgobj.has_option('boot', 'url_req_host'):
+                self.url_req_port = cfgobj.getint('boot', 'url_req_port')
 
-            logging.info('url_req_host:%s', self.req_host)
-            logging.info('url_req_host:%s', self.req_port)
+                logging.info('url_req_host:%s', self.req_host)
+                logging.info('url_req_host:%s', self.req_port)
 
         except Exception, e:
             logging.error(str(e))
@@ -72,6 +71,7 @@ class HttpQuery(object):
             except Exception, e:
                 logging.error(str(e))
                 logging.error(traceback.format_exc())
+                if basedef.GWARNING:basedef.GWARNING.sendmail(str(e), traceback.format_exc())
                 print httpres[:100]
                 return
 

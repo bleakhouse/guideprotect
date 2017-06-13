@@ -21,6 +21,7 @@ import  ignoremgr
 from dbase import db
 import url_redis_matcher
 import ConfigParser
+import gpwarning
 
 basedef.gvar['url_visit_count'] = 0
 basedef.gvar['url_block_count'] = 0
@@ -118,6 +119,9 @@ if __name__ == '__main__':
     ignoremgr.init()
     gpconf.make_gcs()
     basedef.GCS.init()
+    basedef.GWARNING =gpwarning.Warning()
+    basedef.GWARNING.init()
+
     db.createalltables()
 
     startweb()
