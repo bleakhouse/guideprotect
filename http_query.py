@@ -32,7 +32,7 @@ class HttpQuery(object):
                 return
             self.url_req_port = cfgobj.getint('boot', 'url_req_port')
 
-            logging.info('url_req_host:%s', self.url_req_host)
+            logging.info('url_req_host:%s', self.req_host)
             logging.info('url_req_host:%s', self.req_port)
 
         except Exception, e:
