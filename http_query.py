@@ -59,8 +59,8 @@ class HttpQuery(object):
 
             if url.startswith('http://'):
                 url = url[7:]
-
-            self.httpClient.request('GET', '/j2ee002/{0}.do'.format(url))
+            requrl = '/j2ee002/{0}.do'.format(url)
+            self.httpClient.request('GET', requrl)
 
             # response是HTTPResponse对象
             response = self.httpClient.getresponse()
@@ -73,6 +73,7 @@ class HttpQuery(object):
                 logging.error(traceback.format_exc())
                 if basedef.GWARNING:basedef.GWARNING.sendmail(str(e), traceback.format_exc())
                 print httpres[:100]
+                print requrl
                 return
 
             hasfalse = False
