@@ -82,7 +82,7 @@ class HttpQuery(object):
             r=[]
             keys = ["urltype","eviltype","evilclass","urlclass","urlsubclass",]
             for k in keys:
-                if not data.has_keys(k):
+                if not data.has_key(k):
                     hasfalse=True
                     break
                 r.append(data[k])
