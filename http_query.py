@@ -77,15 +77,29 @@ class HttpQuery(object):
                 print httpres[:100]
                 print requrl
                 return
+            if not data.has_key("status"):
+                return
+
+            if data['status']==100:
+                logging.warning('repeat url req: %s', url)
+                return
+            if data['status']!=0:
+                logging.warning('error req url %s,%s', data['status'], url)
+                return
 
             hasfalse = False
             r=[]
+            if not data.has_key('url_attr'):
+                logging.warning('has no url attr %s', str(data))
+                return
+
+            url_attr=data['url_attr'][0]
             keys = ["urltype","eviltype","evilclass","urlclass","urlsubclass",]
             for k in keys:
-                if not data.has_key(k):
+                if not url_attr.has_key(k):
                     hasfalse=True
                     break
-                r.append(data[k])
+                r.append(url_attr[k])
             if hasfalse:
                 return
             return r
