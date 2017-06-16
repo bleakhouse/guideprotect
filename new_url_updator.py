@@ -127,15 +127,15 @@ def do_update(name):
                     if len(urlinfo['redirect_target'])>0 and not urlinfo['redirect_target'].startswith('http://'):
                         urlinfo['redirect_target'] ='http://'+urlinfo['redirect_target']
 
-                updating_url_infos[url]=url_info
+                updating_url_infos[url]=urlinfo
 
             if len(updating_url_infos)>0:
                 pip = redis_match_obj.pipeline()
 
-                for url,update_info in updating_url_infos:
+                for url,update_info in updating_url_infos.items():
                     pip.hmset(url.lower(), update_info)
 
-                logging.info('pip.execute():%s',pip.execute())
+                logging.info('pip.execute():%s',len(pip.execute()))
 
         except:
             pass
