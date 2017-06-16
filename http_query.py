@@ -83,6 +83,7 @@ class HttpQuery(object):
                 if basedef.GWARNING:basedef.GWARNING.sendmail(str(e), traceback.format_exc())
                 print httpres[:100]
                 print requrl
+                print url
                 self.httpClient = httplib.HTTPConnection(self.req_host, self.req_port, timeout=5)
                 return
             if not data.has_key("status"):
