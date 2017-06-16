@@ -56,8 +56,10 @@ def inject_back_url(pkt, newtarget):
     #newack = (seq+len(httpres))&0xffffffff
     newack = seq+reqlen
     response = Ether(dst=ethsrc, src=ethdst)/IP(src=dst, dst=src)/TCP(flags="A",sport=dstport, dport=srcport,seq=ack,ack=newack)/httpres
+    global g_redirect_eth
     sendp(response, iface=g_redirect_eth, verbose= False)
     global  g_redirect_count
+
     g_redirect_count = g_redirect_count + 1
     basedef.gvar['url_block_count'] = basedef.gvar['url_block_count']+1
     if basedef.GCS.output_log():

@@ -35,7 +35,7 @@ def start(sniffeth):
 
     logging.info('importing scapy....')
 
-    logging.info('start sniff....')
+    logging.info('start sniff....%s', sniffeth)
 
     sniff(filter="tcp and dst port 80", iface=sniffeth, prn=snifhandler.sniff_check_http_packet)
 
