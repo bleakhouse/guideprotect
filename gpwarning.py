@@ -50,11 +50,14 @@ class Warning(object):
                 msg["To"] = send
                 msg["Subject"] = str(subj)
                 p = Popen(["/usr/sbin/sendmail", "-t", "-oi"], stdin=PIPE)
-                p.communicate(msg.as_string())
+                return p.communicate(msg.as_string())
 
 
     def sys_warning(self):
         if time.time()-self.last_warning_memory>30*60*1000:
             if psutil.virtual_memory().percent()<30:
                 self.last_warning_memory = time.time()
-                self.sendmail('low memory '+str(psutil.virtual_memory().percent()), force=1)
+                mail_ctx = 'low memory:'+str(psutil.virtual_memory().percent())
+
+                r = self.sendmail(mail_ctx, force=1)
+                logging.warning(mail_ctx +"\n"+str(r))
