@@ -32,12 +32,12 @@ class HttpQuery(object):
         try:
             cfgobj.read(cfg)
             if cfgobj.has_option('boot', 'url_req_host'):
-                self.url_req_port = cfgobj.getint('boot', 'url_req_port')
+                self.req_port = cfgobj.getint('boot', 'url_req_port')
             if cfgobj.has_option('boot', 'url_req_host'):
                 self.req_host = cfgobj.get('boot', 'url_req_host')
 
                 logging.info('url_req_host:%s', self.req_host)
-                logging.info('url_req_host:%s', self.req_port)
+                logging.info('req_port:%s', self.req_port)
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
