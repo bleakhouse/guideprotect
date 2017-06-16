@@ -7,13 +7,13 @@ import basedef
 import os
 import logging
 import traceback
-
-
+import psutil
+import time
 class Warning(object):
     warning_email_on =0
     send_list=[]
     section_name='warning'
-
+    last_warning_memory=0
     def init(self):
         cfg = basedef.GCFG
         cfgobj = ConfigParser.ConfigParser()
@@ -38,9 +38,9 @@ class Warning(object):
             logging.error(traceback.format_exc())
 
 
-    def sendmail(self,warning, subj="exception occur."):
+    def sendmail(self,warning, subj="exception occur.",force=0):
 
-        if self.warning_email_on==0:
+        if self.warning_email_on==0 and force==0:
             return
         pl = platform.platform()
         if pl.startswith("Windows") is False:
@@ -53,3 +53,8 @@ class Warning(object):
                 p.communicate(msg.as_string())
 
 
+    def sys_warning(self):
+        if time.time()-self.last_warning_memory>30*60*1000:
+            if psutil.virtual_memory().percent()<30:
+                self.last_warning_memory = time.time()
+                self.sendmail('low memory '+str(psutil.virtual_memory().percent()), force=1)

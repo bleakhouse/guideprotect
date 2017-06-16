@@ -136,7 +136,7 @@ def do_update(name):
                     pip.hmset(url.lower(), update_info)
 
                 logging.info('pip.execute():%s',len(pip.execute()))
-
+            basedef.GWARNING.sys_warning()
         except:
             pass
 
