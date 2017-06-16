@@ -136,10 +136,13 @@ def do_update(name):
                     pip.hmset(url.lower(), update_info)
 
                 logging.info('pip.execute():%s',len(pip.execute()))
+
+        except:
+            pass
+        try:
             basedef.GWARNING.sys_warning()
         except:
             pass
-
         time.sleep(10)
 
     redis_match_obj.delete('update_info', gstart_update)
