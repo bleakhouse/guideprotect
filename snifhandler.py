@@ -176,7 +176,7 @@ def sniff_check_http_packet(pkt):
     if host1 in basedef.gvar['ignorehost']:
         return
 
-    else:
+    elif not host1.endswith('.com.cn'):
         dot1 = host1.rfind(".")
         dot2 = host1[:dot1-1].rfind(".")
         if dot1 !=-1 and dot2 !=-1 and dot1!=dot2:
