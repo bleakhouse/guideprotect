@@ -62,17 +62,17 @@ class HttpQuery(object):
             return
         try:
 
-            if url.startswith('http://'):
-                url = url[7:]
-            encode_url = base64.b64encode(url)
-            requrl = '/j2ee002/'+encode_url
-            self.httpClient.request('GET', requrl)
-
-            # response是HTTPResponse对象
-            response = self.httpClient.getresponse()
-            httpres =response.read()
             data = None
             try:
+                if url.startswith('http://'):
+                    url = url[7:]
+                encode_url = base64.b64encode(url)
+                requrl = '/j2ee002/'+encode_url
+                self.httpClient.request('GET', requrl)
+
+                # response是HTTPResponse对象
+                response = self.httpClient.getresponse()
+                httpres =response.read()
                 data = json.loads(httpres)
             except Exception, e:
                 logging.error(str(e))
