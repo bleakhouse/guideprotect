@@ -63,11 +63,14 @@ class HttpQuery(object):
         try:
 
             data = None
+            httpres=""
+            requrl=""
             try:
                 if url.startswith('http://'):
                     url = url[7:]
                 encode_url = base64.b64encode(url)
                 requrl = '/j2ee002/'+encode_url
+
                 self.httpClient.request('GET', requrl)
 
                 # response是HTTPResponse对象
@@ -80,6 +83,7 @@ class HttpQuery(object):
                 if basedef.GWARNING:basedef.GWARNING.sendmail(str(e), traceback.format_exc())
                 print httpres[:100]
                 print requrl
+                self.httpClient = httplib.HTTPConnection(self.req_host, self.req_port, timeout=5)
                 return
             if not data.has_key("status"):
                 return
