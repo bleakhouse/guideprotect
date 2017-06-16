@@ -22,6 +22,8 @@ class HttpQuery(object):
     req_port = 8080
     warning_email=[]
 
+
+
     def init_from_cfg(self, cfg):
         cfgobj = ConfigParser.ConfigParser()
         if not os.path.isfile(cfg):
@@ -34,18 +36,18 @@ class HttpQuery(object):
 
                 logging.info('url_req_host:%s', self.req_host)
                 logging.info('url_req_host:%s', self.req_port)
-
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
 
 
+
+
     def init(self):
 
         try:
-            self.httpClient = httplib.HTTPConnection(self.req_host, self.req_port, timeout=5)
             self.init_from_cfg(basedef.GCFG)
-
+            self.httpClient = httplib.HTTPConnection(self.req_host, self.req_port, timeout=5)
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
@@ -84,7 +86,7 @@ class HttpQuery(object):
                 logging.warning('repeat url req: %s', url)
                 return
             if data['status']!=0:
-                logging.warning('error req url %s,%s', data['status'], url)
+                logging.warning('error req url %s,%s', str(data), url)
                 return
 
             hasfalse = False
@@ -99,7 +101,7 @@ class HttpQuery(object):
                 if not url_attr.has_key(k):
                     hasfalse=True
                     break
-                r.append(url_attr[k])
+                r.append(str(url_attr[k]))
             if hasfalse:
                 return
             return r
