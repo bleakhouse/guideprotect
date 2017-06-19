@@ -55,7 +55,7 @@ class Warning(object):
 
     def sys_warning(self):
         if time.time()-self.last_warning_memory>30*60*1000:
-            if psutil.virtual_memory().percent<30:
+            if psutil.virtual_memory().percent>80:
                 self.last_warning_memory = time.time()
                 mail_ctx = 'low memory:'+str(psutil.virtual_memory().percent)
 
