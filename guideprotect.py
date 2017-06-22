@@ -43,18 +43,56 @@ import basedef
 
 import datetime
 
+def get_time_to_flush_db():
+    MAX_SLEEP = 30 * 60
+    cfgobj = basedef.GCS.get_config_obj()
+    hour_inter = round(float(eval(MAX_SLEEP)) / 3600, 2)
+    if cfgobj is not None and cfgobj.has_option('boot', 'save_log_db_interval'):
+        save_log_db_interval = cfgobj.get('boot', 'save_log_db_interval')
+        MAX_SLEEP = int(eval(save_log_db_interval))
+        hour_inter = round(float(eval(MAX_SLEEP)) / 3600, 2)
+
+    logging.info('save_log_db_interval:%s', hour_inter)
+
+    save_log_db_clock = None
+    if cfgobj is not None and cfgobj.has_option('boot', 'save_log_db_clock'):
+        save_log_db_clock = cfgobj.getint('boot', 'save_log_db_clock')
+
+    logging.info('save_log_db_interval:%s', hour_inter)
+    return  MAX_SLEEP, save_log_db_clock
 
 def RuntimEnginThread(name):
-    MAX_SLEEP = 30 * 60
+
+    save_log_db_interval,save_log_db_clock = get_time_to_flush_db()
+    logging.info('save_log_db_interval:%s', save_log_db_interval)
+    logging.info('save_log_db_clock:%s', save_log_db_clock)
     try:
         if os.path.isfile('hotpatch.py'):
             x = __import__('hotpatch')
             x.check(basedef.gvar)
-            time.sleep(10)
+            time.sleep(3)
     except:
-        print "Error: RuntimEnginThread 1"
+        logging.error("Error: RuntimEnginThread 1.1")
+
+    if save_log_db_interval and save_log_db_clock:
+        while 1:
+            logging.warning('should not has 2 valid setting (save_log_db)!!!!!!!!!!!!!!!!')
+            time.sleep(1)
+
+    lasttick = 0
     while 1:
         try:
+            if save_log_db_clock is not None:
+                save_log_db_interval =0
+                while 1:
+                    time.sleep(40)
+                    hour = int(time.strftime("%H", time.localtime()))
+                    min = int(time.strftime("%M", time.localtime()))
+                    if  min==0 and hour == save_log_db_clock and time.time()-lasttick>60:
+                        lasttick = time.time()
+                        logging.info('time to save visit log')
+                        break
+                    continue
             basedef.gcalling_hotpath = True
 
             if os.path.isfile('hotpatch.py'):
@@ -78,8 +116,8 @@ def RuntimEnginThread(name):
             logging.info('update_visit_host_rate:%s',r2)
             basedef.gcalling_hotpath = False
 
-
-            time.sleep(MAX_SLEEP)
+            if save_log_db_interval>0:
+                time.sleep(save_log_db_interval)
 
         except Exception, e:
             logging.error(str(e))

@@ -84,7 +84,7 @@ class confserver:
      binit=False
 
      blogging = False
-
+     config_obj=None
      DATABASE_NAME = 'guideprotect'
      MYSQL_HOST = "127.0.0.1"
      MYSQL_USR = 'test'
@@ -117,12 +117,17 @@ class confserver:
             return
         self.url_mysql_obj.init()
 
+     def get_config_obj(self):
+         return  self.config_obj
+
+
      def paser_cfg(self, cfg):
 
         try:
             if os.path.isfile(cfg):
                 GP_Configer = ConfigParser.ConfigParser()
                 GP_Configer.read(cfg)
+                self.config_obj = GP_Configer
                 if GP_Configer.has_option('boot', 'url_type_valid_time'):
                     url_type_valid_time = GP_Configer.getint('boot', 'url_type_valid_time')
                     basedef.GP_URL_TYPE_VALID_TIMES = url_type_valid_time * 24 * 3600
