@@ -51,6 +51,7 @@ def get_time_to_flush_db():
     if cfgobj is not None and cfgobj.has_option('boot', 'save_log_db_interval'):
         save_log_db_interval = cfgobj.get('boot', 'save_log_db_interval')
         hour_inter = round(int(eval(save_log_db_interval)) / 3600, 2)
+        save_log_db_interval = eval(save_log_db_interval)
         logging.info('save_log_db_interval:%s', hour_inter)
 
 
