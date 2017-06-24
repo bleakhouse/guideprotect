@@ -111,6 +111,9 @@ def RuntimEnginThread(name):
 
             db.create_visit_furture_record()
 
+            logging.info('start save data to mysql db')
+            basedef.GSaveLogRedisPub.save2pub({'_dtype':999})
+
             logging.info('update_url_check_stat:%s',r1)
             logging.info('update_visit_host_rate:%s',r2)
             basedef.gcalling_hotpath = False

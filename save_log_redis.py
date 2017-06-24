@@ -164,7 +164,11 @@ class SaveLogging2Mysql(object):
             if data['_dtype']==2:
                 self.save2fullurl(data)
 
-            if number>500 and self.conn:
+            #save data
+            if data['_dtype']==999 and self.conn:
+                self.conn.commit()
+
+            if number>50000 and self.conn:
                 number=0
                 self.conn.commit()
 import mylogging
