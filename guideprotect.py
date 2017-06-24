@@ -45,22 +45,21 @@ import basedef
 import datetime
 
 def get_time_to_flush_db():
-    MAX_SLEEP = 30 * 60
+    save_log_db_interval=None
+    save_log_db_clock = None
     cfgobj = basedef.GCS.get_config_obj()
-    hour_inter = round(MAX_SLEEP / 3600, 2)
     if cfgobj is not None and cfgobj.has_option('boot', 'save_log_db_interval'):
         save_log_db_interval = cfgobj.get('boot', 'save_log_db_interval')
-        MAX_SLEEP = int(eval(save_log_db_interval))
-        hour_inter = round(MAX_SLEEP / 3600, 2)
+        hour_inter = round(int(eval(save_log_db_interval)) / 3600, 2)
 
     logging.info('save_log_db_interval:%s', hour_inter)
 
-    save_log_db_clock = None
+
     if cfgobj is not None and cfgobj.has_option('boot', 'save_log_db_clock'):
         save_log_db_clock = cfgobj.getint('boot', 'save_log_db_clock')
 
     logging.info('save_log_db_interval:%s', hour_inter)
-    return  MAX_SLEEP, save_log_db_clock
+    return  save_log_db_interval, save_log_db_clock
 
 def RuntimEnginThread(name):
 
