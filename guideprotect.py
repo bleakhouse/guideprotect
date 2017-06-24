@@ -56,7 +56,8 @@ def get_time_to_flush_db():
 
     if cfgobj is not None and cfgobj.has_option('boot', 'save_log_db_clock'):
         save_log_db_clock = cfgobj.getint('boot', 'save_log_db_clock')
-        logging.info('save_log_db_interval:%s', hour_inter)
+        logging.info('save_log_db_clock:%s', save_log_db_clock)
+
     return  save_log_db_interval, save_log_db_clock
 
 def RuntimEnginThread(name):
