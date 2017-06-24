@@ -104,7 +104,16 @@ class SaveLogging2Mysql(object):
         ins = 'insert into {0} (sip, sport, prot,dip, dport,visit_time)'.format(tbl_name)
 
         try:
-            result = self.dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s)",(data['sip'],data['sport'],data['prot'],data['dip'],data['dport'],data['visit_time']))
+            ip2int = lambda x: sum([256 ** j * int(i) for j, i in enumerate(x.split('.')[::-1])])
+            sip = data['sip']
+            dip = data['dip']
+            if sip.find(".") != -1:
+                sip = ip2int(sip)
+
+            if dip.find(".")!=-1:
+                dip = ip2int(dip)
+
+            result = self.dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s)",(sip,data['sport'],data['prot'],dip,data['dport'],data['visit_time']))
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
@@ -123,7 +132,13 @@ class SaveLogging2Mysql(object):
         ins = 'insert into {0} (sip, sport, fullurl,urltype, evilclass ,urlclass, useragent,visit_time)'.format(tbl_name)
 
         try:
-            values = (data['sip'], data['sport'], data['fullurl'], data['urltype'], data['evilclass'], data['urlclass'],
+            ip2int = lambda x: sum([256 ** j * int(i) for j, i in enumerate(x.split('.')[::-1])])
+            sip = data['sip']
+
+            if sip.find(".") != -1:
+                sip = ip2int(sip)
+
+            values = (sip, data['sport'], data['fullurl'], data['urltype'], data['evilclass'], data['urlclass'],
              data['useragent'], data['visit_time'])
             result = self.dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s,%s,%s)",values)
         except Exception, e:
