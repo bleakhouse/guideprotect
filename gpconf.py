@@ -162,10 +162,10 @@ class confserver:
             logging.error(str(e))
             logging.error(traceback.format_exc())
 
-     def get_direct_info(self, host,req, short_host=None):
+     def get_direct_info(self, host,req, useragent, short_host=None ):
 
         if self.is_rule_from_redis():
-            r= url_redis_matcher.get_direct_info(host, req,short_host)
+            r= url_redis_matcher.get_direct_info(host, req, useragent, short_host)
         else:
             r = url_mysql_matcher.get_direct_info(host, req)
         return  r

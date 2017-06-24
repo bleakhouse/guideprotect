@@ -33,7 +33,7 @@ def getDbOrCreate(dbname='guideprotect'):
     return  op
 
 
-def get_create_host_visitdb(dbname='host_visit_rate'):
+def get_create_db(dbname):
 
     obj=None
     op = None
@@ -106,9 +106,9 @@ def createtable(table_create_sql):
             print "Mysql Error %d: %s" % (e.args[0], e.args[1])
 
 
-def createtable_in_host_rate(table_create_sql):
+def createtable_(table_create_sql, dbname='host_visit_rate'):
 
-    db =get_create_host_visitdb()
+    db =get_create_db(dbname)
 
     if db is None:
         logging.info('createtable_in_host_rate fail')
@@ -143,8 +143,50 @@ def create_url_check_detail_furture():
           PRIMARY KEY  (Id)
         ) ENGINE=InnoDB, character set = utf8;;
         '''.format(tbl_name)
-        createtable_in_host_rate(tmp)
+        createtable_(tmp)
 
+def create_ip_visit_detail_furture():
+
+    next_15day_table_names=[]
+
+    timeNow = datetime.datetime.now()
+    for d in range(0,15):
+        anotherTime = timeNow + datetime.timedelta(days=d)
+        next_15day_table_names.append(anotherTime)
+
+
+    for day in next_15day_table_names:
+        tbl_name = 'tran_'+day.strftime('%Y_%m_%d')
+        tmp = '''CREATE TABLE {0} (
+          Id bigint(21) NOT NULL auto_increment,
+          sip bigint(32) default 0, 
+          sport bigint(32) default 0, 
+          dip bigint(32) default 0, 
+          dport bigint(32) default 0, 
+          prot bigint(32) default 0, 
+          visit_time DATETIME  ,
+          PRIMARY KEY  (Id)
+        ) ENGINE=InnoDB, character set = utf8;;
+        '''.format(tbl_name)
+        createtable_(tmp,'transport_visit')
+
+        tbl_name = 'fullurl_'+day.strftime('%Y_%m_%d')
+        tmp = '''CREATE TABLE {0} (
+          Id bigint(21) NOT NULL auto_increment,
+          sip bigint(32) default 0, 
+          sport bigint(32) default 0, 
+          fullurl varchar(256) NOT NULL default '',
+          user-agent varchar(256)  default '',
+          urltype bigint(32) default 0, 
+          evilclass bigint(32) default 0, 
+          urlclass bigint(32) default 0, 
+          visit_time DATETIME  ,
+          PRIMARY KEY  (Id)
+        ) ENGINE=InnoDB, character set = utf8;;
+        '''.format(tbl_name)
+        createtable_(tmp,'transport_visit')
+#date.time=now.strftime('%Y-%m-%d %H:%M:%S')
+#
 def get_today_host_visit_tblname():
     timeNow = datetime.datetime.now()
     tbl_name = 'z_' + timeNow.strftime('%Y_%m_%d')
@@ -186,12 +228,17 @@ def createalltables():
     createtable(url_check_stat)
     create_url_check_detail_furture()
     create_visit_furture_record()
+    create_ip_visit_detail_furture()
 
-
-
+import gpconf
+import datetime
 if __name__ == '__main__':
 
-
+    gpconf.make_gcs()
+    basedef.GCS.init()
+    obj1 =get_create_db('transport_visit')
+    thistime = time.strftime('%Y-%m-%d %H:%M:%S')
+    obj1.execute("insert into fullurl_2017_06_23(fullurl, visit_time) values(%s,%s)",('baidu.com', thistime))
     db = getDbOrCreate()
     test1 = 1
     test2 = 2

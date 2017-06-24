@@ -13,6 +13,7 @@ import os
 import new_url_updator
 
 gRedisObj=None
+
 gTargetFile={}
 gRedisObj_unknow=None
 
@@ -23,9 +24,13 @@ def new_unknow_url(url):
         return
     gRedisObj_unknow.sadd(new_url_updator.gUNKNOW_URL_KEY_NAME, url)
 
-def should_pass_by_shothost(short_host):
+def should_pass_by_shothost(short_host, dicret):
     if short_host is not None:
-        val2 = gRedisObj.hmget(short_host, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time'])
+        val2 = gRedisObj.hmget(short_host, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time', 'urlclass'])
+        if val2 is not None:
+            dicret['urltype'] = val2[0]
+            dicret['evilclass'] = val2[1]
+            dicret['urlclass'] = val2[5]
         if val2 is None or val2[0] is None:
             new_unknow_url(short_host)
         else:
@@ -45,13 +50,17 @@ def should_pass_by_shothost(short_host):
 # 2 风险网址 访问有安全风险 阻断或提醒
 # 3-4 安全 访问无风险 正常访问
 
-def is_blocked_url(url_or_host):
+def is_blocked_url(url_or_host, dicret):
 
     if url_or_host is None:
         return [3]
 
-    val = gRedisObj.hmget(url_or_host, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time'])
+    val = gRedisObj.hmget(url_or_host, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time', 'urlclass'])
 
+    if val is not None:
+        dicret['urltype'] = val[0]
+        dicret['evilclass'] = val[1]
+        dicret['urlclass'] = val[5]
     if val is None or val[0] is None:
         return [3]
 
@@ -104,28 +113,37 @@ def make_redirect_info(val):
 
     return
 
-def get_direct_info( host,req, short_host=None):
-    global gRedisObj
-    if gRedisObj is None:
+def get_direct_info( host,req, useragent, short_host=None):
+
+    url_info={}
+    if should_pass_by_shothost(short_host,url_info)==True:
+        if len(url_info)>0 and basedef.GSaveLogRedisPub:
+            basedef.GSaveLogRedisPub.save_url_info(host + req, url_info[0], url_info[1], url_info[2],
+                                                       useragent)
         return
 
-    if should_pass_by_shothost(short_host)==True:
-        return
-
-    newval = is_blocked_url(host)
-
+    url_info = {}
+    newval = is_blocked_url(host,url_info)
     if newval[0]==2:
+        if len(url_info) > 0 and basedef.GSaveLogRedisPub:
+            basedef.GSaveLogRedisPub.save_url_info(host + req, url_info[0], url_info[1], url_info[2],
+                                                   useragent)
         return
 
     if newval[0]==3:
         new_unknow_url(host)
 
     if newval[0]==1:
+        if len(url_info) > 0 and basedef.GSaveLogRedisPub:
+            basedef.GSaveLogRedisPub.save_url_info(host + req, url_info[0], url_info[1], url_info[2],
+                                                   useragent)
         return make_redirect_info(newval[1:])
 
     fullurl = host + req
-    newval = is_blocked_url(fullurl)
-
+    url_info = {}
+    newval = is_blocked_url(fullurl,url_info)
+    if len(url_info) > 0 and basedef.GSaveLogRedisPub:
+        basedef.GSaveLogRedisPub.save_url_info(fullurl, url_info[0], url_info[1], url_info[2],useragent)
     if newval[0]==1:
         return make_redirect_info(newval[1:])
 
@@ -141,6 +159,9 @@ def init_redis(host='127.0.0.1', port=6379):
         global gRedisObj_unknow
         gRedisObj_unknow = new_url_updator.get_unknow_redis_db()
         print 'unknow url size:', gRedisObj_unknow.dbsize()
+
+        global glogging_redis
+        gRedisObj = redis.Redis(host=host, port=port, db=11)
 
     except Exception, e:
         logging.error(str(e))

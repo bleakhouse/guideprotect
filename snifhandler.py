@@ -16,11 +16,10 @@ import sys
 from scapy.all import *
 import gpconf
 import basedef
-
+import url_redis_matcher
 
 g_redirect_count = 0
 g_redirect_eth=""
-
 
 def inject_back_url(pkt, newtarget):
 
@@ -75,7 +74,7 @@ def find_req_from_httppayload(httppayload):
 
     request = gputils.HTTPRequest(httppayload)
     try:
-        return [request.headers['Host'].lower(), request.path.lower()]
+        return [request.headers['Host'].lower(), request.path.lower(),request.headers['User-Agent']]
     except:
         return None
 
@@ -129,13 +128,22 @@ def sniff_check_http_packet(pkt):
     #     else:
     #         gIgnore_time = time.time()
 
-    if basedef.gcalling_hotpath==True:
+    tcpdat = pkt[TCP]
+
+    if tcpdat.dport!=80:
+         return
+    ipdat = pkt[IP]
+
+    reqlen = ipdat.len-ipdat.ihl*4-tcpdat.dataofs*4
+    if reqlen<10:
         return
 
-    if pkt[TCP].dport!=80:
-         return
-    reqlen = pkt[IP].len-pkt[IP].ihl*4-pkt[TCP].dataofs*4
-    if reqlen<10:
+    #SYN = 0x02  1st of handsharks
+
+    if tcpdat.flags==2:
+        basedef.GSaveLogRedisPub.save5element(ipdat.src, tcpdat.sport,6, ipdat.dst, tcpdat.dport)
+
+    if basedef.gcalling_hotpath==True:
         return
 
     #httpreq = str(pkt[TCP])
@@ -165,15 +173,18 @@ def sniff_check_http_packet(pkt):
 
 
     host1 = req[0]
+    useragent = req[2]
     log_visit_info(host1, req[1])
 
-    if host1.endswith('.gov'):
-        return
-    if host1.endswith('.gov.cn'):
+    if host1.endswith('.gov') or host1.endswith('.gov.cn'):
+        if basedef.GSaveLogRedisPub:
+            basedef.GSaveLogRedisPub.save_url_info(host1+req[1], 3,0, 9,useragent)
         return
 
     short_host = None
-    if host1 in basedef.gvar['ignorehost']:
+    if host1 in basedef.gvar['ignorehost'].keys():
+        if basedef.GSaveLogRedisPub:
+            basedef.GSaveLogRedisPub.save_url_info(host1+req[1], 3,0, basedef.gvar['ignorehost'][host1], useragent)
         return
 
     elif not host1.endswith('.com.cn'):
@@ -181,12 +192,15 @@ def sniff_check_http_packet(pkt):
         dot2 = host1[:dot1-1].rfind(".")
         if dot1 !=-1 and dot2 !=-1 and dot1!=dot2:
             short_host = host1[dot2+1:]
-            if short_host in basedef.gvar['ignorehost']:
+            if short_host in basedef.gvar['ignorehost'].keys():
+                if basedef.GSaveLogRedisPub:
+                    basedef.GSaveLogRedisPub.save_url_info(host1 + req[1], 3, 0, basedef.gvar['ignorehost'][short_host], useragent)
                 return
 
 
 
-    redirect_info = basedef.GCS.get_direct_info(host1, req[1],short_host)
+
+    redirect_info = basedef.GCS.get_direct_info(host1, req[1],useragent, short_host)
 
     #print 'get_direct_info:', redirect_info
     if redirect_info is None:

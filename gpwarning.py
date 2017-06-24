@@ -39,7 +39,7 @@ class Warning(object):
 
 
     def sendmail(self,warning, subj="exception occur.",force=0):
-
+        #if basedef.GWARNING:basedef.GWARNING.sendmail(str(e), traceback.format_exc())
         if self.warning_email_on==0 and force==0:
             return
         pl = platform.platform()

@@ -22,6 +22,7 @@ from dbase import db
 import url_redis_matcher
 import ConfigParser
 import gpwarning
+import save_log_redis
 
 basedef.gvar['url_visit_count'] = 0
 basedef.gvar['url_block_count'] = 0
@@ -29,7 +30,7 @@ basedef.gvar['host_visited'] = {}
 basedef.gvar['blocked_host_visited'] = {}
 basedef.gvar['calling_hotpath'] = False
 basedef.gvar['ignorepostfix'] = set()
-basedef.gvar['ignorehost'] = set()
+basedef.gvar['ignorehost'] = {}
 
 def start(sniffeth):
 
@@ -136,15 +137,17 @@ class RuntimEngin(object):
 
 
 
-def startwebthread(name):
-    os.system('python new_url_updator.py 8787')
+def sub_proc(cmdline):
+    logging.info('start sub proc:%s', cmdline)
+    os.system(cmdline)
 
 
-def startweb():
+def start_sub_proc(tasks):
         try:
-            thread.start_new_thread(startwebthread, ("startwebthread-1",))
+            for task in tasks:
+                thread.start_new_thread(sub_proc, (task,))
         except:
-            print "Error: unable to start startwebthread"
+            print "Error: unable to start start_sub_proc"
 
 
 if __name__ == '__main__':
@@ -160,9 +163,16 @@ if __name__ == '__main__':
     basedef.GWARNING =gpwarning.Warning()
     basedef.GWARNING.init()
 
+    basedef.GSaveLogRedisPub = save_log_redis.SaveLogging2Redis()
+    basedef.GSaveLogRedisPub.init()
+
     db.createalltables()
 
-    startweb()
+
+    cmdlines = ['python new_url_updator.py 8787',
+                'python save_log_redis.py']
+
+    start_sub_proc(cmdlines)
 
     snife, inje= gpconf.get_sniff_eth()
     if len(snife)>0 and  len(inje)>0:
