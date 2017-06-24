@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+#for logging
 
 import subprocess as sub
 import sys
@@ -43,10 +44,14 @@ class SaveLogging2Redis(object):
         dat = {'_dtype':2, 'sip':self.sip, 'sport':self.sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time}
         self.save2pub(dat)
 
+    def save_url_info_with_src(self, sip,sport,fullurl, urltype, evilclass, urlclass,visit_time, useragent='unknow'):
+        dat = {'_dtype':2, 'sip':sip, 'sport':sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time}
+        self.save2pub(dat)
+
     def save2pub(self, data):
         if self.redobj==None:
             logging.error('self.redobj error:%s',data)
-        self.redobj.publish('self.save_log_pub_channel', str(data))
+        self.redobj.publish(self.save_log_pub_channel, (data))
 
 class SaveLogging2Mysql(object):
 
@@ -62,7 +67,7 @@ class SaveLogging2Mysql(object):
         self.save_log_pub_channel   =   save_log_pub_channel
         self.redobj = redis.Redis(db=save_log_pub_redis_num)
         self.ps = self.redobj.pubsub()
-        self.ps.subscribe([save_log_pub_channel])
+        self.ps.subscribe(save_log_pub_channel)
 
         self.init_mysql()
         basedef.GWARNING =gpwarning.Warning()
@@ -142,7 +147,6 @@ class SaveLogging2Mysql(object):
             if data['_dtype']==2:
                 self.save2fullurl(data)
 
-
             if number>500 and self.conn:
                 number=0
                 self.conn.commit()
@@ -157,8 +161,9 @@ if __name__ == '__main__':
     save_log_pub_redis_num = cfgobj.getint('boot','save_log_pub_redis_num')
     save_log_pub_channel = cfgobj.get('boot','save_log_pub_channel')
 
+
     obj = SaveLogging2Mysql()
-    obj.init(save_log_pub_channel, save_log_pub_redis_num)
+    obj.init([save_log_pub_channel], save_log_pub_redis_num)
 
     obj.go()
     if obj.conn:

@@ -22,7 +22,16 @@ def new_unknow_url(url):
     global  gRedisObj_unknow
     if gRedisObj_unknow is None:
         return
-    gRedisObj_unknow.sadd(new_url_updator.gUNKNOW_URL_KEY_NAME, url)
+    url_info={}
+    url_info['url']=url
+    url_info['need_save_log_redis']=0
+    gRedisObj_unknow.sadd(new_url_updator.gUNKNOW_URL_KEY_NAME, (url_info))
+
+def add_unknow_url_info(url_info):
+    global  gRedisObj_unknow
+    if gRedisObj_unknow is None:
+        return
+    gRedisObj_unknow.sadd(new_url_updator.gUNKNOW_URL_KEY_NAME, (url_info))
 
 def should_pass_by_shothost(short_host, dicret):
     if short_host is not None:
@@ -148,7 +157,15 @@ def get_direct_info( host,req, useragent, short_host=None):
         return make_redirect_info(newval[1:])
 
     if newval[0]==3:
-        new_unknow_url(fullurl)
+        visit_time = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        checking_url_info={}
+        checking_url_info['url'] = fullurl
+        checking_url_info['need_save_log_redis'] = 1
+        checking_url_info['useragent'] = useragent
+        checking_url_info['sip'] = basedef.GSaveLogRedisPub.sip
+        checking_url_info['sport'] = basedef.GSaveLogRedisPub.sip
+        add_unknow_url_info(checking_url_info)
 
 def init_redis(host='127.0.0.1', port=6379):
 

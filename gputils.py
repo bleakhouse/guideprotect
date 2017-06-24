@@ -9,12 +9,22 @@ import time
 import urllib2
 import netifaces as netif
 import platform
-
+import redis
 from pprint import pprint
 
-
+import traceback
 from BaseHTTPServer import BaseHTTPRequestHandler
 from StringIO import StringIO
+
+def get_redis_obj():
+
+    try:
+        redis_obj = redis.Redis()
+        return redis_obj
+    except Exception, e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+
 
 class HTTPRequest(BaseHTTPRequestHandler):
     def __init__(self, request_text):

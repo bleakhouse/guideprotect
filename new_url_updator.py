@@ -16,7 +16,7 @@ import http_query
 import httplib
 import base64
 import datetime
-
+import  gputils
 redis_obj =None
 gstart_update = 0
 
@@ -31,16 +31,6 @@ def get_unknow_redis_db(host='127.0.0.1', port=6379,db=1):
         logging.error(str(e))
         logging.error(traceback.format_exc())
 
-
-
-def get_redis_obj():
-
-    try:
-        redis_obj = redis.Redis()
-        return redis_obj
-    except Exception, e:
-        logging.error(str(e))
-        logging.error(traceback.format_exc())
 
 def pop_all_unknow_urls(redis_obj):
 
@@ -78,7 +68,7 @@ def do_update(name):
     if redis_obj is None:
         return
 
-    redis_match_obj = get_redis_obj()
+    redis_match_obj = gputils.get_redis_obj()
     redis_match_obj.set('update_info', gstart_update)
 
     queryobj = http_query.HttpQuery()
@@ -104,14 +94,15 @@ def do_update(name):
             if count>0:
                 logging.info('unknow urls:%s', len(unknow_urls))
             updating_url_infos={}
-            for url in unknow_urls:
+            for it in unknow_urls:
+                checking_url_info = eval(it)
+                url = checking_url_info['url']
                 url_info = queryobj.http_check_url_type(url)
                 if url_info is None:
                     continue
                 url_type = url_info[0]
                 #if url_type != 2:
                 #    continue
-
                 urlinfo = {}
                 urlinfo['urltype'] = url_type
                 urlinfo['eviltype'] = url_info[1]
@@ -127,10 +118,20 @@ def do_update(name):
                     if len(urlinfo['redirect_target'])>0 and not urlinfo['redirect_target'].startswith('http://'):
                         urlinfo['redirect_target'] ='http://'+urlinfo['redirect_target']
 
+                need_save_log_redis = int(checking_url_info['need_save_log_redis'])
+                if need_save_log_redis and basedef.GSaveLogRedisPub:
+                    sip = checking_url_info['sip']
+                    sport = checking_url_info['sport']
+                    visit_time = checking_url_info['visit_time']
+                    useragent = checking_url_info['useragent']
+                    sip = checking_url_info['sip']
+                    sport = checking_url_info['sport']
+                    basedef.GSaveLogRedisPub.save_url_info_with_src(sip, sport, url, urlinfo['urltype'], urlinfo['evilclass'], urlinfo['urlclass'], visit_time, useragent)
+
                 updating_url_infos[url]=urlinfo
 
             if len(updating_url_infos)>0:
-                pip = redis_match_obj.pipeline()
+                pip = gputils.redis_match_obj.pipeline()
 
                 for url,update_info in updating_url_infos.items():
                     pip.hmset(url.lower(), update_info)
@@ -157,7 +158,7 @@ urls = (
 )
 class get_url:
     def GET(self):
-        obj = get_redis_obj()
+        obj = gputils.get_redis_obj()
         if obj is None:
             return 'conn fail'
         url =web.input().get('url')
@@ -174,7 +175,7 @@ class get_url:
 
 class update_url:
     def GET(self):
-        return "start already ",get_redis_obj().get('update_info')
+        return "start already ",gputils.get_redis_obj().get('update_info')
 
 
 class Index:
@@ -188,7 +189,7 @@ class gptest:
 
     def GET(self):
         try:
-            redis_obj = get_redis_obj()
+            redis_obj = gputils.get_redis_obj()
             if redis_obj is not None:
                 return redis_obj.dbsize()
 
@@ -214,6 +215,7 @@ import ConfigParser
 import mylogging
 import basedef
 import gpwarning
+import save_log_redis
 if __name__=='__main__':
 
     mylogging.setuplog('url_updator.txt')
@@ -222,6 +224,9 @@ if __name__=='__main__':
 
     basedef.GWARNING =gpwarning.Warning()
     basedef.GWARNING.init()
+
+    basedef.GSaveLogRedisPub = save_log_redis.SaveLogging2Redis()
+    basedef.GSaveLogRedisPub.init()
 
     run_url_updator().Start()
     app = web.application(urls, globals())
