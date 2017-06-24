@@ -136,12 +136,12 @@ def sniff_check_http_packet(pkt):
 
     reqlen = ipdat.len-ipdat.ihl*4-tcpdat.dataofs*4
     if reqlen<10:
+        if tcpdat.flags == 2:
+            basedef.GSaveLogRedisPub.save5element(ipdat.src, tcpdat.sport, 6, ipdat.dst, tcpdat.dport)
         return
 
     #SYN = 0x02  1st of handsharks
 
-    if tcpdat.flags==2:
-        basedef.GSaveLogRedisPub.save5element(ipdat.src, tcpdat.sport,6, ipdat.dst, tcpdat.dport)
 
     if basedef.gcalling_hotpath==True:
         return
@@ -149,7 +149,7 @@ def sniff_check_http_packet(pkt):
     #httpreq = str(pkt[TCP])
     if not pkt.haslayer(Raw):
         return
-    httppayload = str(pkt[Raw])
+    httppayload = pkt.getlayer(Raw).load()
 
     if not httppayload.startswith('GET /'):
         return

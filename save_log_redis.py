@@ -120,10 +120,12 @@ class SaveLogging2Mysql(object):
         timeNow = datetime.datetime.now()
         tbl_name = 'fullurl_' + timeNow.strftime('%Y_%m_%d')
 
-        ins = 'insert into {0} (sip, sport, fullurl,urltype, evilclass, ,urlclass, useragent,visit_time)'.format(tbl_name)
+        ins = 'insert into {0} (sip, sport, fullurl,urltype, evilclass ,urlclass, useragent,visit_time)'.format(tbl_name)
 
         try:
-            result = self.dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s,%s,%s)",(data['sip'],data['sport'],data['fullurl'],data['urltype'],data['evilclass'],data['urlclass'],data['useragent'],data['visit_time']))
+            values = (data['sip'], data['sport'], data['fullurl'], data['urltype'], data['evilclass'], data['urlclass'],
+             data['useragent'], data['visit_time'])
+            result = self.dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s,%s,%s)",values)
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
