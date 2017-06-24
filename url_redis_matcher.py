@@ -36,13 +36,13 @@ def add_unknow_url_info(url_info):
 def should_pass_by_shothost(short_host, dicret):
     if short_host is not None:
         val2 = gRedisObj.hmget(short_host, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time', 'urlclass'])
-        if val2 is not None:
-            dicret.append(val2[0])
-            dicret.append(val2[1])
-            dicret.append(val2[5])
+
         if val2 is None or val2[0] is None:
             new_unknow_url(short_host)
         else:
+            dicret.append(val2[0])
+            dicret.append(val2[1])
+            dicret.append(val2[5])
             urltype = val2[0]
             if urltype is None or not urltype.isdigit():
                 return
@@ -66,12 +66,12 @@ def is_blocked_url(url_or_host, dicret):
 
     val = gRedisObj.hmget(url_or_host, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time', 'urlclass'])
 
-    if val is not None:
-        dicret.append(val[0])
-        dicret.append(val[1])
-        dicret.append(val[5])
+
     if val is None or val[0] is None:
         return [3]
+    dicret.append(val[0])
+    dicret.append(val[1])
+    dicret.append(val[5])
 
     if basedef.GP_URL_TYPE_VALID_TIMES!=-1:
         update_time = val[4]
