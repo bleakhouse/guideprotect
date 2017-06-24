@@ -216,11 +216,14 @@ import mylogging
 import basedef
 import gpwarning
 import save_log_redis
+import gpconf
 if __name__=='__main__':
 
     mylogging.setuplog('url_updator.txt')
     reload(sys).setdefaultencoding("utf8")
     print 'system encoding: ',sys.getdefaultencoding()
+    gpconf.make_gcs()
+    basedef.GCS.init()
 
     basedef.GWARNING =gpwarning.Warning()
     basedef.GWARNING.init()
