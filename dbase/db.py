@@ -137,7 +137,7 @@ def create_url_check_detail_furture():
         tbl_name = 'z_'+day.strftime('%Y_%m_%d')
         tmp = '''CREATE TABLE {0} (
           Id bigint(21) NOT NULL auto_increment,
-          host_name varchar(128) NOT NULL default '',
+          host_name varchar(512) NOT NULL default '',
           host_visit_count bigint(32),
           record_type bigint(32) default 0, 
           PRIMARY KEY  (Id)
@@ -175,7 +175,7 @@ def create_ip_visit_detail_furture():
           Id bigint(21) NOT NULL auto_increment,
           sip bigint(32) default 0, 
           sport bigint(32) default 0, 
-          fullurl varchar(256) NOT NULL default '',
+          fullurl varchar(1024) NOT NULL default '',
           user_agent varchar(256)  default '',
           urltype bigint(32) default 0, 
           evilclass bigint(32) default 0, 
@@ -236,9 +236,10 @@ if __name__ == '__main__':
 
     gpconf.make_gcs()
     basedef.GCS.init()
+    createalltables()
     obj1 =get_create_db('transport_visit')
     thistime = time.strftime('%Y-%m-%d %H:%M:%S')
-    obj1.execute("insert into fullurl_2017_06_23(fullurl, visit_time) values(%s,%s)",('baidu.com', thistime))
+    obj1.execute("insert into fullurl_2017_06_25(fullurl, visit_time) values(%s,%s)",('baidu.com', thistime))
     db = getDbOrCreate()
     test1 = 1
     test2 = 2
