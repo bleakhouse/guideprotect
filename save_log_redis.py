@@ -129,7 +129,7 @@ class SaveLogging2Mysql(object):
         timeNow = datetime.datetime.now()
         tbl_name = 'fullurl_' + timeNow.strftime('%Y_%m_%d')
 
-        ins = 'insert into {0} (sip, sport, fullurl,urltype, evilclass ,urlclass, useragent,visit_time)'.format(tbl_name)
+        ins = 'insert into {0} (sip, sport, fullurl,urltype, evilclass ,urlclass, user_agent,visit_time)'.format(tbl_name)
 
         try:
             ip2int = lambda x: sum([256 ** j * int(i) for j, i in enumerate(x.split('.')[::-1])])
