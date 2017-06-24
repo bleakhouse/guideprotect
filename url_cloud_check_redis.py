@@ -35,10 +35,6 @@ class url_cloud_checker(object):
         queryobj.init()
         redis_match_obj = gputils.get_redis_obj()
 
-    def add_new_unknown_url(self, url, isvisiting=True):
-
-        dat = {'_dtype':3, 'url':url, 'isvisiting':isvisiting}
-        self.save2pub(dat)
 
     def save2pub(self, data):
         if self.redobj==None:
