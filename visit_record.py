@@ -58,10 +58,10 @@ def update_visit_host_rate(ginfo):
     for host, count in ginfo['host_visited'].items():
 
         host = host.lower()
-        query = '''select * from {0} where host_name=%s'''.format(today)
+        query = '''select COUNT(1) from {0} where host_name=%s'''.format(today)
         obj.execute(query, (host,))
-        result = obj.fetchall()
-        if len(result)>0:
+        result = obj.fetchone()[0]
+        if result>0:
             update = '''update {} set host_visit_count=host_visit_count +%s where host_name=%s'''.format(today)
             result = obj.execute(update, (count, host))
 
@@ -72,10 +72,10 @@ def update_visit_host_rate(ginfo):
     for host, count in ginfo['blocked_host_visited'].items():
 
         host = host.lower()
-        query = '''select * from {0} where host_name=%s and record_type=1'''.format(today)
+        query = '''select COUNT(1) from {0} where host_name=%s and record_type=1'''.format(today)
         obj.execute(query, (host,))
-        result2 = obj.fetchall()
-        if len(result2)>0:
+        result2 = obj.fetchone()[0]
+        if result2>0:
             update = '''update {} set host_visit_count=host_visit_count +%s where host_name=%s and record_type=1'''.format(today)
             result2 = obj.execute(update, (count, host))
 
