@@ -149,7 +149,7 @@ def sniff_check_http_packet(pkt):
     #httpreq = str(pkt[TCP])
     if not pkt.haslayer(Raw):
         return
-    httppayload = pkt.getlayer(Raw).load()
+    httppayload = pkt.getlayer(Raw).load
 
     if not httppayload.startswith('GET /'):
         return
