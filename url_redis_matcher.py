@@ -37,9 +37,9 @@ def should_pass_by_shothost(short_host, dicret):
     if short_host is not None:
         val2 = gRedisObj.hmget(short_host, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time', 'urlclass'])
         if val2 is not None:
-            dicret['urltype'] = val2[0]
-            dicret['evilclass'] = val2[1]
-            dicret['urlclass'] = val2[5]
+            dicret.append(val2[0])
+            dicret.append(val2[1])
+            dicret.append(val2[5])
         if val2 is None or val2[0] is None:
             new_unknow_url(short_host)
         else:
@@ -67,9 +67,9 @@ def is_blocked_url(url_or_host, dicret):
     val = gRedisObj.hmget(url_or_host, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time', 'urlclass'])
 
     if val is not None:
-        dicret['urltype'] = val[0]
-        dicret['evilclass'] = val[1]
-        dicret['urlclass'] = val[5]
+        dicret.append(val[0])
+        dicret.append(val[1])
+        dicret.append(val[5])
     if val is None or val[0] is None:
         return [3]
 
@@ -124,14 +124,14 @@ def make_redirect_info(val):
 
 def get_direct_info( host,req, useragent, short_host=None):
 
-    url_info={}
+    url_info=[]
     if should_pass_by_shothost(short_host,url_info)==True:
         if len(url_info)>0 and basedef.GSaveLogRedisPub:
             basedef.GSaveLogRedisPub.save_url_info(host + req, url_info[0], url_info[1], url_info[2],
                                                        useragent)
         return
 
-    url_info = {}
+    url_info = []
     newval = is_blocked_url(host,url_info)
     if newval[0]==2:
         if len(url_info) > 0 and basedef.GSaveLogRedisPub:
@@ -149,7 +149,7 @@ def get_direct_info( host,req, useragent, short_host=None):
         return make_redirect_info(newval[1:])
 
     fullurl = host + req
-    url_info = {}
+    url_info = []
     newval = is_blocked_url(fullurl,url_info)
     if len(url_info) > 0 and basedef.GSaveLogRedisPub:
         basedef.GSaveLogRedisPub.save_url_info(fullurl, url_info[0], url_info[1], url_info[2],useragent)

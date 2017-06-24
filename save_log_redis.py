@@ -123,7 +123,7 @@ class SaveLogging2Mysql(object):
         ins = 'insert into {0} (sip, sport, fullurl,urltype, evilclass, ,urlclass, useragent,visit_time)'.format(tbl_name)
 
         try:
-            result = self.dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s,%s)",(data['sip'],data['sport'],data['fullurl'],data['urltype'],data['evilclass'],data['urlclass'],data['useragent'],data['visit_time']))
+            result = self.dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s,%s,%s)",(data['sip'],data['sport'],data['fullurl'],data['urltype'],data['evilclass'],data['urlclass'],data['useragent'],data['visit_time']))
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
