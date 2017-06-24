@@ -162,4 +162,5 @@ if __name__ == '__main__':
 
     obj.go()
     if obj.conn:
+        logging.info('do the last db commit')
         obj.conn.commit()

@@ -21,7 +21,7 @@ import basedef
 
 def init_ignore_host_list():
 
-    basedef.gvar['ignorehost'] = set()
+    basedef.gvar['ignorehost'] = {}
 
     if not os.path.isfile('ignorehost.txt'):
         return
