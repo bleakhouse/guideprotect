@@ -177,9 +177,6 @@ def init_redis(host='127.0.0.1', port=6379):
         gRedisObj_unknow = new_url_updator.get_unknow_redis_db()
         print 'unknow url size:', gRedisObj_unknow.dbsize()
 
-        global glogging_redis
-        gRedisObj = redis.Redis(host=host, port=port, db=11)
-
     except Exception, e:
         logging.error(str(e))
         logging.error(traceback.format_exc())
