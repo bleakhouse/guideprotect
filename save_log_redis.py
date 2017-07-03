@@ -156,19 +156,25 @@ class SaveLogging2Mysql(object):
         for item in self.ps.listen():
             if item['type']!='message':
                 continue
-            number = number+1
+
             msg = item['data']
             data = eval(msg)
             if data['_dtype']==1:
+                number = number + 1
                 self.save2transIP(data)
             if data['_dtype']==2:
+                number = number + 1
                 self.save2fullurl(data)
 
             #save data
             if data['_dtype']==999 and self.conn:
+
+                logging.info('save new data :%s', number)
+                number = 0
                 self.conn.commit()
 
             if number>50000 and self.conn:
+                logging.info('save new data :%s', number)
                 number=0
                 self.conn.commit()
 import mylogging
