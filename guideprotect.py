@@ -172,7 +172,9 @@ if __name__ == '__main__':
 
 
     cmdlines = ['kill -s $(pidof python save_log_redis.py)',
-                'kill -s $(pidof python new_url_updator.py)'
+                'kill -s $(pidof python new_url_updator.py)',
+                'kill -s 9 $(pidof python new_url_updator.py)',
+                'kill -s 9 $(pidof python new_url_updator.py)',
                 'python new_url_updator.py 8787',
                 'python save_log_redis.py'
                 ]
