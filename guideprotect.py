@@ -171,10 +171,10 @@ if __name__ == '__main__':
     db.createalltables()
 
 
-    cmdlines = ['kill -s $(pidof python save_log_redis.py)',
-                'kill -s $(pidof python new_url_updator.py)',
-                'kill -s 9 $(pidof python new_url_updator.py)',
-                'kill -s 9 $(pidof python save_log_redis.py)'
+    cmdlines = ['''kill -s $(pidof 'python save_log_redis.py')''',
+                '''kill -s $(pidof 'python new_url_updator.py')''',
+                '''kill -s 9 $(pidof 'python new_url_updator.py')''',
+                '''kill -s 9 $(pidof 'python save_log_redis.py')'''
                 ]
 
     start_sub_proc(cmdlines)
