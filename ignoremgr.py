@@ -32,9 +32,13 @@ def init_ignore_host_list():
             continue
         if len(r)==0:
             continue
-        if r.lower() not in basedef.gvar['ignorehost'].keys():
-            basedef.gvar['ignorehost'][r.lower()] =1
-    logging.info("init ignor host list:"+str(len(basedef.gvar['ignorehost'])))
+        info = r.split(',')
+        if len(info)!=2:
+            logging.error('error ignore host:%s', str(info))
+            continue
+        if info[0].lower() not in basedef.gvar['ignorehost'].keys():
+            basedef.gvar['ignorehost'][info[0].lower()] =int(info[1])
+    logging.info("init ignor host list:%s",len(basedef.gvar['ignorehost']))
 
 def init_ignore_postfix_list():
 
