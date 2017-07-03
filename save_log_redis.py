@@ -170,7 +170,6 @@ class SaveLogging2Mysql(object):
 
             #save data
             if data['_dtype']==999 and self.conn:
-
                 logging.info('save new data :%s, number_url:%s', number, number_url)
                 number = 0
                 number_url=0

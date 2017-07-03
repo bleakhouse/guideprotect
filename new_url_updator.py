@@ -97,8 +97,15 @@ def do_update(name):
             for it in unknow_urls:
                 checking_url_info = eval(it)
                 url = checking_url_info['url']
-                url_info = queryobj.http_check_url_type(url)
-                if url_info is None:
+                url_info=None
+                trytimes=10
+                while trytimes>0:
+                    url_info = queryobj.http_check_url_type(url)
+                    if url_info !=1:
+                        break
+                    trytimes = trytimes+1
+
+                if url_info is None or url_info ==1:
                     continue
                 url_type = url_info[0]
                 #if url_type != 2:
