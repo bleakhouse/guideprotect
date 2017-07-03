@@ -156,6 +156,9 @@ if __name__ == '__main__':
 
     mylogging.setuplog('guideprotect')
     reload(sys).setdefaultencoding("utf8")
+    if len(sys.argv)>=2 and sys.argv[1].find('test')!=-1:
+        basedef.GCFG = 'guideprotect - test.conf'
+        logging.info('enter testing mode')
 
     logging.info('guideprotect up.....')
 
