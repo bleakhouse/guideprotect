@@ -118,8 +118,8 @@ def do_update(name):
                     if len(urlinfo['redirect_target'])>0 and not urlinfo['redirect_target'].startswith('http://'):
                         urlinfo['redirect_target'] ='http://'+urlinfo['redirect_target']
 
-                need_save_log_redis = int(checking_url_info['need_save_log_redis'])
-                if need_save_log_redis and basedef.GSaveLogRedisPub:
+
+                if basedef.GSaveLogRedisPub:
                     sip = checking_url_info['sip']
                     sport = checking_url_info['sport']
                     visit_time = checking_url_info['visit_time']

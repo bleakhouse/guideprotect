@@ -153,6 +153,7 @@ class SaveLogging2Mysql(object):
     def go(self):
 
         number=0
+        number_url=0
         for item in self.ps.listen():
             if item['type']!='message':
                 continue
@@ -164,13 +165,15 @@ class SaveLogging2Mysql(object):
                 self.save2transIP(data)
             if data['_dtype']==2:
                 number = number + 1
+                number_url=number_url+1
                 self.save2fullurl(data)
 
             #save data
             if data['_dtype']==999 and self.conn:
 
-                logging.info('save new data :%s', number)
+                logging.info('save new data :%s, number_url:%s', number, number_url)
                 number = 0
+                number_url=0
                 self.conn.commit()
 
             if number>50000 and self.conn:
