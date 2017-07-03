@@ -181,6 +181,11 @@ def sniff_check_http_packet(pkt):
             basedef.GSaveLogRedisPub.save_url_info(host1+req[1], 3,0, 9,useragent)
         return
 
+    if host1.endswith('.edu.cn'):
+        if basedef.GSaveLogRedisPub:
+            basedef.GSaveLogRedisPub.save_url_info(host1+req[1], 3,0, 10,useragent)
+        return
+
     short_host = None
     if host1 in basedef.gvar['ignorehost'].keys():
         if basedef.GSaveLogRedisPub:
