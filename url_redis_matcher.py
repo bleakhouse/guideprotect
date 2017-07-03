@@ -165,6 +165,7 @@ def get_direct_info( host,req, useragent, short_host=None):
         checking_url_info['useragent'] = useragent
         checking_url_info['sip'] = basedef.GSaveLogRedisPub.sip
         checking_url_info['sport'] = basedef.GSaveLogRedisPub.sip
+        checking_url_info['visit_time'] = visit_time
         add_unknow_url_info(checking_url_info)
 
 def init_redis(host='127.0.0.1', port=6379):
