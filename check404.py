@@ -48,10 +48,14 @@ def checkhistory():
     obj = db.get_create_db('transport_visit')
     r = obj.execute(query)
     result = obj.fetchall()
+    url_checked =[]
     for row in result:
         url = row[0]
+        if url in url_checked:
+            continue
         urltype = row[1]
         if urltype and int(urltype)!=2:
+            url_checked.append(url)
             is404 = is_url_404(url)
             if is404:
                 fp.write(url+"\n")
@@ -84,7 +88,7 @@ if __name__ == '__main__':
     mylogging.setuplog('check404')
     gpconf.make_gcs()
     basedef.GCS.init()
-    clock=1
+    clock=3
     if len(sys.argv)==2:
         clock = int(sys.argv[1])
     logging.info('clock:%s', clock)
