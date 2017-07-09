@@ -73,6 +73,7 @@ def setup_3am_job(job_hour):
 
         try:
             checkhistory()
+            logging.info('done today')
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
