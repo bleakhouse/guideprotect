@@ -177,7 +177,7 @@ def create_ip_visit_detail_furture():
           sport bigint(32) default 0, 
           fullurl varchar(1024) NOT NULL default '',
           user_agent varchar(256)  default '',
-          reference varchar(256)  default '',
+          referer varchar(256)  default '',
           urltype bigint(32) default 0, 
           evilclass bigint(32) default 0, 
           urlclass bigint(32) default 0, 
