@@ -41,9 +41,9 @@ def checkhistory():
     timeNow = datetime.datetime.now()
     lasttime = timeNow + datetime.timedelta(days=-1)
     tbl_name = 'fullurl_' + lasttime.strftime('%Y_%m_%d')
-    query = '''select fullurl, urltype from %s'''
+    query = '''select fullurl, urltype from '''+tbl_name
     obj = db.get_create_db('transport_visit')
-    r = obj.execute(query, (tbl_name,))
+    r = obj.execute(query)
     result = obj.fetchall()
     for row in result:
         url = row[0]
@@ -73,4 +73,8 @@ if __name__ == '__main__':
     mylogging.setuplog('check404')
     gpconf.make_gcs()
     basedef.GCS.init()
-    setup_3am_job(1)
+    clock=1
+    if len(sys.argv)==2:
+        clock = int(sys.argv[1])
+    logging.info('clock:%s', clock)
+    setup_3am_job(clock)
