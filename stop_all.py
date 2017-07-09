@@ -9,6 +9,7 @@ cmdlines = [
     '''pkill -f 'python save_log_redis.py' ''',
     '''pkill -f 'python guideprotect.py' ''',
     '''pkill -f 'python new_url_updator.py' '''
+    '''pkill -f 'python check404.py' '''
 
             ]
 for cmdline in cmdlines:
