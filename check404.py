@@ -21,14 +21,17 @@ import urllib2
 
 def is_url_404(url):
     try:
-        if not url.startswith('http://'):
-            url = 'http://'+url
-        response = urllib2.urlopen(url)
-        code = response.getcode()
-        print code," ",url
+        try:
+            if not url.startswith('http://'):
+                url = 'http://'+url
+            response = urllib2.urlopen(url)
+            code = response.getcode()
+            print code," ",url
+        except urllib2.HTTPError, e2:
+            if e2.code==404:
+                print 404, " ", url
+                return True
 
-        if code==404:
-            return  True
     except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
