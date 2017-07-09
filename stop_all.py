@@ -1,15 +1,7 @@
 # -*- coding: UTF-8 -*-
 __author__ = 'Administrator'
 import json
-import logging
-import logging.handlers
-import platform
-import thread
-import time
-import urllib2
 
-
-from dbase import db
 
 import mylogging
 import os
