@@ -6,6 +6,8 @@ import json
 import mylogging
 import os
 import save_log_redis
+import basedef
+import gpconf
 cmdlines = [
     '''pkill -f 'python save_log_redis.py' ''',
     '''pkill -f 'python guideprotect.py' ''',
@@ -13,7 +15,8 @@ cmdlines = [
     'python guideprotect.py'
 
             ]
-
+gpconf.make_gcs()
+basedef.GCS.init()
 obj = save_log_redis.SaveLogging2Redis()
 obj.init()
 obj.save2pub({'_dtype':999})
