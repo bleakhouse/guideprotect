@@ -7,7 +7,7 @@ import thread
 import logging
 import os
 import mylogging
-
+import traceback
 import gputils
 
 import basedef
@@ -21,14 +21,17 @@ import urllib2
 
 def is_url_404(url):
     try:
+        if not url.startswith('http://'):
+            url = 'http://'+url
         response = urllib2.urlopen(url)
         code = response.getcode()
         print code," ",url
 
         if code==404:
             return  True
-    except urllib2.HTTPError, e:
-        logging.warning("urllib2 %s", e.code)
+    except Exception, e:
+            logging.error(str(e))
+            logging.error(traceback.format_exc())
 
 def checkhistory():
 
@@ -55,13 +58,14 @@ def setup_3am_job(job_hour):
     lasttick = 0
     while 1:
         while 1:
-            time.sleep(40)
+
             hour = int(time.strftime("%H", time.localtime()))
             min = int(time.strftime("%M", time.localtime()))
             if hour == job_hour and time.time() - lasttick > 60*60*12:
                 lasttick = time.time()
                 logging.info(' the clock is ticking')
                 break
+            time.sleep(40)
             continue
         checkhistory()
 
