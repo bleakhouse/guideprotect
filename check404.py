@@ -70,7 +70,13 @@ def setup_3am_job(job_hour):
                 break
             time.sleep(40)
             continue
-        checkhistory()
+
+        try:
+            checkhistory()
+        except Exception, e:
+            logging.error(str(e))
+            logging.error(traceback.format_exc())
+
 
 if __name__ == '__main__':
     mylogging.setuplog('check404')
