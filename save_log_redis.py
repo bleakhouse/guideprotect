@@ -39,13 +39,13 @@ class SaveLogging2Redis(object):
         dat = {'_dtype':1, 'sip':sip, 'sport':sport,'prot':prot, 'dip':dip, 'dport':dport,'visit_time':visit_time}
         self.save2pub(dat)
 
-    def save_url_info(self, fullurl, urltype, evilclass, urlclass,useragent='unknow'):
+    def save_url_info(self, fullurl, urltype, evilclass, urlclass,referer, useragent='unknow'):
         visit_time = time.strftime('%Y-%m-%d %H:%M:%S')
-        dat = {'_dtype':2, 'sip':self.sip, 'sport':self.sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time}
+        dat = {'_dtype':2, 'sip':self.sip, 'sport':self.sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
         self.save2pub(dat)
 
-    def save_url_info_with_src(self, sip,sport,fullurl, urltype, evilclass, urlclass,visit_time, useragent='unknow'):
-        dat = {'_dtype':2, 'sip':sip, 'sport':sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time}
+    def save_url_info_with_src(self, sip,sport,fullurl, urltype, evilclass, urlclass,visit_time,referer, useragent='unknow'):
+        dat = {'_dtype':2, 'sip':sip, 'sport':sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
         self.save2pub(dat)
 
     def save2pub(self, data):
@@ -129,7 +129,7 @@ class SaveLogging2Mysql(object):
         timeNow = datetime.datetime.now()
         tbl_name = 'fullurl_' + timeNow.strftime('%Y_%m_%d')
 
-        ins = 'insert into {0} (sip, sport, fullurl,urltype, evilclass ,urlclass, user_agent,visit_time)'.format(tbl_name)
+        ins = 'insert into {0} (sip, sport, fullurl,urltype, evilclass ,urlclass, referer, user_agent,visit_time)'.format(tbl_name)
 
         try:
             ip2int = lambda x: sum([256 ** j * int(i) for j, i in enumerate(x.split('.')[::-1])])
@@ -139,7 +139,7 @@ class SaveLogging2Mysql(object):
                 sip = ip2int(sip)
 
             values = (sip, data['sport'], data['fullurl'], data['urltype'], data['evilclass'], data['urlclass'],
-             data['useragent'], data['visit_time'])
+            data['referer'],data['useragent'], data['visit_time'])
             result = self.dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s,%s,%s)",values)
         except Exception, e:
             logging.error(str(e))

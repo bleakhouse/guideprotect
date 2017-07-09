@@ -74,7 +74,13 @@ def find_req_from_httppayload(httppayload):
 
     request = gputils.HTTPRequest(httppayload)
     try:
-        return [request.headers['Host'].lower(), request.path.lower(),request.headers['User-Agent']]
+        Referer=''
+
+        try:
+            Referer = request.headers['Referer']
+        except:
+            pass
+        return [request.headers['Host'].lower(), request.path.lower(),request.headers['User-Agent'],Referer]
     except:
         return None
 
@@ -205,7 +211,7 @@ def sniff_check_http_packet(pkt):
 
 
 
-    redirect_info = basedef.GCS.get_direct_info(host1, req[1],useragent, short_host)
+    redirect_info = basedef.GCS.get_direct_info(host1, req[1],useragent, req[3],short_host)
 
     #print 'get_direct_info:', redirect_info
     if redirect_info is None:

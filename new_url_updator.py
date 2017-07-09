@@ -138,7 +138,8 @@ def do_update(name):
                     useragent = checking_url_info['useragent']
                     sip = checking_url_info['sip']
                     sport = checking_url_info['sport']
-                    basedef.GSaveLogRedisPub.save_url_info_with_src(sip, sport, url, urlinfo['urltype'], urlinfo['evilclass'], urlinfo['urlclass'], visit_time, useragent)
+                    referer = checking_url_info['referer']
+                    basedef.GSaveLogRedisPub.save_url_info_with_src(sip, sport, url, urlinfo['urltype'], urlinfo['evilclass'], urlinfo['urlclass'], visit_time, referer, useragent)
 
                 updating_url_infos[url]=urlinfo
 

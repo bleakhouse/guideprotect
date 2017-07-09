@@ -122,13 +122,13 @@ def make_redirect_info(val):
 
     return
 
-def get_direct_info( host,req, useragent, short_host=None):
+def get_direct_info( host,req, useragent, referer, short_host=None):
 
     url_info=[]
     if should_pass_by_shothost(short_host,url_info)==True:
         if len(url_info)>0 and basedef.GSaveLogRedisPub:
             basedef.GSaveLogRedisPub.save_url_info(host + req, url_info[0], url_info[1], url_info[2],
-                                                       useragent)
+                                                   referer, useragent)
         return
 
     url_info = []
@@ -136,7 +136,7 @@ def get_direct_info( host,req, useragent, short_host=None):
     if newval[0]==2:
         if len(url_info) > 0 and basedef.GSaveLogRedisPub:
             basedef.GSaveLogRedisPub.save_url_info(host + req, url_info[0], url_info[1], url_info[2],
-                                                   useragent)
+                                                   referer, useragent)
         return
 
     if newval[0]==3:
@@ -145,14 +145,14 @@ def get_direct_info( host,req, useragent, short_host=None):
     if newval[0]==1:
         if len(url_info) > 0 and basedef.GSaveLogRedisPub:
             basedef.GSaveLogRedisPub.save_url_info(host + req, url_info[0], url_info[1], url_info[2],
-                                                   useragent)
+                                                   referer, useragent)
         return make_redirect_info(newval[1:])
 
     fullurl = host + req
     url_info = []
     newval = is_blocked_url(fullurl,url_info)
     if len(url_info) > 0 and basedef.GSaveLogRedisPub:
-        basedef.GSaveLogRedisPub.save_url_info(fullurl, url_info[0], url_info[1], url_info[2],useragent)
+        basedef.GSaveLogRedisPub.save_url_info(fullurl, url_info[0], url_info[1], url_info[2],referer, useragent)
     if newval[0]==1:
         return make_redirect_info(newval[1:])
 
@@ -166,6 +166,7 @@ def get_direct_info( host,req, useragent, short_host=None):
         checking_url_info['sip'] = basedef.GSaveLogRedisPub.sip
         checking_url_info['sport'] = basedef.GSaveLogRedisPub.sport
         checking_url_info['visit_time'] = visit_time
+        checking_url_info['referer'] = referer
         add_unknow_url_info(checking_url_info)
 
 def init_redis(host='127.0.0.1', port=6379):
