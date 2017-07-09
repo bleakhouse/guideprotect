@@ -76,6 +76,7 @@ def setup_3am_job(job_hour):
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
+            print 'except ,continue'
 
 
 if __name__ == '__main__':
