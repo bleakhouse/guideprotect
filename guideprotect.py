@@ -173,15 +173,13 @@ if __name__ == '__main__':
 
     db.createalltables()
 
+    cmdlines = [
+        '''pkill -f 'python save_log_redis.py' ''',
+        '''pkill -f 'python new_url_updator.py' '''
+    ]
 
-    cmdlines = ['''kill -s $(pidof 'python save_log_redis.py')''',
-                '''kill -s $(pidof 'python new_url_updator.py')''',
-                '''kill -s 9 $(pidof 'python new_url_updator.py')''',
-                '''kill -s 9 $(pidof 'python save_log_redis.py')'''
-                ]
-
-    start_sub_proc(cmdlines)
-    time.sleep(3)
+    for cmdline in cmdlines:
+        os.system(cmdline)
     cmdlines = [
                 'python new_url_updator.py 8787',
                 'python save_log_redis.py'
