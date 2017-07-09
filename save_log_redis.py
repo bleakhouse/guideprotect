@@ -140,7 +140,7 @@ class SaveLogging2Mysql(object):
 
             values = (sip, data['sport'], data['fullurl'], data['urltype'], data['evilclass'], data['urlclass'],
             data['referer'],data['useragent'], data['visit_time'])
-            result = self.dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s,%s,%s)",values)
+            result = self.dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s,%s,%s,%s)",values)
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
