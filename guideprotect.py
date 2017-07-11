@@ -175,7 +175,7 @@ if __name__ == '__main__':
 
     cmdlines = [
         '''pkill -f 'python save_log_redis.py' ''',
-        '''pkill -f 'python new_url_updator.py' '''
+        '''pkill -f 'python new_url_updator.py' ''',
         '''pkill -f 'python check404.py' '''
     ]
 
@@ -183,7 +183,7 @@ if __name__ == '__main__':
         os.system(cmdline)
     cmdlines = [
                 'python new_url_updator.py 8787',
-                'python save_log_redis.py'
+                'python save_log_redis.py',
                 'python check404.py'
                 ]
 
