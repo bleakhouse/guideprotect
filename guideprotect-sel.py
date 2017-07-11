@@ -33,22 +33,14 @@ basedef.gvar['ignorepostfix'] = set()
 basedef.gvar['ignorehost'] = {}
 
 
-def newsniff(sni):
-    import pcap
-    pc = pcap.pcap(sni, promisc=True)
-    pc.setfilter('tcp dst port 80')
-    for ptime, pdata in pc:
-        snifhandler.sniff_check_http_packet(Ether(str(pdata)))
-
-
 
 def start(sniffeth):
 
     logging.info('importing scapy....')
 
     logging.info('start sniff....%s', sniffeth)
-    newsniff(sniffeth)
 
+    sniff(filter="tcp and dst port 80", iface=sniffeth, prn=snifhandler.sniff_check_http_packet)
 
 import basedef
 
