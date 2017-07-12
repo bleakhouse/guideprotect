@@ -44,7 +44,12 @@ def newsniff(sni):
                 continue
         if ether.data.p!=dpkt.ip.IP_PROTO_TCP:
             continue
-        snifhandler.sniff_check_http_packet(Ether(str(pdata)))
+
+        try:
+            snifhandler.sniff_check_http_packet(Ether(str(pdata)))
+        except Exception, e:
+            logging.error(str(e))
+            logging.error(traceback.format_exc())
 
 
 def start(sniffeth):
