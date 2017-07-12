@@ -38,8 +38,12 @@ def newsniff(sni):
     pc = pcap.pcap(sni, promisc=True)
     pc.setfilter('tcp dst port 80')
     for ptime, pdata in pc:
+        ether = dpkt.ethernet.Ethernet(pdata)
+        if ether.type != dpkt.ethernet.ETH_TYPE_IP:
+                continue
+        if ether.data.p!=dpkt.ip.IP_PROTO_TCP:
+            continue
         snifhandler.sniff_check_http_packet(Ether(str(pdata)))
-
 
 
 def start(sniffeth):
