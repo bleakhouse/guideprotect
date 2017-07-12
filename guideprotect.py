@@ -35,6 +35,7 @@ basedef.gvar['ignorehost'] = {}
 
 def newsniff(sni):
     import pcap
+    import dpkt
     pc = pcap.pcap(sni, promisc=True)
     #pc.setfilter('tcp dst port 80')
     for ptime, pdata in pc:
