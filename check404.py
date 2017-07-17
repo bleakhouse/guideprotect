@@ -85,7 +85,7 @@ def setup_3am_job(job_hour):
 
 
 if __name__ == '__main__':
-    mylogging.setuplog('check404')
+    mylogging.setuplog('check404.txt')
     gpconf.make_gcs()
     basedef.GCS.init()
     clock=3
