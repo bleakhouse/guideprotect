@@ -40,7 +40,7 @@ def start(sniffeth):
 
     logging.info('start sniff....%s', sniffeth)
 
-    sniff(filter="tcp and dst port 80", iface=sniffeth, prn=snifhandler.sniff_check_http_packet)
+    sniff(filter="tcp and dst port 80 greater 70", iface=sniffeth, prn=snifhandler.sniff_check_http_packet)
 
 import basedef
 
