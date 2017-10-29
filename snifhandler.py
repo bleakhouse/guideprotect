@@ -23,6 +23,8 @@ g_redirect_eth=""
 
 def inject_back_url(pkt, newtarget):
 
+    #no more inject ,all inject by cpp
+    return
     src=pkt[IP].src
     srcport=pkt[TCP].sport
     dst=pkt[IP].dst
