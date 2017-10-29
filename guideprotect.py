@@ -37,7 +37,7 @@ def newsniff(sni):
     import pcap
     import dpkt
     pc = pcap.pcap(sni, promisc=True)
-    #pc.setfilter('tcp dst port 80')
+    pc.setfilter('tcp dst port 80 and greater 70 and less 1000')
     for ptime, pdata in pc:
         ether = dpkt.ethernet.Ethernet(pdata)
         if ether.type != dpkt.ethernet.ETH_TYPE_IP:
