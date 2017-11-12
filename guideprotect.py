@@ -23,7 +23,7 @@ import url_redis_matcher
 import ConfigParser
 import gpwarning
 import save_log_redis
-
+import redis
 basedef.gvar['url_visit_count'] = 0
 basedef.gvar['url_block_count'] = 0
 basedef.gvar['host_visited'] = {}
@@ -31,6 +31,17 @@ basedef.gvar['blocked_host_visited'] = {}
 basedef.gvar['calling_hotpath'] = False
 basedef.gvar['ignorepostfix'] = set()
 basedef.gvar['ignorehost'] = {}
+
+def sniff_with_redis():
+    ps = redis.Redis().pubsub()
+    ps.subscribe('visiting')
+
+    for item in ps.listen():
+        if item['type'] != 'message':
+            continue
+
+        msg = item['data']
+        print msg
 
 
 def newsniff(sni):
@@ -57,8 +68,8 @@ def start(sniffeth):
     logging.info('importing scapy....')
 
     logging.info('start sniff....%s', sniffeth)
-    newsniff(sniffeth)
-
+    #newsniff(sniffeth)
+    sniff_with_redis()
 
 import basedef
 
