@@ -40,7 +40,7 @@ def promote_select_eth():
     choice = raw_input('select sniff ehter:')
     if len(choice)==0:
         print 'select nothing'
-        return
+        return "",""
     if int(choice)==0 or int(choice) > len(iflist):
         print 'wrong choice'
         choice = raw_input('select sniff ehter:')
