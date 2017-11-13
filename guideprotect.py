@@ -24,6 +24,8 @@ import ConfigParser
 import gpwarning
 import save_log_redis
 import redis
+import base64
+
 basedef.gvar['url_visit_count'] = 0
 basedef.gvar['url_block_count'] = 0
 basedef.gvar['host_visited'] = {}
@@ -31,6 +33,24 @@ basedef.gvar['blocked_host_visited'] = {}
 basedef.gvar['calling_hotpath'] = False
 basedef.gvar['ignorepostfix'] = set()
 basedef.gvar['ignorehost'] = {}
+
+def swap32(x):
+    return (((x << 24) & 0xFF000000) |
+            ((x <<  8) & 0x00FF0000) |
+            ((x >>  8) & 0x0000FF00) |
+            ((x >> 24) & 0x000000FF))
+
+def checkmsg(msg):
+    decode_msg = base64.b64decode(msg)
+    httpreq = decode_msg[16:]
+    ipinfo = struct.unpack('''4l''', decode_msg[0:16])
+    sip = swap32(ipinfo[0])
+    dip = swap32(ipinfo[1])
+    sport = swap32(ipinfo[2])
+    dport = swap32(ipinfo[3])
+
+    newpkt =IP(src=sip, dst=dip) / TCP(sport=sport, dport=dport) / httpreq
+    snifhandler.sniff_check_http_packet(newpkt)
 
 def sniff_with_redis():
     ps = redis.Redis().pubsub()
@@ -43,6 +63,7 @@ def sniff_with_redis():
 
         msg = item['data']
         print msg
+        checkmsg(msg)
 
 
 def newsniff(sni):
