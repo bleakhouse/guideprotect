@@ -43,7 +43,7 @@ def swap32(x):
 def checkmsg(msg):
     decode_msg = base64.b64decode(msg)
     httpreq = decode_msg[16:]
-    ipinfo = struct.unpack('''4l''', decode_msg[0:16])
+    ipinfo = struct.unpack('''4i''', decode_msg[0:16])
     sip = swap32(ipinfo[0])
     dip = swap32(ipinfo[1])
     sport = swap32(ipinfo[2])
