@@ -242,8 +242,8 @@ if __name__ == '__main__':
 
     start_sub_proc(cmdlines)
     RuntimEngin().Start()
-    time.sleep(5)
-    snife, inje= gpconf.get_sniff_eth()
+    #time.sleep(5)
+    snife, inje= "","" #gpconf.get_sniff_eth()
     if len(snife)>0 and  len(inje)>0:
         print 'select eth:'
         print 'sniffer:',snife
