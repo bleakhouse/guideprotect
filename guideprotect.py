@@ -36,6 +36,7 @@ def sniff_with_redis():
     ps = redis.Redis().pubsub()
     ps.subscribe('visiting')
 
+    print ''' ps.subscribe('visiting')'''
     for item in ps.listen():
         if item['type'] != 'message':
             continue
@@ -68,8 +69,8 @@ def start(sniffeth):
     logging.info('importing scapy....')
 
     logging.info('start sniff....%s', sniffeth)
-    #newsniff(sniffeth)
-    sniff_with_redis()
+    newsniff(sniffeth)
+    #sniff_with_redis()
 
 import basedef
 
@@ -219,17 +220,18 @@ if __name__ == '__main__':
                 ]
 
     start_sub_proc(cmdlines)
-
+    RuntimEngin().Start()
+    time.sleep(5)
     snife, inje= gpconf.get_sniff_eth()
     if len(snife)>0 and  len(inje)>0:
         print 'select eth:'
         print 'sniffer:',snife
         print 'inject:',inje
         snifhandler.g_redirect_eth=inje
-        RuntimEngin().Start()
         start(snife)
-    else:
-        logging.info('no eth selected!!')
+    else :
+        sniff_with_redis()
+        #logging.info('no eth selected!!')
 
     logging.info('guideprotect down!')
     logging.info('star saving redis......')
