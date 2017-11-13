@@ -41,15 +41,21 @@ def swap32(x):
             ((x >> 24) & 0x000000FF))
 
 def checkmsg(msg):
-    decode_msg = base64.b64decode(msg)
-    httpreq = decode_msg[16:]
-    ipinfo = struct.unpack('''4i''', decode_msg[0:16])
-    sip = swap32(ipinfo[0])
-    dip = swap32(ipinfo[1])
-    sport = swap32(ipinfo[2])
-    dport = swap32(ipinfo[3])
+    newpkt=""
+    try:
+        decode_msg = base64.b64decode(msg)
+        httpreq = decode_msg[16:]
+        ipinfo = struct.unpack('''4i''', decode_msg[0:16])
+        sip = swap32(ipinfo[0])
+        dip = swap32(ipinfo[1])
+        sport = swap32(ipinfo[2])
+        dport = swap32(ipinfo[3])
+        newpkt = IP(src=sip, dst=dip) / TCP(sport=sport, dport=dport) / httpreq
+    except Exception, e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+        return
 
-    newpkt =IP(src=sip, dst=dip) / TCP(sport=sport, dport=dport) / httpreq
     snifhandler.sniff_check_http_packet(newpkt)
 
 def sniff_with_redis():
