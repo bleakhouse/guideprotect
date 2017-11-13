@@ -48,8 +48,8 @@ def checkmsg(msg):
         ipinfo = struct.unpack('''4i''', decode_msg[0:16])
         sip = swap32(ipinfo[0])
         dip = swap32(ipinfo[1])
-        sport = swap32(ipinfo[2])
-        dport = swap32(ipinfo[3])
+        sport = (ipinfo[2])
+        dport = (ipinfo[3])
         newpkt = IP(src=sip, dst=dip) / TCP(sport=sport, dport=dport) / httpreq
     except Exception, e:
         logging.error(str(e))
