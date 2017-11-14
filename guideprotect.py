@@ -243,8 +243,12 @@ if __name__ == '__main__':
     cmdlines = [
                 'python new_url_updator.py 8787',
                 'python save_log_redis.py',
-                'python check404.py'
-                ]
+                'python check404.py',
+                'python gp_mq_puller.py zmqp1',
+                'python gp_mq_puller.py zmqp2',
+                'python gp_mq_puller.py zmqp3',
+                'python gp_mq_puller.py zmqp4',
+    ]
 
     start_sub_proc(cmdlines)
     RuntimEngin().Start()
