@@ -11,6 +11,7 @@ def listen(pipname):
     socket = context.socket(zmq.PULL)
     #socket.setsockopt(zmq.SUBSCRIBE, 'visiting')
     bindaddr = "ipc:///guideprotect.mq."+pipname
+    print bindaddr
     socket.bind(bindaddr)
 
 
