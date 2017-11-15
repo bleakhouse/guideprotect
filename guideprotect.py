@@ -261,6 +261,7 @@ if __name__ == '__main__':
         snifhandler.g_redirect_eth=inje
         start(snife)
     else :
+        time.sleep(2)
         sniff_with_redis()
         #logging.info('no eth selected!!')
 
