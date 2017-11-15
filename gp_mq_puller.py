@@ -10,8 +10,8 @@ def listen(pipname):
     print 'pipname:'+pipname
     socket = context.socket(zmq.PULL)
     #socket.setsockopt(zmq.SUBSCRIBE, 'visiting')
-
-    socket.bind("ipc:///guideprotect.mq."+pipname)
+    bindaddr = "ipc:///guideprotect.mq."+pipname
+    socket.bind(bindaddr)
 
 
     while 1:
