@@ -63,7 +63,7 @@ def sniff_with_redis():
     obj = redis.Redis()
 
     while 1:
-        msg = obj.lpop('visitinginfo')
+        msg = obj.blpop('visitinginfo')
         if msg is None:
             print "msg is None"
             continue
