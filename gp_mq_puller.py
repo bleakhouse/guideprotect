@@ -14,7 +14,7 @@ def listen(pipname):
     pipid = sys.argv[1]
     print 'pipname:'+pipname
     socket = context.socket(zmq.PULL)
-    bindaddr = "ipc:///guideprotect.mq."+pipname
+    bindaddr = "ipc:///tmp/guideprotect.mq."+pipname
     print bindaddr
     socket.bind(bindaddr)
 
@@ -22,7 +22,7 @@ def listen(pipname):
     cache_info =range(1000)
     idx =0
     while 1:
-            rdata = socket.recv_string()
+            rdata = socket.recv()
             cache_info[idx] = rdata
             idx=idx+1
             if idx ==1000:
@@ -34,5 +34,5 @@ def listen(pipname):
 if len(sys.argv)!=2:
     print 'pars fail'
 else:
-    mylogging.setuplog('mqpuller')
+    mylogging.setuplog('mqpuller.txt')
     listen(sys.argv[1])
