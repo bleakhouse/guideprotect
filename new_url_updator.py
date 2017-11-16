@@ -34,12 +34,17 @@ def get_unknow_redis_db(host='127.0.0.1', port=6379,db=1):
 
 def pop_all_unknow_urls(redis_obj):
     urls=[]
-    number =100
+    number =200
+    pipe = redis_obj.pipeline()
+
     while number>0:
-        oneurl = redis_obj.lpop(gUNKNOW_URL_KEY_NAME)
-        if oneurl is None:
-            break
+        oneurl = pipe.lpop(gUNKNOW_URL_KEY_NAME)
+        # if oneurl is None:
+        #     break
+        number = number-1
         urls.append(oneurl)
+    pipe.execute()
+
     return urls
 
 def zwonderwoman():
@@ -106,6 +111,8 @@ def do_update(name):
                 continue
             updating_url_infos={}
             for it in unknow_urls:
+                if it is None:
+                    continue
                 checking_url_info = eval(it)
                 url = checking_url_info['url']
                 url_info=None
