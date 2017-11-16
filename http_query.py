@@ -66,11 +66,11 @@ class HttpQuery(object):
             httpres=""
             requrl=""
             try:
-                if url.startswith('http://'):
+                if url.startswith('http://') or url.startswith('HTTP://'):
                     url = url[7:]
                 encode_url = base64.b64encode(url)
-                requrl = '/j2ee002/'+encode_url
-
+                requrl = '/API/url_Testing.php?url='+url
+                #print requrl
                 self.httpClient.request('GET', requrl)
 
                 # response是HTTPResponse对象
@@ -116,3 +116,13 @@ class HttpQuery(object):
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
+# obj = HttpQuery()
+# obj.init()
+# fp =open('''''')
+# for line in fp:
+#     line = line.lower()
+#     pos = line.find("/",7)
+#     if pos!=-1:
+#         line = line[:pos]
+#     obj.http_check_url_type(line)
+

@@ -224,6 +224,15 @@ class run_url_updator(object):
             print "Error: unable to start run_url_updator"
 
 
+def run_updators():
+    cfgobj = basedef.GCS.get_config_obj()
+    update_number = 1
+    if cfgobj and cfgobj.has_option('boot', 'update_number'):
+        update_number = cfgobj.getint('boot', 'update_number')
+    for x in range(0, update_number):
+        name = "do_update"+str(x)
+        logging.info("start updator %s", name)
+        run_url_updator().Start()
 
 import ConfigParser
 import mylogging
@@ -245,7 +254,7 @@ if __name__=='__main__':
     basedef.GSaveLogRedisPub = save_log_redis.SaveLogging2Redis()
     basedef.GSaveLogRedisPub.init()
 
-    run_url_updator().Start()
+
     app = web.application(urls, globals())
     app.notfound = notfound
     app.run()
