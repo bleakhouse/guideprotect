@@ -107,10 +107,11 @@ class SaveLogging2Mysql(object):
             ip2int = lambda x: sum([256 ** j * int(i) for j, i in enumerate(x.split('.')[::-1])])
             sip = data['sip']
             dip = data['dip']
-            if sip.find(".") != -1:
+
+            if type(sip)==type('') and sip.find(".") != -1:
                 sip = ip2int(sip)
 
-            if dip.find(".")!=-1:
+            if type(dip)==type('') and dip.find(".")!=-1:
                 dip = ip2int(dip)
 
             result = self.dbobj.execute(ins+" values(%s,%s,%s,%s,%s,%s)",(sip,data['sport'],data['prot'],dip,data['dport'],data['visit_time']))
@@ -135,7 +136,7 @@ class SaveLogging2Mysql(object):
             ip2int = lambda x: sum([256 ** j * int(i) for j, i in enumerate(x.split('.')[::-1])])
             sip = data['sip']
 
-            if sip.find(".") != -1:
+            if type(sip)==type('') and sip.find(".") != -1:
                 sip = ip2int(sip)
 
             values = (sip, data['sport'], data['fullurl'], data['urltype'], data['evilclass'], data['urlclass'],
