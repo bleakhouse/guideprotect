@@ -67,7 +67,7 @@ def sniff_with_redis():
         if msg is None:
             print "msg is None"
             continue
-        checkmsg(msg)
+        checkmsg(msg[1])
 
 
     ps = redis.Redis().pubsub()
