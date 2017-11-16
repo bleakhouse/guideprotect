@@ -64,6 +64,9 @@ def sniff_with_redis():
 
     while 1:
         msg = obj.lpop('visitinginfo')
+        if msg is None:
+            print "msg is None"
+            continue
         checkmsg(msg)
 
 
