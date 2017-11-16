@@ -12,7 +12,6 @@ import redis
 def listen(pipname):
     context = zmq.Context()
     pipid = sys.argv[1]
-    print 'pipname:'+pipname
     socket = context.socket(zmq.PULL)
     bindaddr = "ipc:///tmp/guideprotect.mq."+pipname
     print bindaddr
