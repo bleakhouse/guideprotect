@@ -100,6 +100,10 @@ def do_update(name):
             count = len(unknow_urls)
             if count>0:
                 logging.info('unknow urls:%s', len(unknow_urls))
+            else:
+                logging.warn("no unknow urls to check")
+                time.sleep(2)
+                continue
             updating_url_infos={}
             for it in unknow_urls:
                 checking_url_info = eval(it)
