@@ -171,7 +171,7 @@ def sniff_check_http_packet(pkt):
         ranghost = req[0]
         if req[0].startswith("www."):
             ranghost = ranghost[4:]
-        url_redis_matcher.gRedisObj.zincrby('visit_host_rage', 1, ranghost)
+        url_redis_matcher.gRedisObj.zincrby('visit_host_range', ranghost, 1)
 
     if len(req[1])>300:
         return

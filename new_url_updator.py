@@ -111,7 +111,7 @@ def do_update(name):
                 continue
             updating_url_infos={}
             for it in unknow_urls:
-                if it is None:
+                if it is None or it[0] is None:
                     continue
                 checking_url_info = eval(it)
                 url = checking_url_info['url']
