@@ -142,11 +142,12 @@ def sniff_check_http_packet(pkt):
          return
     ipdat = pkt[IP]
 
-    reqlen = ipdat.len-ipdat.ihl*4-tcpdat.dataofs*4
-    if reqlen<10:
-        if tcpdat.flags == 2:
-            basedef.GSaveLogRedisPub.save5element(ipdat.src, tcpdat.sport, 6, ipdat.dst, tcpdat.dport)
-        return
+    basedef.GSaveLogRedisPub.save5element(ipdat.src, tcpdat.sport, 6, ipdat.dst, tcpdat.dport)
+    # reqlen = ipdat.len-ipdat.ihl*4-tcpdat.dataofs*4
+    # if reqlen<10:
+    #     if tcpdat.flags == 2:
+    #         basedef.GSaveLogRedisPub.save5element(ipdat.src, tcpdat.sport, 6, ipdat.dst, tcpdat.dport)
+    #     return
 
     #SYN = 0x02  1st of handsharks
 
