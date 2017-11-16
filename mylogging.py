@@ -10,7 +10,7 @@ import logging.handlers
 loglist=[]
 
 def setuplog(logname='guideprotect.txt'):
-
+    print 'setup log ', logname
     if logname in loglist:
         return
     loglist.append(logname)
