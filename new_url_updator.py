@@ -254,7 +254,7 @@ if __name__=='__main__':
     basedef.GSaveLogRedisPub = save_log_redis.SaveLogging2Redis()
     basedef.GSaveLogRedisPub.init()
 
-
+    run_updators()
     app = web.application(urls, globals())
     app.notfound = notfound
     app.run()
