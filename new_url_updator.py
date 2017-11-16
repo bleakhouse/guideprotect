@@ -33,10 +33,14 @@ def get_unknow_redis_db(host='127.0.0.1', port=6379,db=1):
 
 
 def pop_all_unknow_urls(redis_obj):
-
-    unknow_urls = redis_obj.smembers(gUNKNOW_URL_KEY_NAME)
-    redis_obj.flushdb()
-    return unknow_urls
+    urls=[]
+    number =100
+    while number>0:
+        oneurl = redis_obj.lpop(gUNKNOW_URL_KEY_NAME)
+        if oneurl is None:
+            break
+        urls.append(oneurl)
+    return urls
 
 def zwonderwoman():
 
@@ -180,10 +184,6 @@ class get_url:
             return 'error pars'
         url = url.lower()
         info = obj.hgetall(url)
-        if len(info)==0:
-            obj =redis.Redis(db=1)
-            if obj.sismember(gUNKNOW_URL_KEY_NAME,url):
-                print 'url in unknow record:',url
         return info
 
 
