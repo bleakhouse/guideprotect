@@ -59,6 +59,14 @@ def checkmsg(msg):
     snifhandler.sniff_check_http_packet(newpkt)
 
 def sniff_with_redis():
+
+    obj = redis.Redis()
+
+    while 1:
+        msg = obj.lpop('visitinginfo')
+        checkmsg(msg)
+
+
     ps = redis.Redis().pubsub()
     ps.subscribe('visiting')
 
@@ -245,9 +253,11 @@ if __name__ == '__main__':
                 'python save_log_redis.py',
                 'python check404.py',
                 'python gp_mq_puller.py zmqp1',
-                'python gp_mq_puller.py zmqp2',
-                'python gp_mq_puller.py zmqp3',
-                'python gp_mq_puller.py zmqp4',
+                'python gp_mq_puller.py zmqp1',
+                'python gp_mq_puller.py zmqp1',
+                'python gp_mq_puller.py zmqp1',
+                'python gp_mq_puller.py zmqp1',
+
     ]
 
     start_sub_proc(cmdlines)
