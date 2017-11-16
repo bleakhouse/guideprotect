@@ -15,7 +15,7 @@ def listen(pipname):
     socket = context.socket(zmq.PULL)
     bindaddr = "ipc:///tmp/guideprotect.mq."+pipname
     print bindaddr
-    socket.bind(bindaddr)
+    socket.connect(bindaddr)
 
     obj = redis.Redis()
     cache_info =range(1000)
