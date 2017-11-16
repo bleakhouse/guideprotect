@@ -42,10 +42,10 @@ def pop_all_unknow_urls(redis_obj):
         # if oneurl is None:
         #     break
         number = number-1
-        urls.append(oneurl)
-    pipe.execute()
+        #urls.append(oneurl)
+    return pipe.execute()
 
-    return urls
+    #return urls
 
 def zwonderwoman():
 
@@ -111,7 +111,7 @@ def do_update(name):
                 continue
             updating_url_infos={}
             for it in unknow_urls:
-                if it is None or it[0] is None:
+                if it is None:
                     continue
                 checking_url_info = eval(it)
                 url = checking_url_info['url']
