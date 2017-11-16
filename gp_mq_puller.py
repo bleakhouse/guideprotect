@@ -28,7 +28,7 @@ def listen(pipname):
                 idx=0
                 pipe = obj.pipeline()
                 pipe.rpush('visitinginfo', *cache_info)
-                logging.info('pip.execute()os.getpid():%s,count:%s',os.getpid(), len(pipe.execute()))
+                logging.info('pip.execute() result:%s, os.getpid():%s', len(pipe.execute()),os.getpid())
 
 if len(sys.argv)!=2:
     print 'pars fail'
