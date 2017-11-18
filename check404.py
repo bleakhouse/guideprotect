@@ -17,7 +17,17 @@ from dbase import db
 
 import datetime
 import urllib2
+import zmq
 
+def send_cmd(cmd):
+    context = zmq.Context()
+
+    socket = context.socket(zmq.PUSH)
+    bindaddr = "ipc:///tmp/guideprotect.mq.update_cfg"
+    print bindaddr
+    socket.connect(bindaddr)
+
+    socket.send_string(cmd)
 
 def is_url_404(url):
     try:
@@ -41,6 +51,7 @@ def checkhistory():
     timeNow = datetime.datetime.now()
     record_name ="record404 "+ timeNow.strftime('%Y-%m-%d')+".txt"
     fp = open(record_name,"w")
+    fp_all404  = open(("/tmp/all404.txt","a"))
     timeNow = datetime.datetime.now()
     lasttime = timeNow + datetime.timedelta(days=-1)
     tbl_name = 'fullurl_' + lasttime.strftime('%Y_%m_%d')
@@ -49,6 +60,8 @@ def checkhistory():
     r = obj.execute(query)
     result = obj.fetchall()
     url_checked =[]
+    count404 =0
+    checkcount = 0
     for row in result:
         url = row[0]
         if url in url_checked:
@@ -57,9 +70,13 @@ def checkhistory():
         if urltype and int(urltype)!=2:
             url_checked.append(url)
             is404 = is_url_404(url)
+            checkcount=checkcount+1
             if is404:
                 fp.write(url+"\n")
-
+                fp_all404.write(url+"\n")
+                count404 = count404+1
+    logging.info('checkcount:%s ,404 count:%s', checkcount, count404)
+    fp_all404.close()
 
 def setup_3am_job(job_hour):
     lasttick = 0
@@ -78,6 +95,10 @@ def setup_3am_job(job_hour):
         try:
             checkhistory()
             logging.info('done today')
+
+            if job_hour>=1 and job_hour<7:
+                send_cmd("update_cfg")
+
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())

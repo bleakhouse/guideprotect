@@ -51,12 +51,13 @@ def checkmsg(msg):
         sport = (ipinfo[2])
         dport = (ipinfo[3])
         newpkt = IP(src=sip, dst=dip) / TCP(sport=sport, dport=dport) / httpreq
+        snifhandler.sniff_check_http_packet(newpkt)
     except Exception, e:
         logging.error(str(e))
         logging.error(traceback.format_exc())
         return
 
-    snifhandler.sniff_check_http_packet(newpkt)
+
 
 def sniff_with_redis():
 
@@ -68,19 +69,6 @@ def sniff_with_redis():
             print "msg is None"
             continue
         checkmsg(msg[1])
-
-
-    ps = redis.Redis().pubsub()
-    ps.subscribe('visiting')
-
-    print ''' ps.subscribe('visiting')'''
-    for item in ps.listen():
-        if item['type'] != 'message':
-            continue
-
-        msg = item['data']
-        print msg
-        checkmsg(msg)
 
 
 def newsniff(sni):
