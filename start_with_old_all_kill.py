@@ -21,7 +21,7 @@ obj = save_log_redis.SaveLogging2Redis()
 obj.init()
 obj.save2pub({'_dtype':999})
 obj = redis.Redis()
-obj.pubsub("exitpygp", "ok")
+obj.publish("exitpygp", "ok")
 time.sleep(1)
 
 for cmdline in cmdlines:
