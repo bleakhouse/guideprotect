@@ -63,8 +63,9 @@ def record_block_url(data):
         block_type = block_info[0]
         block_url = block_info[1]
         dbobj, conn = getDbOrCreatex()
-        dbobj.execute("insert into redirect_history (reason,fullurll,visit_time)  values(%s,%s,%s)", (block_type, block_url, visit_time))
-        conn.commit()
+        if dbobj:
+            dbobj.execute("insert into redirect_history (reason,fullurll,visit_time)  values(%s,%s,%s)", (block_type, block_url, visit_time))
+            conn.commit()
 
     except Exception, e:
         logging.error(str(e))
@@ -124,8 +125,6 @@ def listen(pipname, max_count=1000):
 
 if len(sys.argv)<=1:
     print 'pars fail'
-    start_listen_exit()
-    time.sleep(111)
 else:
     mylogging.setuplog('mqpuller'+str(os.getpid())+'.txt')
     create_db("redirect_history")

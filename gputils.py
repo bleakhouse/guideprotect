@@ -16,6 +16,19 @@ import traceback
 from BaseHTTPServer import BaseHTTPRequestHandler
 from StringIO import StringIO
 
+def make_real_host(url):
+    if url is None:
+        return
+    if url.startswith("http://"):
+        url = url[7:]
+    if url.startswith("HTTP://"):
+        url = url[7:]
+    pos  = url.find("/")
+    if pos!=-1:
+        url = url[:pos]
+    return url
+
+
 def get_redis_obj():
 
     try:

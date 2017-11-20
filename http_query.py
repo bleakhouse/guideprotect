@@ -15,7 +15,7 @@ import ConfigParser
 import httplib
 import basedef
 import base64
-
+import gputils
 class HttpQuery(object):
     httpClient = None
     req_host = '127.0.0.1'
@@ -69,6 +69,7 @@ class HttpQuery(object):
                 if url.startswith('http://') or url.startswith('HTTP://'):
                     url = url[7:]
                 encode_url = base64.b64encode(url)
+                url = gputils.make_real_host(url)
                 requrl = '/API/url_Testing.php?url='+url
                 #print requrl
                 self.httpClient.request('GET', requrl)

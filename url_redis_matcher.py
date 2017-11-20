@@ -11,12 +11,14 @@ import traceback
 from basedef import *
 import os
 import new_url_updator
-
+import gputils
 gRedisObj=None
 
 gTargetFile={}
 gRedisObj_unknow=None
 
+def make_real_host(url):
+    return gputils.make_real_host(url)
 
 def new_unknow_url(url):
     global  gRedisObj_unknow
@@ -63,7 +65,7 @@ def is_blocked_url(url_or_host, dicret):
 
     if url_or_host is None:
         return [3]
-
+    url_or_host = make_real_host(url_or_host)
     val = gRedisObj.hmget(url_or_host, ['urltype','evilclass','redirect_type', 'redirect_target', 'update_time', 'urlclass'])
 
 
@@ -140,7 +142,7 @@ def get_direct_info( host,req, useragent, referer, short_host=None):
         return
 
     if newval[0]==3:
-        new_unknow_url(host)
+        new_unknow_url(make_real_host(host))
 
     if newval[0]==1:
         if len(url_info) > 0 and basedef.GSaveLogRedisPub:

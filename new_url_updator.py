@@ -162,9 +162,10 @@ def do_update(name):
                 pip = gputils.get_redis_obj().pipeline()
 
                 for url,update_info in updating_url_infos.items():
-                    pip.hmset(url.lower(), update_info)
+                    host1 = gputils.make_real_host(url.lower())
+                    pip.hmset(host1, update_info)
 
-                logging.info('pip.execute():%s',len(pip.execute()))
+                logging.info('url updator pip.execute():%s',len(pip.execute()))
 
         except Exception, e:
             logging.error(str(e))
