@@ -16,6 +16,7 @@ import httplib
 import basedef
 import base64
 import gputils
+import requests
 class HttpQuery(object):
     httpClient = None
     req_host = '127.0.0.1'
@@ -49,7 +50,8 @@ class HttpQuery(object):
 
         try:
             self.init_from_cfg(basedef.GCFG)
-            self.httpClient = httplib.HTTPConnection(self.req_host, self.req_port, timeout=5)
+            #self.httpClient = httplib.HTTPConnection(self.req_host, self.req_port, timeout=5)
+            self.httpClient = requests.Session()
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
@@ -71,12 +73,13 @@ class HttpQuery(object):
                 encode_url = base64.b64encode(url)
                 url = gputils.make_real_host(url)
                 requrl = '/API/url_Testing.php?url='+url
+                requrl = 'http://'+str(self.req_host)+":"+str(self.req_port)+requrl
                 #print requrl
-                self.httpClient.request('GET', requrl)
+                r = self.httpClient.get(requrl)
+                if !r.ok:
+                    return
+                httpres =r.text
 
-                # response是HTTPResponse对象
-                response = self.httpClient.getresponse()
-                httpres =response.read()
                 data = json.loads(httpres)
             except Exception, e:
                 logging.error(str(e))
@@ -85,7 +88,8 @@ class HttpQuery(object):
                 print httpres[:100]
                 logging.info('req url:%s', requrl)
                 logging.info(' url:%s', url)
-                self.httpClient = httplib.HTTPConnection(self.req_host, self.req_port, timeout=5)
+                #self.httpClient = httplib.HTTPConnection(self.req_host, self.req_port, timeout=5)
+                self.httpClient = requests.Session()
                 return 1
             if not data.has_key("status"):
                 return
