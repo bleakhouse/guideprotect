@@ -110,10 +110,11 @@ def listen(pipname, max_count=1000):
     idx =0
     while 1:
             rdata = socket.recv()
-            cache_info[idx] = rdata
+
             if str(rdata).startswith("block"):
                 record_block_url(rdata[5:])
                 continue
+            cache_info[idx] = rdata
             idx=idx+1
             if idx ==max_count:
                 idx=0

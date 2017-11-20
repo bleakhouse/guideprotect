@@ -175,7 +175,7 @@ def sniff_check_http_packet(pkt):
             ranghost = ranghost[:-1]
 
         url_redis_matcher.gRedisObj.zincrby('visit_host_range', ranghost, 1)
-        timeNow = datetime.datetime.now()
+        timeNow = datetime.now()
         record_name = 'visit_host_range' + timeNow.strftime('%Y-%m-%d')
         url_redis_matcher.gRedisObj.zincrby(record_name, ranghost, 1)
 

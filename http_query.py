@@ -92,9 +92,9 @@ class HttpQuery(object):
             if data['status']==100:
                 logging.warning('repeat url req: %s', url)
                 return
-            if data['status']!=0:
-                logging.warning('error req url %s,%s', str(data), url)
-                return
+            # if data['status']!=0:
+            #     logging.warning('error req url %s,%s', str(data), url)
+            #     return
 
             hasfalse = False
             r=[]
