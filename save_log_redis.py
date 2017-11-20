@@ -181,6 +181,38 @@ class SaveLogging2Mysql(object):
                 number=0
                 self.conn.commit()
 import mylogging
+save_con=None
+def clean_onexit():
+    print 'exit'
+    global save_con
+    if save_con:
+        logging.info('do the last db commit 2')
+        save_con.commit()
+        time.sleep(2)
+    os._exit(1)
+
+def listen_exit(name):
+    redobj = redis.Redis()
+    ps = redobj.pubsub()
+    ps.subscribe("exitpygp")
+    for item in ps.listen():
+        print item
+        if item['type'] != 'message':
+            continue
+        msg = item['data']
+        print msg
+        if msg=="ok":
+            clean_onexit()
+            return
+
+def start_listen_exit():
+    import thread
+    try:
+        thread.start_new_thread(listen_exit, ('listen_exit',))
+    except:
+        print "Error: unable to start start_listen_exit"
+
+
 if __name__ == '__main__':
     mylogging.setuplog('save_log_redis.txt')
     import gpconf
@@ -191,10 +223,10 @@ if __name__ == '__main__':
     save_log_pub_redis_num = cfgobj.getint('boot','save_log_pub_redis_num')
     save_log_pub_channel = cfgobj.get('boot','save_log_pub_channel')
 
-
+    start_listen_exit()
     obj = SaveLogging2Mysql()
     obj.init([save_log_pub_channel], save_log_pub_redis_num)
-
+    save_con = obj.conn
     obj.go()
     if obj.conn:
         logging.info('do the last db commit')

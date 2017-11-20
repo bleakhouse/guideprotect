@@ -209,6 +209,36 @@ def start_sub_proc(tasks):
         except:
             print "Error: unable to start start_sub_proc"
 
+def clean_onexit():
+
+    logging.info('guideprotect down!')
+    logging.info('star saving redis......')
+
+    r = url_redis_matcher.save_data()
+
+    logging.info('end saving redis..!')
+    print r
+    sys.exit(0)
+
+def listen_exit(name):
+    redobj = redis.Redis()
+    ps = redobj.pubsub()
+    ps.subscribe("exitpygp")
+    for item in ps.listen():
+        if item['type'] != 'message':
+            continue
+        msg = item['data']
+        if msg=="ok":
+            clean_onexit()
+            return
+
+def start_listen_exit():
+    try:
+        thread.start_new_thread(listen_exit, ('listen_exit',))
+    except:
+        print "Error: unable to start start_sub_proc"
+
+
 
 if __name__ == '__main__':
 
@@ -250,7 +280,7 @@ if __name__ == '__main__':
                 'python gp_mq_puller.py zmqp1',
 
     ]
-
+    start_listen_exit()
     start_sub_proc(cmdlines)
     RuntimEngin().Start()
     #time.sleep(5)
@@ -265,14 +295,7 @@ if __name__ == '__main__':
         time.sleep(2)
         sniff_with_redis()
         #logging.info('no eth selected!!')
-
-    logging.info('guideprotect down!')
-    logging.info('star saving redis......')
-
-    r = url_redis_matcher.save_data()
-
-    logging.info('end saving redis..!')
-    print r
+    clean_onexit()
 
 #p = sub.Popen(('sudo', 'tcpdump', '-w'),stdout=sub.PIPE)
 

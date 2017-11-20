@@ -70,6 +70,32 @@ def record_block_url(data):
         logging.error(traceback.format_exc())
 
 
+def clean_onexit():
+    print 'exit'
+    os._exit(1)
+
+def listen_exit(name):
+    redobj = redis.Redis()
+    ps = redobj.pubsub()
+    ps.subscribe("exitpygp")
+    for item in ps.listen():
+        print item
+        if item['type'] != 'message':
+            continue
+        msg = item['data']
+        print msg
+        if msg=="ok":
+            clean_onexit()
+            return
+
+def start_listen_exit():
+    import thread
+    try:
+        thread.start_new_thread(listen_exit, ('listen_exit',))
+    except:
+        print "Error: unable to start start_listen_exit"
+
+
 def listen(pipname, max_count=1000):
     context = zmq.Context()
     pipid = sys.argv[1]
@@ -96,10 +122,13 @@ def listen(pipname, max_count=1000):
 
 if len(sys.argv)<=1:
     print 'pars fail'
+    start_listen_exit()
+    time.sleep(111)
 else:
     mylogging.setuplog('mqpuller'+str(os.getpid())+'.txt')
     create_db("redirect_history")
     max_count =1000
     if len(sys.argv)==3:
         max_count = int(sys.argv[2])
+    start_listen_exit()
     listen(sys.argv[1])

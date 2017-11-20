@@ -245,6 +245,33 @@ def run_updators():
         logging.info("start updator %s", name)
         run_url_updator().Start()
 
+def clean_onexit():
+    print 'exit'
+    os._exit(1)
+
+def listen_exit(name):
+    redobj = redis.Redis()
+    ps = redobj.pubsub()
+    ps.subscribe("exitpygp")
+    for item in ps.listen():
+        print item
+        if item['type'] != 'message':
+            continue
+        msg = item['data']
+        print msg
+        if msg=="ok":
+            clean_onexit()
+            return
+
+def start_listen_exit():
+    import thread
+    try:
+        thread.start_new_thread(listen_exit, ('listen_exit',))
+    except:
+        print "Error: unable to start start_listen_exit"
+
+
+
 import ConfigParser
 import mylogging
 import basedef
@@ -264,7 +291,7 @@ if __name__=='__main__':
 
     basedef.GSaveLogRedisPub = save_log_redis.SaveLogging2Redis()
     basedef.GSaveLogRedisPub.init()
-
+    start_listen_exit()
     run_updators()
     app = web.application(urls, globals())
     app.notfound = notfound
