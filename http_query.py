@@ -76,7 +76,7 @@ class HttpQuery(object):
                 requrl = 'http://'+str(self.req_host)+":"+str(self.req_port)+requrl
                 #print requrl
                 r = self.httpClient.get(requrl,   headers={'Connection': 'keep-alive'})
-                if r.ok not True:
+                if r.ok is not True:
                     return
                 httpres =r.text
 
