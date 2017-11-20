@@ -59,7 +59,7 @@ def record_block_url(data):
         visit_time = time.strftime('%Y-%m-%d %H:%M:%S')
         data = decode_msg = base64.b64decode(data)
         block_info = data.split("||")
-        logging.warn('record_block_url {}', str(block_info))
+        logging.warn('record_block_url %s', str(block_info))
         block_type = block_info[0]
         block_url = block_info[1]
         dbobj, conn = getDbOrCreatex()
