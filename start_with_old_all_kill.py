@@ -33,6 +33,6 @@ def start_gp():
     except:
         print "Error: unable to start start_listen_exit"
 
-start_gp()
+start("")
 
 
