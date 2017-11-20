@@ -102,7 +102,7 @@ class HttpQuery(object):
                 logging.warning('has no url attr %s', str(data))
                 return
 
-            url_attr=data['url_attr'][0]
+            url_attr=data['url_attr']
             keys = ["urltype","eviltype","evilclass","urlclass","urlsubclass",]
             for k in keys:
                 if not url_attr.has_key(k):
