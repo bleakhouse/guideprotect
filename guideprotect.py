@@ -218,7 +218,7 @@ def clean_onexit():
 
     logging.info('end saving redis..!')
     print r
-    sys.exit(0)
+    os._exit(1)
 
 def listen_exit(name):
     redobj = redis.Redis()

@@ -71,7 +71,7 @@ def record_block_url(data):
 
 
 def clean_onexit():
-    print 'exit'
+    print 'exit ',sys.argv
     os._exit(1)
 
 def listen_exit(name):

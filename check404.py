@@ -105,6 +105,33 @@ def setup_3am_job(job_hour):
             print 'except ,continue'
 
 
+def clean_onexit():
+    print 'exit ',sys.argv
+    os._exit(1)
+
+def listen_exit(name):
+    import redis
+    redobj = redis.Redis()
+    ps = redobj.pubsub()
+    ps.subscribe("exitpygp")
+    for item in ps.listen():
+        print item
+        if item['type'] != 'message':
+            continue
+        msg = item['data']
+        print msg
+        if msg=="ok":
+            clean_onexit()
+            return
+
+def start_listen_exit():
+    import thread
+    try:
+        thread.start_new_thread(listen_exit, ('listen_exit',))
+    except:
+        print "Error: unable to start start_listen_exit"
+
+
 if __name__ == '__main__':
     mylogging.setuplog('check404.txt')
     gpconf.make_gcs()
@@ -113,4 +140,5 @@ if __name__ == '__main__':
     if len(sys.argv)==2:
         clock = int(sys.argv[1])
     logging.info('clock:%s', clock)
+    start_listen_exit()
     setup_3am_job(clock)

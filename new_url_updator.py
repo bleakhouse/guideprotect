@@ -104,7 +104,7 @@ def do_update(name):
             unknow_urls= pop_all_unknow_urls(redis_obj)
             count = len(unknow_urls)
             if count>0:
-                logging.info('unknow urls:%s', len(unknow_urls))
+                logging.info('unknow urls:%s on %s', len(unknow_urls), name)
             else:
                 logging.warn("no unknow urls to check")
                 time.sleep(2)
@@ -243,10 +243,10 @@ def run_updators():
     for x in range(0, update_number):
         name = "do_update"+str(x)
         logging.info("start updator %s", name)
-        run_url_updator().Start()
+        run_url_updator().Start(name)
 
 def clean_onexit():
-    print 'exit'
+    print 'exit ', sys.argv
     os._exit(1)
 
 def listen_exit(name):

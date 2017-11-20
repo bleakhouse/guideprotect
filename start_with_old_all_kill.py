@@ -11,9 +11,7 @@ import gpconf
 import redis
 import time
 cmdlines = [
-
     'python guideprotect.py'
-
             ]
 gpconf.make_gcs()
 basedef.GCS.init()
@@ -24,6 +22,17 @@ obj = redis.Redis()
 obj.publish("exitpygp", "ok")
 time.sleep(1)
 
-for cmdline in cmdlines:
-    os.system(cmdline)
+def start(name):
+    for cmdline in cmdlines:
+        os.system(cmdline)
+
+def start_gp():
+    import thread
+    try:
+        thread.start_new_thread(start, ('start_gp',))
+    except:
+        print "Error: unable to start start_listen_exit"
+
+start_gp()
+
 

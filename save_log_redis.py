@@ -183,7 +183,7 @@ class SaveLogging2Mysql(object):
 import mylogging
 save_con=None
 def clean_onexit():
-    print 'exit'
+    print 'exit ', sys.argv
     global save_con
     if save_con:
         logging.info('do the last db commit 2')
