@@ -104,7 +104,8 @@ def do_update(name):
             unknow_urls= pop_all_unknow_urls(redis_obj)
             count = len(unknow_urls)
             if count>0:
-                logging.info('unknow urls:%s on %s', len(unknow_urls), name)
+                pass
+                #logging.info('unknow urls:%s on %s', len(unknow_urls), name)
             else:
                 logging.warn("no unknow urls to check")
                 time.sleep(2)
@@ -165,7 +166,7 @@ def do_update(name):
                     host1 = gputils.make_real_host(url.lower())
                     pip.hmset(host1, update_info)
 
-                logging.info('url updator pip.execute():%s',len(pip.execute()))
+                # logging.info('url updator pip.execute():%s',len(pip.execute()))
 
         except Exception, e:
             logging.error(str(e))
