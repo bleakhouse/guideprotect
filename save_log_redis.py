@@ -176,7 +176,7 @@ class SaveLogging2Mysql(object):
                 number_url=0
                 self.conn.commit()
 
-            if number>50000 and self.conn:
+            if number>500000 and self.conn:
                 logging.info('save new data :%s', number)
                 number=0
                 self.conn.commit()
