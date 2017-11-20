@@ -75,8 +75,8 @@ class HttpQuery(object):
                 requrl = '/API/url_Testing.php?url='+url
                 requrl = 'http://'+str(self.req_host)+":"+str(self.req_port)+requrl
                 #print requrl
-                r = self.httpClient.get(requrl)
-                if !r.ok:
+                r = self.httpClient.get(requrl,   headers={'Connection': 'keep-alive'})
+                if r.ok not True:
                     return
                 httpres =r.text
 
