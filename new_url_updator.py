@@ -280,6 +280,9 @@ import gpwarning
 import save_log_redis
 import gpconf
 if __name__=='__main__':
+    import logging
+
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
 
     mylogging.setuplog('url_updator.txt')
     reload(sys).setdefaultencoding("utf8")
