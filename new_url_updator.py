@@ -111,11 +111,20 @@ def do_update(name):
                 time.sleep(2)
                 continue
             updating_url_infos={}
+            checkinobj = gputils.get_redis_obj()
             for it in unknow_urls:
                 if it is None:
                     continue
                 checking_url_info = eval(it)
                 url = checking_url_info['url']
+                tmphost = gputils.make_real_host(url)
+                val = checkinobj.hmget(tmphost,
+                                      ['urltype', 'evilclass', 'redirect_type', 'redirect_target', 'update_time',
+                                       'urlclass'])
+
+                if val is not None and  val[0] is not None:
+                    continue
+
                 url_info=None
                 trytimes=10
                 while trytimes>0:
