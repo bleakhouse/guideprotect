@@ -36,7 +36,7 @@ def is_url_404(url):
                 url = 'http://'+url
             response = urllib2.urlopen(url)
             code = response.getcode()
-            print code," ",url
+            #print code," ",url
         except urllib2.HTTPError, e2:
             if e2.code==404:
                 print 404, " ", url
