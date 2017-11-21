@@ -51,7 +51,7 @@ def checkhistory():
     timeNow = datetime.datetime.now()
     record_name ="record404 "+ timeNow.strftime('%Y-%m-%d')+".txt"
     fp = open(record_name,"w")
-    fp_all404  = open(("/tmp/all404.txt","a"))
+    fp_all404  = open("/tmp/all404.txt","a")
     timeNow = datetime.datetime.now()
     lasttime = timeNow + datetime.timedelta(days=-1)
     tbl_name = 'fullurl_' + lasttime.strftime('%Y_%m_%d')
