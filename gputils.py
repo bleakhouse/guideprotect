@@ -23,7 +23,10 @@ def show_noisy_logging():
 
 def set_noisy_logging(noisy):
     global noisy_logging
-    noisy_logging = noisy
+    if noisy=="noisy_on":
+        noisy_logging = 1
+    else:
+        noisy_logging=None
 
 def make_real_host(url):
     if url is None:

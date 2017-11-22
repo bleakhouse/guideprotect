@@ -90,8 +90,8 @@ def listen_exit(name):
         if msg=="ok":
             clean_onexit()
             return
-        if msg=='noisy':
-            gputils.set_noisy_logging(1)
+        if msg.startswith('noisy_'):
+            gputils.set_noisy_logging(msg)
 
 def start_listen_exit():
     import thread
