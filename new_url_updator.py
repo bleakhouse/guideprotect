@@ -174,8 +174,8 @@ def do_update(name):
                 for url,update_info in updating_url_infos.items():
                     host1 = gputils.make_real_host(url.lower())
                     pip.hmset(host1, update_info)
-
-                # logging.info('url updator pip.execute():%s',len(pip.execute()))
+                if gputils.show_noisy_logging():
+                     logging.info('url updator pip.execute():%s',len(pip.execute()))
 
         except Exception, e:
             logging.error(str(e))
@@ -273,6 +273,8 @@ def listen_exit(name):
         if msg=="ok":
             clean_onexit()
             return
+        if msg=='noisy':
+            gputils.set_noisy_logging(1)
 
 def start_listen_exit():
     import thread

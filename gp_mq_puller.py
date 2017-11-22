@@ -11,6 +11,7 @@ import MySQLdb
 import os
 import traceback
 import base64
+import gputils
 
 def getDbOrCreatex(dbname='guideprotect'):
     conn=None
@@ -89,6 +90,8 @@ def listen_exit(name):
         if msg=="ok":
             clean_onexit()
             return
+        if msg=='noisy':
+            gputils.set_noisy_logging(1)
 
 def start_listen_exit():
     import thread
@@ -121,7 +124,8 @@ def listen(pipname, max_count=1000):
                 idx=0
                 pipe = obj.pipeline()
                 pipe.rpush('visitinginfo', *cache_info)
-                #logging.info('pip.execute() result:%s, os.getpid():%s', len(pipe.execute()),os.getpid())
+                if gputils.show_noisy_logging():
+                    logging.info('pip.execute() result:%s, os.getpid():%s', len(pipe.execute()),os.getpid())
 
 if len(sys.argv)<=1:
     print 'pars fail'

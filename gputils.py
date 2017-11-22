@@ -16,6 +16,15 @@ import traceback
 from BaseHTTPServer import BaseHTTPRequestHandler
 from StringIO import StringIO
 
+noisy_logging = None
+def show_noisy_logging():
+    global noisy_logging
+    return  noisy_logging
+
+def set_noisy_logging(noisy):
+    global noisy_logging
+    noisy_logging = noisy
+
 def make_real_host(url):
     if url is None:
         return

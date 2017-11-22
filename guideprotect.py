@@ -231,6 +231,8 @@ def listen_exit(name):
         if msg=="ok":
             clean_onexit()
             return
+        if msg=='noisy':
+            gputils.set_noisy_logging(1)
 
 def start_listen_exit():
     try:
@@ -261,14 +263,6 @@ if __name__ == '__main__':
 
     db.createalltables()
 
-    cmdlines = [
-        '''pkill -f 'python save_log_redis.py' ''',
-        '''pkill -f 'python new_url_updator.py' ''',
-        '''pkill -f 'python check404.py' '''
-    ]
-
-    for cmdline in cmdlines:
-        os.system(cmdline)
     cmdlines = [
                 'python new_url_updator.py 8787',
                 'python save_log_redis.py',
