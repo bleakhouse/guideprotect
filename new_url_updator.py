@@ -119,24 +119,24 @@ def do_update(name):
                 url = checking_url_info['url']
                 tmphost = gputils.make_real_host(url)
                 val = checkinobj.hmget(tmphost,
-                                      ['urltype', 'evilclass', 'redirect_type', 'redirect_target', 'update_time',
-                                       'urlclass'])
+                                      ['urltype', 'eviltype','evilclass', 'urlclass','urlsubclass','redirect_type', 'redirect_target', 'update_time'
+                                       ])
+                url_info = None
 
-                if val is not None and  val[0] is not None:
-                    continue
+                if val is None or val[0] is None:
+                    trytimes=10
+                    while trytimes>0:
+                        url_info = queryobj.http_check_url_type(url)
+                        if url_info !=1:
+                            break
+                        trytimes = trytimes-1
+                        if trytimes==0:
+                            logging.warning('exceed try times!!')
 
-                url_info=None
-                trytimes=10
-                while trytimes>0:
-                    url_info = queryobj.http_check_url_type(url)
-                    if url_info !=1:
-                        break
-                    trytimes = trytimes-1
-                    if trytimes==0:
-                        logging.warning('exceed try times!!')
-
-                if url_info is None or url_info ==1:
-                    continue
+                    if url_info is None or url_info ==1:
+                        continue
+                else:
+                    url_info = val
                 url_type = url_info[0]
                 #if url_type != 2:
                 #    continue
