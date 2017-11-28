@@ -124,8 +124,9 @@ def listen(pipname, max_count=1000):
                 idx=0
                 pipe = obj.pipeline()
                 pipe.rpush('visitinginfo', *cache_info)
+                lenexec = len(pipe.execute())
                 if gputils.show_noisy_logging():
-                    logging.info('pip.execute() result:%s, os.getpid():%s', len(pipe.execute()),os.getpid())
+                    logging.info('pip.execute() result:%s, os.getpid():%s', lenexec,os.getpid())
 
 if len(sys.argv)<=1:
     print 'pars fail'
