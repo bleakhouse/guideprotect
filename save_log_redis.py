@@ -61,7 +61,8 @@ class SaveLogging2Mysql(object):
     ps =None
     dbobj=None
     conn=None
-
+    trans_data=[]
+    url_data=[]
     def init(self,save_log_pub_channel, save_log_pub_redis_num):
         self.save_log_pub_redis_num =   save_log_pub_redis_num
         self.save_log_pub_channel   =   save_log_pub_channel
@@ -118,6 +119,7 @@ class SaveLogging2Mysql(object):
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
+            init_mysql()
             if basedef.GWARNING: basedef.GWARNING.sendmail(str(e), traceback.format_exc())
             return
 
@@ -145,6 +147,7 @@ class SaveLogging2Mysql(object):
         except Exception, e:
             logging.error(str(e))
             logging.error(traceback.format_exc())
+            init_mysql()
             if basedef.GWARNING: basedef.GWARNING.sendmail(str(e), traceback.format_exc())
             return
 
@@ -163,22 +166,46 @@ class SaveLogging2Mysql(object):
             data = eval(msg)
             if data['_dtype']==1:
                 number = number + 1
-                self.save2transIP(data)
+                self.trans_data.append(data)
+                #self.save2transIP(data)
             if data['_dtype']==2:
                 number = number + 1
                 number_url=number_url+1
-                self.save2fullurl(data)
+                self.url_data.append(data)
+                #self.save2fullurl(data)
 
             #save data
             if data['_dtype']==999 and self.conn:
                 logging.info('save new data :%s, number_url:%s', number, number_url)
                 number = 0
                 number_url=0
+
+                self.init_mysql()
+                tmptran = self.trans_data
+                self.trans_data=[]
+                tmpurl = self.url_data
+                self.url_data=[]
+                for data in tmptran:
+                    self.save2transIP(data)
+                for data in tmpurl:
+                    self.save2fullurl(data)
                 self.conn.commit()
 
-            if number>500000 and self.conn:
+            if number>50000 and self.conn:
                 logging.info('save new data :%s', number)
                 number=0
+                number_url=0
+
+                self.init_mysql()
+                tmptran = self.trans_data
+                self.trans_data=[]
+                tmpurl = self.url_data
+                self.url_data=[]
+                for data in tmptran:
+                    self.save2transIP(data)
+                for data in tmpurl:
+                    self.save2fullurl(data)
+
                 self.conn.commit()
 import mylogging
 save_con=None
