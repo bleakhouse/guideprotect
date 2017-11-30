@@ -55,7 +55,7 @@ class SaveLogging2Redis(object):
             if self.redis_snapshot.get("dont_push")!="1":
                 self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, dat)
             else:
-                if gputils.show_noisy_logging():
+                if gputils.show_noisy_logging() and time.strftime('%S')>'58':
                     logging.info("not push ")
 
 
@@ -66,7 +66,7 @@ class SaveLogging2Redis(object):
             if self.redis_snapshot.get("dont_push") != "1":
                 self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, dat)
             else:
-                if gputils.show_noisy_logging():
+                if gputils.show_noisy_logging() and time.strftime('%S')>'58':
                     logging.info("not push ")
 
 
