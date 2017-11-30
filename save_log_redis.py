@@ -22,13 +22,19 @@ class SaveLogging2Redis(object):
     redobj=None
     save_log_pub_channel=''
     redis_snapshot=None
+    save_log_pub_fullurl_detail = ''
     def init(self):
         save_log_pub_redis_num=0
         cfgobj = basedef.GCS.get_config_obj()
-        save_log_pub_redis_num = cfgobj.getint('boot','save_log_pub_redis_num')
-        self.save_log_pub_channel = cfgobj.get('boot','save_log_pub_channel')
+        save_log_pub_redis_num = cfgobj.getint('boot', 'save_log_pub_redis_num')
+        self.save_log_pub_channel = cfgobj.get('boot', 'save_log_pub_channel')
+
         self.redobj = redis.Redis(db=save_log_pub_redis_num)
-        self.redis_snapshot = redis.Redis()
+
+        save_log_fullurl_detail_redis_num = cfgobj.getint('boot', 'save_log_fullurl_detail_redis_num')
+        self.save_log_pub_fullurl_detail = cfgobj.get('boot', 'save_log_fullurl_detail_key')
+
+        self.redis_snapshot = redis.Redis(db=save_log_fullurl_detail_redis_num)
 
         logging.info('save_log_pub_redis_num:%s,%s', save_log_pub_redis_num, self.redobj)
         logging.info('save_log_pub_channel:%s', self.save_log_pub_channel)
@@ -45,12 +51,12 @@ class SaveLogging2Redis(object):
         visit_time = time.strftime('%Y-%m-%d %H:%M:%S')
         dat = {'_dtype':2, 'sip':self.sip, 'sport':self.sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
         self.save2pub(dat)
-        #self.redis_snapshot.rpush("fullurl_detail", dat)
+        self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, dat)
 
     def save_url_info_with_src(self, sip,sport,fullurl, urltype, evilclass, urlclass,visit_time,referer, useragent='unknow'):
         dat = {'_dtype':2, 'sip':sip, 'sport':sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
         self.save2pub(dat)
-        #self.redis_snapshot.rpush("fullurl_detail", dat)
+        self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, dat)
 
     def save2pub(self, data):
         if self.redobj==None:
