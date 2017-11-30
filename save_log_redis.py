@@ -14,7 +14,7 @@ import os
 import MySQLdb
 import datetime
 import gpwarning
-
+import gputils
 class SaveLogging2Redis(object):
 
     sip=0
@@ -52,15 +52,23 @@ class SaveLogging2Redis(object):
         dat = {'_dtype':2, 'sip':self.sip, 'sport':self.sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
         self.save2pub(dat)
         if urltype !=3 and urltype !=4:
-            if self.redis_snapshot.get("dont_push")!=1:
+            if self.redis_snapshot.get("dont_push")!="1":
                 self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, dat)
+            else:
+                if gputils.show_noisy_logging():
+                    logging.info("not push ")
+
 
     def save_url_info_with_src(self, sip,sport,fullurl, urltype, evilclass, urlclass,visit_time,referer, useragent='unknow'):
         dat = {'_dtype':2, 'sip':sip, 'sport':sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
         self.save2pub(dat)
         if urltype != 3 and urltype != 4:
-            if self.redis_snapshot.get("dont_push") != 1:
+            if self.redis_snapshot.get("dont_push") != "1":
                 self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, dat)
+            else:
+                if gputils.show_noisy_logging():
+                    logging.info("not push ")
+
 
     def save2pub(self, data):
         if self.redobj==None:
