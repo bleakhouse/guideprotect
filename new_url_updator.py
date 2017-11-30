@@ -129,7 +129,7 @@ def do_update(name):
                                       ['urltype', 'eviltype','evilclass', 'urlclass','urlsubclass','redirect_type', 'redirect_target', 'update_time'
                                        ])
                 url_info = None
-
+                found_in_cache=None
                 if val is None or val[0] is None:
                     trytimes=10
                     while trytimes>0:
@@ -144,6 +144,8 @@ def do_update(name):
                         continue
                 else:
                     url_info = val
+                    found_in_cache=True
+
                 url_type = url_info[0]
                 #if url_type != 2:
                 #    continue
@@ -172,6 +174,8 @@ def do_update(name):
                     sport = checking_url_info['sport']
                     referer = checking_url_info['referer']
                     basedef.GSaveLogRedisPub.save_url_info_with_src(sip, sport, url, urlinfo['urltype'], urlinfo['evilclass'], urlinfo['urlclass'], visit_time, referer, useragent)
+                if found_in_cache:
+                    continue
 
                 updating_url_infos[url]=urlinfo
 
