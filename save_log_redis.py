@@ -65,6 +65,7 @@ class SaveLogging2Redis(object):
             logging.error('self.redobj error:%s',data)
         self.redobj.publish(self.save_log_pub_channel, (data))
 
+save_con=None
 class SaveLogging2Mysql(object):
 
     save_log_pub_redis_num=0
@@ -75,6 +76,8 @@ class SaveLogging2Mysql(object):
     conn=None
     trans_data=[]
     url_data=[]
+    stoprecv=None
+
     def init(self,save_log_pub_channel, save_log_pub_redis_num):
         self.save_log_pub_redis_num =   save_log_pub_redis_num
         self.save_log_pub_channel   =   save_log_pub_channel
@@ -174,6 +177,9 @@ class SaveLogging2Mysql(object):
             if item['type']!='message':
                 continue
 
+            if self.stoprecv:
+                continue
+
             msg = item['data']
             data = eval(msg)
             if data['_dtype']==1:
@@ -192,41 +198,40 @@ class SaveLogging2Mysql(object):
                 number = 0
                 number_url=0
 
-                self.init_mysql()
-                tmptran = self.trans_data
-                self.trans_data=[]
-                tmpurl = self.url_data
-                self.url_data=[]
-                for data in tmptran:
-                    self.save2transIP(data)
-                for data in tmpurl:
-                    self.save2fullurl(data)
-                self.conn.commit()
+                self.saveit()
 
             if number>50000 and self.conn:
                 logging.info('save new data :%s', number)
                 number=0
                 number_url=0
+                self.saveit()
 
-                self.init_mysql()
-                tmptran = self.trans_data
-                self.trans_data=[]
-                tmpurl = self.url_data
-                self.url_data=[]
-                for data in tmptran:
-                    self.save2transIP(data)
-                for data in tmpurl:
-                    self.save2fullurl(data)
+    def saveit(self):
+        self.init_mysql()
+        tmptran = self.trans_data
+        self.trans_data = []
+        tmpurl = self.url_data
+        self.url_data = []
+        for data in tmptran:
+            self.save2transIP(data)
+        for data in tmpurl:
+            self.save2fullurl(data)
+        self.conn.commit()
 
-                self.conn.commit()
+    def stopit(self):
+        self.stoprecv=True
+
+
 import mylogging
-save_con=None
+sqlsaveobj=None
+
 def clean_onexit():
     print 'exit ', sys.argv
-    global save_con
-    if save_con:
+    global sqlsaveobj
+    if sqlsaveobj:
         logging.info('do the last db commit 2')
-        save_con.commit()
+        sqlsaveobj.stopit()
+        sqlsaveobj.saveit()
         time.sleep(2)
     os._exit(1)
 
@@ -264,8 +269,8 @@ if __name__ == '__main__':
 
     start_listen_exit()
     obj = SaveLogging2Mysql()
+    sqlsaveobj = obj
     obj.init([save_log_pub_channel], save_log_pub_redis_num)
-    save_con = obj.conn
     obj.go()
     if obj.conn:
         logging.info('do the last db commit')
