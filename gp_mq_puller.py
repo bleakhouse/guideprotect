@@ -53,18 +53,26 @@ def create_db(tbl_name):
     else:
         print("OK!")
         logging.warn("create table %s ok!!", tbl_name)
-
+import time
+lasttime=0
 def record_block_url(data):
 
     try:
         visit_time = time.strftime('%Y-%m-%d %H:%M:%S')
         data = decode_msg = base64.b64decode(data)
         block_info = data.split("||")
-        logging.warn('record_block_url %s', str(block_info))
+
         block_type = block_info[0]
         block_url = block_info[1]
-        dbobj, conn = getDbOrCreatex()
+        dbobj=None
+        conn=None
+        global lasttime
+        if time.time()-lasttime>60*10:
+            lasttime = time.time()
+            dbobj, conn = getDbOrCreatex()
+
         if dbobj:
+            logging.warn('record_block_url %s', str(block_info))
             dbobj.execute("insert into redirect_history (reason,fullurll,visit_time)  values(%s,%s,%s)", (block_type, block_url, visit_time))
             conn.commit()
 
