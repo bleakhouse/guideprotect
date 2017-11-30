@@ -271,6 +271,7 @@ def clean_onexit():
 def listen_exit(name):
     redobj = redis.Redis()
     ps = redobj.pubsub()
+    new=1
     ps.subscribe("exitpygp")
     for item in ps.listen():
         print item
@@ -283,6 +284,12 @@ def listen_exit(name):
             return
         if msg.startswith('noisy_'):
             gputils.set_noisy_logging(msg)
+
+        if msg=='new_updator':
+            logging.info("start updator %s", name)
+            name = 'newupdator'+str(new)
+            new= new+1
+            run_url_updator().Start(name)
 
 def start_listen_exit():
     import thread
