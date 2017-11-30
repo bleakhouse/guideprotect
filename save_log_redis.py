@@ -45,12 +45,12 @@ class SaveLogging2Redis(object):
         visit_time = time.strftime('%Y-%m-%d %H:%M:%S')
         dat = {'_dtype':2, 'sip':self.sip, 'sport':self.sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
         self.save2pub(dat)
-        self.redis_snapshot.rpush("fullurl_detail", dat)
+        #self.redis_snapshot.rpush("fullurl_detail", dat)
 
     def save_url_info_with_src(self, sip,sport,fullurl, urltype, evilclass, urlclass,visit_time,referer, useragent='unknow'):
         dat = {'_dtype':2, 'sip':sip, 'sport':sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
         self.save2pub(dat)
-        self.redis_snapshot.rpush("fullurl_detail", dat)
+        #self.redis_snapshot.rpush("fullurl_detail", dat)
 
     def save2pub(self, data):
         if self.redobj==None:
