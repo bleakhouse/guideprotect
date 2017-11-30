@@ -17,7 +17,7 @@ import httplib
 import base64
 import datetime
 import  gputils
-redis_obj =None
+
 gstart_update = 0
 
 gUNKNOW_URL_KEY_NAME = 'guide:protect:unknow_urls'
@@ -76,19 +76,18 @@ def do_update(name):
     curren_task_name = name + " " + gstart_update
     gstart_update = name + " " + gstart_update
 
-    global  redis_obj
+
     redis_obj = get_unknow_redis_db()
 
     if redis_obj is None:
         return
 
-    redis_match_obj = gputils.get_redis_obj()
-    redis_match_obj.set('update_info', gstart_update)
-
     queryobj = http_query.HttpQuery()
     queryobj.init()
 
     lasttime=0
+    checkinobj = gputils.get_redis_obj()
+
     while True:
         try:
             check1 = time.strftime("%H", time.localtime())
@@ -100,9 +99,6 @@ def do_update(name):
 
         try:
 
-            if redis_match_obj is None:
-                raise NameError('redis not init')
-
             unknow_urls= pop_all_unknow_urls(redis_obj)
             count = len(unknow_urls)
             if count>0:
@@ -113,7 +109,7 @@ def do_update(name):
                 time.sleep(2)
                 continue
             updating_url_infos={}
-            checkinobj = gputils.get_redis_obj()
+
 
             if gputils.show_noisy_logging():
                 logging.info("fetch url:%s,%s", curren_task_name, str(unknow_urls[0]))
@@ -174,19 +170,21 @@ def do_update(name):
                     sport = checking_url_info['sport']
                     referer = checking_url_info['referer']
                     basedef.GSaveLogRedisPub.save_url_info_with_src(sip, sport, url, urlinfo['urltype'], urlinfo['evilclass'], urlinfo['urlclass'], visit_time, referer, useragent)
+
                 if found_in_cache:
                     continue
 
                 updating_url_infos[url]=urlinfo
 
             if len(updating_url_infos)>0:
-                pip = gputils.get_redis_obj().pipeline()
+                pip = checkinobj.pipeline()
 
                 for url,update_info in updating_url_infos.items():
                     host1 = gputils.make_real_host(url.lower())
                     pip.hmset(host1, update_info)
+                lenexec= pip.execute()
                 if gputils.show_noisy_logging():
-                     logging.info('url updator pip.execute():%s',len(pip.execute()))
+                     logging.info('url updator pip.execute():%s',len(lenexec))
 
         except Exception, e:
             logging.error(str(e))
@@ -197,7 +195,6 @@ def do_update(name):
             pass
         time.sleep(10)
 
-    redis_match_obj.delete('update_info', gstart_update)
 
 # URL映射
 urls = (
