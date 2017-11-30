@@ -73,7 +73,9 @@ def do_update(name):
     global  gstart_update
     timeNow = datetime.datetime.now()
     gstart_update = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    curren_task_name = name + " " + gstart_update
     gstart_update = name + " " + gstart_update
+
     global  redis_obj
     redis_obj = get_unknow_redis_db()
 
@@ -114,7 +116,7 @@ def do_update(name):
             checkinobj = gputils.get_redis_obj()
 
             if gputils.show_noisy_logging():
-                logging.info("fetch url:%s,%s", gstart_update, str(unknow_urls[0]))
+                logging.info("fetch url:%s,%s", curren_task_name, str(unknow_urls[0]))
 
             for it in unknow_urls:
                 if it is None:
