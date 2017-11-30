@@ -28,16 +28,16 @@ def new_unknow_url(url):
     url_info['url']=url
     url_info['need_save_log_redis']=0
     gRedisObj_unknow.rpush(new_url_updator.gUNKNOW_URL_KEY_NAME, (url_info))
-    if gputils.show_noisy_logging():
-        logging.info("new unknow url:%s", url)
+    # if gputils.show_noisy_logging():
+    #     logging.info("new unknow url:%s", url)
 
 def add_unknow_url_info(url_info):
     global  gRedisObj_unknow
     if gRedisObj_unknow is None:
         return
     gRedisObj_unknow.rpush(new_url_updator.gUNKNOW_URL_KEY_NAME, (url_info))
-    if gputils.show_noisy_logging():
-        logging.info("add unknow url")
+    # if gputils.show_noisy_logging():
+    #     logging.info("add unknow url")
 
 def should_pass_by_shothost(short_host, dicret):
     if short_host is not None:

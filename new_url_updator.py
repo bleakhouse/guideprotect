@@ -116,6 +116,9 @@ def do_update(name):
                 if it is None:
                     continue
                 checking_url_info = eval(it)
+                if gputils.show_noisy_logging():
+                    logging.info("fetch url:%s,%s",gstart_update, str(it))
+
                 url = checking_url_info['url']
                 tmphost = gputils.make_real_host(url)
                 val = checkinobj.hmget(tmphost,
