@@ -55,7 +55,7 @@ def create_db(tbl_name):
         logging.warn("create table %s ok!!", tbl_name)
 import time
 lasttime=0
-def record_block_url(data):
+def record_block_url(sqlobj,data):
 
     try:
         visit_time = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -64,13 +64,14 @@ def record_block_url(data):
 
         block_type = block_info[0]
         block_url = block_info[1]
-        dbobj=None
-        conn=None
+        dbobj=sqlobj[0]
+        conn=sqlobj[1]
         global lasttime
-        if time.time()-lasttime>60*10:
+        if time.time()-lasttime>60*10 or dbobj is None:
             lasttime = time.time()
             dbobj, conn = getDbOrCreatex()
-
+            sqlobj[0]= dbobj
+            sqlobj[1] = conn
         if dbobj:
             logging.warn('record_block_url %s', str(block_info))
             dbobj.execute("insert into redirect_history (reason,fullurll,visit_time)  values(%s,%s,%s)", (block_type, block_url, visit_time))
@@ -79,7 +80,8 @@ def record_block_url(data):
     except Exception, e:
         logging.error(str(e))
         logging.error(traceback.format_exc())
-
+        sqlobj[0] = None
+        sqlobj[1] = None
 
 def clean_onexit():
     print 'exit ',sys.argv
@@ -120,11 +122,16 @@ def listen(pipname, max_count=1000):
     obj = redis.Redis()
     cache_info =range(max_count)
     idx =0
+    dbobj, conn = getDbOrCreatex()
+    sqlobj=[]
+    sqlobj.append(dbobj)
+    sqlobj.append(conn)
+
     while 1:
             rdata = socket.recv()
 
             if str(rdata).startswith("block"):
-                record_block_url(rdata[5:])
+                record_block_url(sqlobj, rdata[5:])
                 continue
             cache_info[idx] = rdata
             idx=idx+1
