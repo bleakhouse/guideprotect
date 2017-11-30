@@ -112,12 +112,14 @@ def do_update(name):
                 continue
             updating_url_infos={}
             checkinobj = gputils.get_redis_obj()
+
+            if gputils.show_noisy_logging():
+                logging.info("fetch url:%s,%s", gstart_update, str(unknow_urls[0]))
+
             for it in unknow_urls:
                 if it is None:
                     continue
                 checking_url_info = eval(it)
-                if gputils.show_noisy_logging():
-                    logging.info("fetch url:%s,%s",gstart_update, str(it))
 
                 url = checking_url_info['url']
                 tmphost = gputils.make_real_host(url)
