@@ -140,6 +140,11 @@ def do_update(name):
                 cache = res[counter]
                 counter = counter+1
 
+                if len(tmphost)<3:
+                    continue
+                if unicode(tmphost[-2:]).isnumeric():
+                    continue
+
                 url_info = None
                 found_in_cache=None
                 if cache is None or cache[0] is None or cache[0]==0:
