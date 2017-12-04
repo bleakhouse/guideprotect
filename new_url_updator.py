@@ -113,6 +113,7 @@ def do_update(name):
 
             if gputils.show_noisy_logging():
                 logging.info("fetch url:%s,%s", curren_task_name, str(unknow_urls[0]))
+            pipobj = checkinobj.pipeline()
 
             for it in unknow_urls:
                 if it is None:
@@ -121,12 +122,26 @@ def do_update(name):
 
                 url = checking_url_info['url']
                 tmphost = gputils.make_real_host(url)
-                val = checkinobj.hmget(tmphost,
+
+                pipobj.hmget(tmphost,
                                       ['urltype', 'eviltype','evilclass', 'urlclass','urlsubclass','redirect_type', 'redirect_target', 'update_time'
                                        ])
+            res = pip.execute()
+
+            counter=0
+            for it in unknow_urls:
+                if it is None:
+                    continue
+                checking_url_info = eval(it)
+
+                url = checking_url_info['url']
+                tmphost = gputils.make_real_host(url)
+                cache = res[counter]
+                counter = counter+1
+
                 url_info = None
                 found_in_cache=None
-                if val is None or val[0] is None:
+                if cache is cache or cache[0] is None:
                     trytimes=10
                     while trytimes>0:
                         url_info = queryobj.http_check_url_type(url)
@@ -139,7 +154,7 @@ def do_update(name):
                     if url_info is None or url_info ==1:
                         continue
                 else:
-                    url_info = val
+                    url_info = cache
                     found_in_cache=True
 
                 url_type = url_info[0]
