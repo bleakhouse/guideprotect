@@ -190,7 +190,7 @@ def do_update(name):
                 if found_in_cache:
                     continue
 
-                if url_type!=0:
+                if url_type!='0':
                     updating_url_infos[tmphost]=urlinfo
                 else:
                     unknow_url_infos.add(tmphost)
@@ -206,9 +206,9 @@ def do_update(name):
                      logging.info('url updator pip.execute():%s',len(lenexec))
 
             if len(unknow_url_infos):
-                pip = delay_chk_obj.pipepline()
+                pip = delay_chk_obj.pipeline()
                 for host in unknow_url_infos:
-                    pip.add(host)
+                    pip.sadd('delay_unknow_host',host)
                 lenexec = pip.execute()
                 if gputils.show_noisy_logging():
                      logging.info('url updator set pip.execute():%s',len(lenexec))
