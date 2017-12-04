@@ -143,7 +143,9 @@ def do_update(name):
                 if len(tmphost)<3:
                     continue
                 if unicode(tmphost[-2:]).isnumeric():
-                    continue
+                    x = tmphost.split('.')
+                    if len(x)!=4:
+                        continue
 
                 url_info = None
                 found_in_cache=None
