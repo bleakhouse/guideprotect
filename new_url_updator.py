@@ -87,6 +87,7 @@ def do_update(name):
 
     lasttime=0
     checkinobj = gputils.get_redis_obj()
+    delay_chk_obj = gputils.get_delay_check_redis_obj()
 
     while True:
         try:
@@ -109,7 +110,7 @@ def do_update(name):
                 time.sleep(2)
                 continue
             updating_url_infos={}
-
+            unknow_url_infos = set()
 
             if gputils.show_noisy_logging():
                 logging.info("fetch url:%s,%s", curren_task_name, str(unknow_urls[0]))
@@ -126,7 +127,7 @@ def do_update(name):
                 pipobj.hmget(tmphost,
                                       ['urltype', 'eviltype','evilclass', 'urlclass','urlsubclass','redirect_type', 'redirect_target', 'update_time'
                                        ])
-            res = pip.execute()
+            res = pipobj.execute()
 
             counter=0
             for it in unknow_urls:
@@ -141,7 +142,7 @@ def do_update(name):
 
                 url_info = None
                 found_in_cache=None
-                if cache is cache or cache[0] is None:
+                if cache is None or cache[0] is None or cache[0]==0:
                     trytimes=10
                     while trytimes>0:
                         url_info = queryobj.http_check_url_type(url)
@@ -189,7 +190,10 @@ def do_update(name):
                 if found_in_cache:
                     continue
 
-                updating_url_infos[url]=urlinfo
+                if url_type!=0:
+                    updating_url_infos[tmphost]=urlinfo
+                else:
+                    unknow_url_infos.add(tmphost)
 
             if len(updating_url_infos)>0:
                 pip = checkinobj.pipeline()
@@ -200,6 +204,14 @@ def do_update(name):
                 lenexec= pip.execute()
                 if gputils.show_noisy_logging():
                      logging.info('url updator pip.execute():%s',len(lenexec))
+
+            if len(unknow_url_infos):
+                pip = delay_chk_obj.pipepline()
+                for host in unknow_url_infos:
+                    pip.add(host)
+                lenexec = pip.execute()
+                if gputils.show_noisy_logging():
+                     logging.info('url updator set pip.execute():%s',len(lenexec))
 
         except Exception, e:
             logging.error(str(e))

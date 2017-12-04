@@ -51,6 +51,16 @@ def get_redis_obj():
         logging.error(traceback.format_exc())
 
 
+def get_delay_check_redis_obj():
+
+    try:
+        redis_obj = redis.Redis(db=2)
+        return redis_obj
+    except Exception, e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
+
+
 class HTTPRequest(BaseHTTPRequestHandler):
     def __init__(self, request_text):
         self.rfile = StringIO(request_text)
