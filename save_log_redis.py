@@ -51,7 +51,7 @@ class SaveLogging2Redis(object):
         visit_time = time.strftime('%Y-%m-%d %H:%M:%S')
         dat = {'_dtype':2, 'sip':self.sip, 'sport':self.sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
         self.save2pub(dat)
-        if urltype !=3 and urltype !=4:
+        if urltype !=3 and urltype !=4 and evilclass!=0:
             if self.redis_snapshot.get("dont_push")!="1":
                 self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, dat)
             else:
@@ -62,7 +62,7 @@ class SaveLogging2Redis(object):
     def save_url_info_with_src(self, sip,sport,fullurl, urltype, evilclass, urlclass,visit_time,referer, useragent='unknow'):
         dat = {'_dtype':2, 'sip':sip, 'sport':sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
         self.save2pub(dat)
-        if urltype != 3 and urltype != 4:
+        if urltype != 3 and urltype != 4 and evilclass!=0:
             if self.redis_snapshot.get("dont_push") != "1":
                 self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, dat)
             else:
@@ -73,6 +73,8 @@ class SaveLogging2Redis(object):
     def save2pub(self, data):
         if self.redobj==None:
             logging.error('self.redobj error:%s',data)
+        if gputils.show_noisy_logging() and time.strftime('%S') > '58':
+            logging.info('pushing data %s', str(data))
         self.redobj.publish(self.save_log_pub_channel, (data))
 
 save_con=None
