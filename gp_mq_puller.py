@@ -87,29 +87,12 @@ def clean_onexit():
     print 'exit ',sys.argv
     os._exit(1)
 
-def listen_exit(name):
-    redobj = redis.Redis()
-    ps = redobj.pubsub()
-    ps.subscribe("exitpygp")
-    for item in ps.listen():
-        print item
-        if item['type'] != 'message':
-            continue
-        msg = item['data']
-        print msg
-        if msg=="ok":
-            clean_onexit()
-            return
-        if msg.startswith('noisy_'):
-            gputils.set_noisy_logging(msg)
-
-def start_listen_exit():
-    import thread
-    try:
-        thread.start_new_thread(listen_exit, ('listen_exit',))
-    except:
-        print "Error: unable to start start_listen_exit"
-
+def handle_cmd(data):
+    if gputils.is_cmd_go_die(data):
+        clean_onexit()
+        return
+    if data.startswith('noisy_'):
+        gputils.set_noisy_logging(data)
 
 def listen(pipname, max_count=1000):
     context = zmq.Context()
@@ -151,5 +134,5 @@ else:
     max_count =1000
     if len(sys.argv)==3:
         max_count = int(sys.argv[2])
-    start_listen_exit()
+    gputils.start_listen_cmd(handle_cmd)
     listen(sys.argv[1])

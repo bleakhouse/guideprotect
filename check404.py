@@ -49,7 +49,8 @@ def is_url_404(url):
 def checkhistory():
 
     timeNow = datetime.datetime.now()
-    record_name ="record404 "+ timeNow.strftime('%Y-%m-%d')+".txt"
+    lastday = timeNow+ datetime.timedelta(days=-1)
+    record_name ="record404 "+ lastday.strftime('%Y-%m-%d')+".txt"
     fp = open(record_name,"w")
     fp_all404  = open("/tmp/all404.txt","a")
     timeNow = datetime.datetime.now()
@@ -62,10 +63,17 @@ def checkhistory():
     url_checked =[]
     count404 =0
     checkcount = 0
+    if not result:
+        logging.error('total 404checking result is :%s', str(result))
+        return
+    logging.info('total 404checking :%s', len(result))
     for row in result:
         url = row[0]
         if url in url_checked:
             continue
+        if len(url)>200:
+            continue
+
         urltype = row[1]
         if urltype and int(urltype)!=2:
             url_checked.append(url)
@@ -109,28 +117,10 @@ def clean_onexit():
     print 'exit ',sys.argv
     os._exit(1)
 
-def listen_exit(name):
-    import redis
-    redobj = redis.Redis()
-    ps = redobj.pubsub()
-    ps.subscribe("exitpygp")
-    for item in ps.listen():
-        print item
-        if item['type'] != 'message':
-            continue
-        msg = item['data']
-        print msg
-        if msg=="ok":
-            clean_onexit()
-            return
-
-def start_listen_exit():
-    import thread
-    try:
-        thread.start_new_thread(listen_exit, ('listen_exit',))
-    except:
-        print "Error: unable to start start_listen_exit"
-
+def handle(msg):
+    if gputils.is_cmd_go_die(msg):
+        clean_onexit()
+        return
 
 if __name__ == '__main__':
     mylogging.setuplog('check404.txt')
@@ -140,5 +130,6 @@ if __name__ == '__main__':
     if len(sys.argv)==2:
         clock = int(sys.argv[1])
     logging.info('clock:%s', clock)
-    start_listen_exit()
+    gputils.start_listen_cmd(handle)
+
     setup_3am_job(clock)

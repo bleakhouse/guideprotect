@@ -74,7 +74,8 @@ def is_blocked_url(url_or_host, dicret):
 
 
     if val is None or val[0] is None:
-        return [3]
+        return [3] #unknow
+
     dicret.append(val[0])
     dicret.append(val[1])
     dicret.append(val[5])
@@ -103,28 +104,28 @@ def is_blocked_url(url_or_host, dicret):
     return [3]
 
 def make_redirect_info(val):
-
-    redirect_type = val[2]
-    redirect_target=val[3]
-
-    if redirect_type is None or redirect_target is None:
-        return
-
-    if redirect_type == RULE_ATTR_NAME_redirect_type_url or redirect_type == RULE_ATTR_NAME_redirect_type_buf :
-        return [redirect_type, redirect_target]
-
-    if redirect_type != RULE_ATTR_NAME_redirect_type_file:
-        return
-
-    if redirect_target in gTargetFile.keys():
-        return [RULE_ATTR_NAME_redirect_type_buf, gTargetFile[redirect_target]]
-
-    try:
-        if os.path.isfile(redirect_target):
-            gTargetFile[redirect_target] = open(redirect_target, 'r').read()
-        return [RULE_ATTR_NAME_redirect_type_buf, gTargetFile[redirect_target]]
-    except:
-        pass
+    #
+    # redirect_type = val[2]
+    # redirect_target=val[3]
+    #
+    # if redirect_type is None or redirect_target is None:
+    #     return
+    #
+    # if redirect_type == RULE_ATTR_NAME_redirect_type_url or redirect_type == RULE_ATTR_NAME_redirect_type_buf :
+    #     return [redirect_type, redirect_target]
+    #
+    # if redirect_type != RULE_ATTR_NAME_redirect_type_file:
+    #     return
+    #
+    # if redirect_target in gTargetFile.keys():
+    #     return [RULE_ATTR_NAME_redirect_type_buf, gTargetFile[redirect_target]]
+    #
+    # try:
+    #     if os.path.isfile(redirect_target):
+    #         gTargetFile[redirect_target] = open(redirect_target, 'r').read()
+    #     return [RULE_ATTR_NAME_redirect_type_buf, gTargetFile[redirect_target]]
+    # except:
+    #     pass
 
     return
 

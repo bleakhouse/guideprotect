@@ -11,10 +11,44 @@ import netifaces as netif
 import platform
 import redis
 from pprint import pprint
-
+import thread
+import os
 import traceback
 from BaseHTTPServer import BaseHTTPRequestHandler
 from StringIO import StringIO
+
+
+def listen_cmd(name, handler):
+    redobj = redis.Redis()
+    ps = redobj.pubsub()
+    ps.subscribe("common_cmd")
+    for item in ps.listen():
+        if item['type'] != 'message':
+            continue
+        msg = item['data']
+        handler(msg)
+
+def start_listen_cmd(handler):
+    try:
+        thread.start_new_thread(listen_cmd, ('listen_cmd',handler))
+    except:
+        print "Error: unable to start start_sub_proc"
+
+def is_cmd_go_die(cmd):
+    return cmd=='godie'
+
+
+def sub_proc(cmdline):
+    logging.info('start sub proc:%s', cmdline)
+    os.system(cmdline)
+
+
+def start_sub_proc(task):
+        try:
+            thread.start_new_thread(sub_proc, (task,))
+        except:
+            print "Error: unable to start start_sub_proc"
+
 
 noisy_logging = None
 def show_noisy_logging():
