@@ -89,8 +89,10 @@ def handle_cmd(data):
     if gputils.is_cmd_go_die(data):
         clean_onexit()
         return
-    if data.startswith('noisy_'):
-        gputils.set_noisy_logging(data)
+    msg  =gputils.extra_cmd_msg(data)
+    if msg.startswith('noisy_'):
+        gputils.set_noisy_logging(msg)
+
 
 if __name__ == '__main__':
 

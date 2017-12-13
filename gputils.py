@@ -17,6 +17,15 @@ import traceback
 from BaseHTTPServer import BaseHTTPRequestHandler
 from StringIO import StringIO
 
+def get_unknow_redis():
+    return redis.Redis(db=1)
+
+def get_unknow_redis_keyname():
+    return "unknowurl"
+
+def get_black_redis():
+    return redis.Redis()
+
 
 def listen_cmd(name, handler):
     redobj = redis.Redis()
@@ -26,7 +35,13 @@ def listen_cmd(name, handler):
         if item['type'] != 'message':
             continue
         msg = item['data']
-        handler(msg)
+        try:
+            msg = eval(msg)
+            handler(msg)
+        except Exception, e:
+            logging.error(str(e))
+            logging.error(traceback.format_exc())
+            print msg
 
 def start_listen_cmd(handler):
     try:
@@ -35,8 +50,12 @@ def start_listen_cmd(handler):
         print "Error: unable to start start_sub_proc"
 
 def is_cmd_go_die(cmd):
-    return cmd=='godie'
+    return cmd.has_key('msg') and cmd['msg']=='godie'
 
+def extra_cmd_msg(cmd):
+    if not cmd.has_key('msg'):
+        return ""
+    return str(cmd['msg'])
 
 def sub_proc(cmdline):
     logging.info('start sub proc:%s', cmdline)

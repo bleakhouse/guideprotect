@@ -15,6 +15,7 @@ import MySQLdb
 import datetime
 import gpwarning
 import gputils
+import mylogging
 
 save_con=None
 class SaveLogging2Mysql(object):
@@ -194,7 +195,11 @@ def handle_cmd(data):
     if gputils.is_cmd_go_die(data):
         clean_onexit()
         return
-    if data=='firesaveing':
+    msg  =gputils.extra_cmd_msg(data)
+    if msg.startswith('noisy_'):
+        gputils.set_noisy_logging(msg)
+
+    if msg=='firesaveing':
         global sqlsaveobj
         sqlsaveobj.fire_saveing()
 

@@ -116,12 +116,13 @@ _check_unknow_redis=None
 
 def handle_url(host,req, useragent, referer):
 
+
     global _check_black_redis
     global _check_unknow_redis
     try:
         if _check_black_redis is None:
-            _check_black_redis = redis.Redis()
-            _check_unknow_redis = redis.Redis(db=1)
+            _check_black_redis = gputils.get_black_redis()
+            _check_unknow_redis = gputils.get_unknow_redis()
         if _check_black_redis is None:
             return
 
@@ -137,7 +138,8 @@ def handle_url(host,req, useragent, referer):
             if _check_unknow_redis is None:
                 logging.error('_check_unknow_redis is None 1')
                 return
-            _check_unknow_redis.sadd('unknowurl', host)
+            host = gputils.make_real_host(host.lower())
+            _check_unknow_redis.sadd(gputils.get_unknow_redis_keyname(), host)
             save_url_info(fullurl, urltype, evilclass, urlclass, referer, useragent)
             return
 
@@ -150,8 +152,8 @@ def handle_url(host,req, useragent, referer):
         logging.error(str(e))
         logging.error(traceback.format_exc())
         print 'except ,continue'
-        _check_black_redis = redis.Redis()
-        _check_unknow_redis = redis.Redis(db=1)
+        _check_black_redis = gputils.get_black_redis()
+        _check_unknow_redis = gputils.get_unknow_redis()
 
 def find_req_from_httppayload(httppayload):
 
@@ -164,6 +166,7 @@ def find_req_from_httppayload(httppayload):
             pass
         return [request.headers['Host'].lower(), request.path.lower(),request.headers['User-Agent'],Referer]
     except:
+        logging.info('parse http:%s', str(httppayload))
         return None
 
 
@@ -199,6 +202,8 @@ def handle(pkt):
     if req is None:
         return
 
+    if req[0] is not None:
+        req[0] = gputils.make_real_host(req[0].lower())
     # save visit range to redis
     if req[0] is not None:
         ranghost = req[0]
