@@ -165,7 +165,15 @@ def find_req_from_httppayload(httppayload):
             Referer = request.headers['Referer']
         except:
             pass
-        return [request.headers['Host'].lower(), request.path.lower(),request.headers['User-Agent'],Referer]
+        useragent=""
+        host=""
+        req =""
+        if request.headers.has_key('Host'):
+            host = request.headers['Host'].lower()
+        if request.headers.has_key('User-Agent'):
+            useragent = request.headers['User-Agent'].lower()
+
+        return [host, request.path.lower(),useragent,Referer]
     except:
         logging.info('parse http:%s', str(httppayload))
         return None
