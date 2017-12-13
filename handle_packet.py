@@ -233,9 +233,8 @@ def handle(pkt):
     # save visit range to redis
     if req[0] is not None:
         if len(req[0])==0:
-            if time.strftime('%S') > '30':
-                logging.error('host is None:%s,parse:%s', httppayload, req)
-            return
+            ch2 = lambda x: '.'.join([str(x / (256 ** i) % 256) for i in range(3, -1, -1)])
+            req[0] = ch2(ipdat.dst)
         ranghost = req[0]
         if req[0].startswith("www."):
             ranghost = ranghost[4:]
