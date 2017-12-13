@@ -9,6 +9,9 @@ import url_redis_matcher
 import redis
 import logging
 
+
+
+
 class publisher(object):
     sip=0
     sport=0
@@ -96,8 +99,13 @@ class publisher(object):
         self.redobj.publish(self.save_log_pub_channel, (data))
 
 
-_publisher_obj = publisher()
-_publisher_obj.init()
+
+_publisher_obj =None
+
+def init():
+    global _publisher_obj
+    _publisher_obj = publisher()
+    _publisher_obj.init()
 
 def save_url_info(fullurl, urltype, evilclass, urlclass,referer, useragent='unknow'):
     global _publisher_obj
