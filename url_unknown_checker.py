@@ -155,6 +155,7 @@ if __name__ == '__main__':
         all_unknown = obj.smembers(gputils.get_unknow_redis_keyname())
         all_unknown = list(all_unknown)
         if last_list is not None and  last_list is not  None and  abs(len(last_list)-len(all_unknown))<100:
+            logging.info('wait')
             time.sleep(3600*10) #after ten hours
             continue
         if len(all_unknown):
@@ -166,5 +167,6 @@ if __name__ == '__main__':
             for i in range(0,len(all_unknown), slice_step):
                 part = all_unknown[i:i+slice_step]
                 run_url_updator().Start(part)
-
-        time.sleep(len(all_unknown)+10*60)   #10 mins
+        nexttime = len(all_unknown)+10*60
+        logging.info('wait nexttime:%s', nexttime)
+        time.sleep(nexttime)   #10 mins
