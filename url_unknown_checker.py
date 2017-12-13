@@ -111,7 +111,6 @@ def do_update(name, unknow_urls):
         hosts = unknow_urls[:50]
         unknow_urls = unknow_urls[50:]
         do_update_internal(hosts)
-o
 
 class run_url_updator(object):
     def Start(self, unknow_list, name='do_update-1'):
@@ -153,13 +152,14 @@ if __name__ == '__main__':
         if last_list is not None and  last_list is not  None and  abs(len(last_list)-len(all_unknown))<100:
             time.sleep(3600*10) #after ten hours
             continue
-        last_list = all_unknown
+        if len(all_unknown):
+            last_list = all_unknown
 
-        slice_step = len(all_unknown)/conthread
-        logging.info('unknow check slice_step:%s', slice_step)
+            slice_step = len(all_unknown)/conthread
+            logging.info('unknow check slice_step:%s', slice_step)
 
-        for i in range(0,len(all_unknown), slice_step):
-            part = all_unknown[i:i+slice_step]
-            run_url_updator().Start(part)
+            for i in range(0,len(all_unknown), slice_step):
+                part = all_unknown[i:i+slice_step]
+                run_url_updator().Start(part)
 
         time.sleep(len(all_unknown)+10*60)   #10 mins

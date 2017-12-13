@@ -19,11 +19,14 @@ def start_receiver():
 def start_404():
     gputils.start_sub_proc('python receiver.py')
 
-
+import time
 if __name__=='__main__':
     start_receiver()
+    time.sleep(2)
     start_worker()
+    time.sleep(2)
     start_puller()
+    time.sleep(2)
     os.system('python url_unknown_checker.py')
 
 

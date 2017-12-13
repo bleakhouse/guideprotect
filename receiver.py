@@ -162,6 +162,9 @@ class SaveLogging2Mysql(object):
                 self.saveit()
 
     def saveit(self):
+        if not self.conn:
+            logging.error('self.conn is now on saveit')
+            return
         self.init_mysql()
         tmptran = self.trans_data
         self.trans_data = []

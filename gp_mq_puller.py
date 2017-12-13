@@ -126,12 +126,20 @@ def listen(pipname, max_count=1000):
                 lenexec = len(pipe.execute())
                 if gputils.show_noisy_logging():
                     logging.info('pip.execute() result:%s, os.getpid():%s', lenexec,os.getpid())
+import gpconf
+import basedef
+import gpwarning
 
 if len(sys.argv)<=1:
     print 'pars fail'
 else:
     mylogging.setuplog('mqpuller'+str(os.getpid())+'.txt')
     create_db("redirect_history")
+    gpconf.make_gcs()
+    basedef.GCS.init()
+    basedef.GWARNING =gpwarning.Warning()
+    basedef.GWARNING.init()
+
     max_count =1000
     if len(sys.argv)==3:
         max_count = int(sys.argv[2])
