@@ -76,12 +76,8 @@ def sniff_with_redis():
 
 def clean_onexit():
 
-    logging.info('guideprotect down!')
-    logging.info('star saving redis......:%s', str(sys.argv))
+    logging.info('worker down!')
 
-    gputils.get_black_redis().save()
-
-    logging.info('end saving redis..!')
     os._exit(1)
 
 def handle_cmd(data):

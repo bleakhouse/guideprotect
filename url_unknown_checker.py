@@ -123,6 +123,11 @@ class run_url_updator(object):
 
 def clean_onexit():
     print 'exit ', sys.argv
+    logging.info('star saving redis......:%s', str(sys.argv))
+    gputils.get_black_redis().save()
+    gputils.get_unknow_redis().save()
+    logging.info('end saving redis..!')
+
     os._exit(1)
 
 def handle_cmd(data):
