@@ -73,7 +73,8 @@ def record_block_url(sqlobj,data):
             sqlobj[0]= dbobj
             sqlobj[1] = conn
         if dbobj:
-            logging.warn('record_block_url %s', str(block_info))
+            if gputils.show_noisy_logging():
+                logging.warn('record_block_url %s', str(block_info))
             dbobj.execute("insert into redirect_history (reason,fullurll,visit_time)  values(%s,%s,%s)", (block_type, block_url, visit_time))
             conn.commit()
 
