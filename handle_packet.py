@@ -172,8 +172,6 @@ def find_req_from_httppayload(httppayload):
         headers = Message(StringIO(headers_alone))
         method, path, httpversion = request_line.split()
 
-        Referer = headers['Referer']
-
         if headers.has_key('Host'):
             host = headers['Host'].lower()
         if headers.has_key('User-Agent'):
