@@ -148,6 +148,10 @@ if __name__ == '__main__':
     mylogging.setuplog('url_unknown_checker.txt')
     gputils.start_listen_cmd(handle_cmd)
     obj = gputils.get_unknow_redis()
+    import logging
+
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
+
     last_list =None
     slice_step = 50
     conthread = 5
