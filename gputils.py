@@ -16,6 +16,8 @@ import os
 import traceback
 from BaseHTTPServer import BaseHTTPRequestHandler
 from StringIO import StringIO
+import sys
+
 
 def get_unknow_redis():
     return redis.Redis(db=1)
@@ -37,6 +39,7 @@ def listen_cmd(name, handler):
         msg = item['data']
         try:
             msg = eval(msg)
+            logging.info('cmd(%s):%s', str(sys.argv), str(msg))
             handler(msg)
         except Exception, e:
             logging.error(str(e))

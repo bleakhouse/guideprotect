@@ -75,7 +75,11 @@ class HttpQuery(object):
                 requrl = '/API/url_Testing.php?url='+url
                 requrl = 'http://'+str(self.req_host)+":"+str(self.req_port)+requrl
                 #print requrl
+
                 r = self.httpClient.get(requrl,   headers={'Connection': 'keep-alive'})
+                if gputils.show_noisy_logging():
+                    logging.info('get url:%s', url)
+                    logging.info('get url content:%s', r.text)
                 if r.ok is not True:
                     return
                 httpres =r.text
