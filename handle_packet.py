@@ -78,8 +78,8 @@ class publisher(object):
         if self.is_filter and self.filter_bypass(data):
             return
         # we need check 404 to redirect
-
-        self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, data)
+        if int(data['_dtype']) == 2:
+            self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, data)
 
         if self.redobj==None:
             logging.error('self.redobj error:%s',data)
