@@ -13,13 +13,11 @@ import logging
 
 
 class publisher(object):
-    sip=0
-    sport=0
     redobj=None
     save_log_pub_channel=''
     redis_snapshot=None
     save_log_pub_fullurl_detail = ''
-    is_filter=None
+    is_filter=True
 
     def do_filter(self, do):
         self.is_filter=do
@@ -42,28 +40,19 @@ class publisher(object):
 
 
     def save5element(self, sip,sport,prot, dip, dport):
-        self.sip = sip
-        self.sport = sport
+
         visit_time = time.strftime('%Y-%m-%d %H:%M:%S')
         dat = {'_dtype':1, 'sip':sip, 'sport':sport,'prot':prot, 'dip':dip, 'dport':dport,'visit_time':visit_time}
         self.save2pub(dat)
 
-    def save_url_info(self, fullurl, urltype, evilclass, urlclass,referer, useragent='unknow'):
+    def save_url_info(self, sip,sport,fullurl, urltype, evilclass, urlclass,referer, useragent='unknow'):
         visit_time = time.strftime('%Y-%m-%d %H:%M:%S')
-        dat = {'_dtype':2, 'sip':self.sip, 'sport':self.sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
+        dat = {'_dtype':2, 'sip':sip, 'sport':sport,'fullurl':fullurl, 'urltype':urltype, 'evilclass':evilclass, 'urlclass':urlclass, 'useragent':useragent,'visit_time':visit_time,'referer':referer}
         urltype = int(urltype)
         evilclass = int(evilclass)
         urlclass = int(urlclass)
 
         self.save2pub(dat)
-
-
-        if urltype !=3 and urltype !=4 and evilclass!=0:
-            if self.redis_snapshot.get("dont_push")!="1":
-                self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, dat)
-            else:
-                if gputils.show_noisy_logging() and time.strftime('%S')>'58':
-                    logging.info("not push ")
 
 
     def save_url_info_with_src(self, sip,sport,fullurl, urltype, evilclass, urlclass,visit_time,referer, useragent='unknow'):
@@ -75,27 +64,22 @@ class publisher(object):
         self.save2pub(dat)
 
 
-        if urltype != 3 and urltype != 4 and evilclass!=0:
-            if self.redis_snapshot.get("dont_push") != "1":
-                self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, dat)
-            else:
-                if gputils.show_noisy_logging() and time.strftime('%S')>'58':
-                    logging.info("not push ")
-
-
     def filter_bypass(self, data):
         if data is None:
             return
 
-        if data.has_key('urltype'):
-            urltype = int(data['urltype'])
-            if urltype!=2:
-                return True #go by if is not black
+        urltype = int(data['urltype'])
+        evilclass = int(data['evilclass'])
+
+        if urltype!=2:
+            return True
 
     def save2pub(self, data):
         if self.is_filter and self.filter_bypass(data):
             return
         # we need check 404 to redirect
+
+        self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, data)
 
         if self.redobj==None:
             logging.error('self.redobj error:%s',data)
@@ -116,9 +100,9 @@ def get_obj():
     global _publisher_obj
     return _publisher_obj
 
-def save_url_info(fullurl, urltype, evilclass, urlclass,referer, useragent='unknow'):
+def save_url_info(sip,sport,fullurl, urltype, evilclass, urlclass,referer, useragent='unknow'):
     global _publisher_obj
-    _publisher_obj.save_url_info(fullurl, urltype, evilclass, urlclass,referer, useragent)
+    _publisher_obj.save_url_info(sip,sport,fullurl, urltype, evilclass, urlclass,referer, useragent)
 
 def save5element(sip,sport,prot, dip, dport):
     global _publisher_obj
@@ -131,7 +115,7 @@ def save_url_info_with_src(sip, sport, fullurl, urltype, evilclass, urlclass, vi
 _check_black_redis=None
 _check_unknow_redis=None
 
-def handle_url(host,req, useragent, referer):
+def handle_url(sip,sport, host,req, useragent, referer):
 
 
     global _check_black_redis
@@ -157,13 +141,13 @@ def handle_url(host,req, useragent, referer):
                 return
             host = gputils.make_real_host(host.lower())
             _check_unknow_redis.sadd(gputils.get_unknow_redis_keyname(), host)
-            save_url_info(fullurl, urltype, evilclass, urlclass, referer, useragent)
+            save_url_info(sip,sport,fullurl, urltype, evilclass, urlclass, referer, useragent)
             return
 
         urltype     = val2[0]
         evilclass   = val2[1]
         urlclass    = val2[2]
-        save_url_info(fullurl, urltype, evilclass, urlclass, referer, useragent)
+        save_url_info(sip,sport,fullurl, urltype, evilclass, urlclass, referer, useragent)
 
     except Exception, e:
         logging.error(str(e))
@@ -274,7 +258,7 @@ def handle(pkt):
                 return
 
 
-    handle_url(host1, req[1],useragent, req[3])
+    handle_url(ipdat.src, tcpdat.sport, host1, req[1],useragent, req[3])
 
 
 
