@@ -51,7 +51,7 @@ def do_update_internal(unknow_urls):
 
         url_info = None
         found_in_cache = None
-        if cache is None or len(cache) == 0:
+        if cache is None or cache[0] is None:
             trytimes = 10
             while trytimes > 0:
                 url_info = queryobj.http_check_url_type(host)
