@@ -87,7 +87,11 @@ def handle_cmd(data):
     msg  =gputils.extra_cmd_msg(data)
     if msg.startswith('noisy_'):
         gputils.set_noisy_logging(msg)
+    if msg=='dof_yes':
+        handle_packet.get_obj().do_filter(True)
 
+    if msg=='dof_no':
+        handle_packet.get_obj().do_filter(False)
 
 if __name__ == '__main__':
 

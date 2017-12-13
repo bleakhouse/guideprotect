@@ -19,6 +19,11 @@ class publisher(object):
     save_log_pub_channel=''
     redis_snapshot=None
     save_log_pub_fullurl_detail = ''
+    is_filter=None
+
+    def do_filter(self, do):
+        self.is_filter=do
+
     def init(self):
         save_log_pub_redis_num=0
         cfgobj = basedef.GCS.get_config_obj()
@@ -88,8 +93,8 @@ class publisher(object):
                 return True #go by if is not black
 
     def save2pub(self, data):
-        # if self.filter_bypass(data):
-        #     return
+        if self.is_filter and self.filter_bypass(data):
+            return
         # we need check 404 to redirect
 
         if self.redobj==None:
@@ -106,6 +111,10 @@ def init():
     global _publisher_obj
     _publisher_obj = publisher()
     _publisher_obj.init()
+
+def get_obj():
+    global _publisher_obj
+    return _publisher_obj
 
 def save_url_info(fullurl, urltype, evilclass, urlclass,referer, useragent='unknow'):
     global _publisher_obj
