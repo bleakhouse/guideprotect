@@ -156,25 +156,37 @@ def handle_url(sip,sport, host,req, useragent, referer):
         _check_black_redis = gputils.get_black_redis()
         _check_unknow_redis = gputils.get_unknow_redis()
 
+from mimetools import Message
+from StringIO import StringIO
+
 def find_req_from_httppayload(httppayload):
 
-    request = gputils.HTTPRequest(httppayload)
+
+
     try:
         Referer=''
-        try:
-            Referer = request.headers['Referer']
-        except:
-            pass
         useragent=""
         host=""
         req =""
-        if request.headers.has_key('Host'):
-            host = request.headers['Host'].lower()
-        if request.headers.has_key('User-Agent'):
-            useragent = request.headers['User-Agent'].lower()
+        request_line, headers_alone = httppayload.split('\r\n', 1)
+        headers = Message(StringIO(headers_alone))
+        method, path, httpversion = request_line.split()
 
-        return [host, request.path.lower(),useragent,Referer]
-    except:
+        Referer = headers['Referer']
+
+        if headers.has_key('Host'):
+            host = headers['Host'].lower()
+        if headers.has_key('User-Agent'):
+            useragent = headers['User-Agent'].lower()
+        if headers.has_key('Referer'):
+            Referer = headers['Referer'].lower()
+        if path:
+            req = path
+        ret = [host, req.lower(),useragent,Referer]
+        return ret
+    except Exception, e:
+        logging.error(str(e))
+        logging.error(traceback.format_exc())
         logging.info('parse http:%s', str(httppayload))
         return None
 
