@@ -103,12 +103,13 @@ if __name__ == '__main__':
         logging.info('enter testing mode')
 
     logging.info('guideprotect up.....')
-    handle_packet.init()
+
     ignoremgr.init()
     gpconf.make_gcs()
     basedef.GCS.init()
     basedef.GWARNING =gpwarning.Warning()
     basedef.GWARNING.init()
+    handle_packet.init()
 
     db.createalltables()
 
