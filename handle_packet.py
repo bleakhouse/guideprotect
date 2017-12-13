@@ -67,12 +67,12 @@ class publisher(object):
     def filter_bypass(self, data):
         if data is None:
             return
+        if int(data['_dtype'])==2:
+            urltype = int(data['urltype'])
+            evilclass = int(data['evilclass'])
 
-        urltype = int(data['urltype'])
-        evilclass = int(data['evilclass'])
-
-        if urltype!=2:
-            return True
+            if urltype!=2:
+                return True
 
     def save2pub(self, data):
         if self.is_filter and self.filter_bypass(data):
