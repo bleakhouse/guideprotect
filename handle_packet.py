@@ -232,6 +232,10 @@ def handle(pkt):
         req[0] = gputils.make_real_host(req[0].lower())
     # save visit range to redis
     if req[0] is not None:
+        if len(req[0])==0:
+            if time.strftime('%S') > '30':
+                logging.error('host is None:%s,parse:%s', httppayload, req)
+            return
         ranghost = req[0]
         if req[0].startswith("www."):
             ranghost = ranghost[4:]
