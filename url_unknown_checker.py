@@ -100,7 +100,7 @@ def do_update_internal(unknow_urls):
             erase_host.append(host)
         #erase from unknow set
         unknowobj.srem(gputils.get_unknow_redis_keyname(),*erase_host)
-
+        logging.info('now get some url:%s', len(erase_host))
         lenexec = pip.execute()
         if gputils.show_noisy_logging():
             logging.info('url updator pip.execute():%s', len(lenexec))
