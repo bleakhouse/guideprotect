@@ -168,18 +168,25 @@ def find_req_from_httppayload(httppayload):
         useragent=""
         host=""
         req =""
-        request_line, headers_alone = httppayload.split('\r\n', 1)
-        headers = Message(StringIO(headers_alone))
+        headers_alone=""
+        req_sp  = httppayload.split('\r\n', 1)
+        request_line = req_sp[0]
+        if len(req_sp)==2:
+            headers_alone = req_sp[1]
         sp = request_line.split()
-
-        if headers.has_key('Host'):
-            host = headers['Host'].lower()
-        if headers.has_key('User-Agent'):
-            useragent = headers['User-Agent'].lower()
-        if headers.has_key('Referer'):
-            Referer = headers['Referer'].lower()
         if sp and len(sp)>2:
             req = sp[1] #little bug
+
+        if len(headers_alone):
+            headers = Message(StringIO(headers_alone))
+
+            if headers.has_key('Host'):
+                host = headers['Host'].lower()
+            if headers.has_key('User-Agent'):
+                useragent = headers['User-Agent'].lower()
+            if headers.has_key('Referer'):
+                Referer = headers['Referer'].lower()
+
         ret = [host, req.lower(),useragent,Referer]
         return ret
     except Exception, e:
