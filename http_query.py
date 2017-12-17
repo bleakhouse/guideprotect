@@ -82,6 +82,9 @@ class HttpQuery(object):
                     logging.info('get url content:%s', r.text)
                 if r.ok is not True:
                     return
+                if r.status_code !=200:
+                    print 'check error 03'
+
                 httpres =r.text
 
                 data = json.loads(httpres)
@@ -89,11 +92,12 @@ class HttpQuery(object):
                 logging.error(str(e))
                 logging.error(traceback.format_exc())
                 if basedef.GWARNING:basedef.GWARNING.sendmail(str(e), traceback.format_exc())
-                print httpres[:100]
+                print 'res:', httpres[:100]
                 logging.info('req url:%s', requrl)
                 logging.info(' url:%s', url)
                 #self.httpClient = httplib.HTTPConnection(self.req_host, self.req_port, timeout=5)
                 self.httpClient = requests.Session()
+                time.sleep(1)
                 return 1
             if not data.has_key("status"):
                 return
