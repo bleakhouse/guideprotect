@@ -78,7 +78,7 @@ class publisher(object):
         if self.is_filter and self.filter_bypass(data):
             return
         # we need check 404 to redirect
-        if int(data['_dtype']) == 2:
+        if int(data['_dtype']) == 2 and int(data['evilclass'])!=0:
             self.redis_snapshot.rpush(self.save_log_pub_fullurl_detail, data)
 
         if self.redobj==None:
